@@ -1,4 +1,4 @@
-package com.healthcareapp.backend;
+package com.healthcareapp.backend.entities;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
