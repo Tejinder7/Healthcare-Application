@@ -9,7 +9,7 @@ import java.util.List;
 @Entity
 public class Hospital {
     @Id
-    private int hosp_id;
+    private int hospId;
 
     private String hosp_name;
 
@@ -25,18 +25,18 @@ public class Hospital {
     }
 
     public Hospital(int hosp_id, String hosp_name, String hosp_address, List<Doctor> doctorList) {
-        this.hosp_id = hosp_id;
+        this.hospId = hosp_id;
         this.hosp_name = hosp_name;
         this.hosp_address = hosp_address;
         this.doctorList = doctorList;
     }
 
     public int getHosp_id() {
-        return hosp_id;
+        return hospId;
     }
 
     public void setHosp_id(int hosp_id) {
-        this.hosp_id = hosp_id;
+        this.hospId = hosp_id;
     }
 
     public String getHosp_name() {
@@ -66,7 +66,7 @@ public class Hospital {
     @Override
     public String toString() {
         return "Hospital{" +
-                "hosp_id=" + hosp_id +
+                "hosp_id=" + hospId +
                 ", hosp_name='" + hosp_name + '\'' +
                 ", hosp_address='" + hosp_address + '\'' +
                 ", doctorList=" + doctorList +

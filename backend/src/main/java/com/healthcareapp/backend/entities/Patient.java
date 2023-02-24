@@ -9,7 +9,7 @@ import jakarta.persistence.Id;
 public class Patient {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int P_id;
+    private int pid;
 
     private String name;
 
@@ -25,7 +25,7 @@ public class Patient {
     }
 
     public Patient(int p_id, String name, String address, int age, String sex, String contact) {
-        P_id = p_id;
+        pid = p_id;
         this.name = name;
         this.address = address;
         this.age = age;
@@ -34,11 +34,11 @@ public class Patient {
     }
 
     public int getP_id() {
-        return P_id;
+        return pid;
     }
 
     public void setP_id(int p_id) {
-        P_id = p_id;
+        pid = p_id;
     }
 
     public String getName() {
@@ -84,7 +84,7 @@ public class Patient {
     @Override
     public String toString() {
         return "Patient{" +
-                "P_id=" + P_id +
+                "P_id=" + pid +
                 ", name='" + name + '\'' +
                 ", address='" + address + '\'' +
                 ", age=" + age +

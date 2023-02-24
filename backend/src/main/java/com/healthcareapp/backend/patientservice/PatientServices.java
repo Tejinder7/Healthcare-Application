@@ -18,4 +18,9 @@ public class PatientServices {
         return c;
     }
 
+    public Patient getPatientById(int id){
+        Patient c = patientDao.findByPid(id);
+        return c;
+    }
+
 }
