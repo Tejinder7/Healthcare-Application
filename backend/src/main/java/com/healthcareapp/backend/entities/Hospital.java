@@ -1,5 +1,7 @@
 package com.healthcareapp.backend.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
@@ -16,6 +18,7 @@ public class Hospital {
     private String hosp_address;
 
     @OneToMany(mappedBy = "hospital")
+    @JsonBackReference
     private List<Doctor> doctorList;
 
     //Need to add admin id and list of front desk and pending queue

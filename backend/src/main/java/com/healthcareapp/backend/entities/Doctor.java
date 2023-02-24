@@ -1,5 +1,7 @@
 package com.healthcareapp.backend.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
@@ -19,7 +21,8 @@ public class Doctor {
     private String specialisation;
 
     @ManyToOne
-    @JoinColumn(name= "doc_hosp_id", nullable = false)
+    @JoinColumn(name= "hospital", nullable = false)
+    @JsonManagedReference
     private Hospital hospital;
 
     public Doctor() {
