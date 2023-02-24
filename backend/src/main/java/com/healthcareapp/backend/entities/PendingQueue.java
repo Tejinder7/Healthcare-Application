@@ -1,13 +1,11 @@
 package com.healthcareapp.backend.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 
 @Entity
 public class PendingQueue {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private int pen_id;
 
     private String date_time;
