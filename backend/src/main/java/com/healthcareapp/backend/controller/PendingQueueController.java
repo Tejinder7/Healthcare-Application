@@ -21,6 +21,8 @@ public class PendingQueueController {
     public ResponseEntity<List<PendingQueue>> getPendingQueue(@PathVariable("id") int id){
         List<PendingQueue> list = pendingQueueService.getPendingQueuebyDid(id);
 
+        if(list.size()==0)
+            return ResponseEntity.status(404).build();
         return ResponseEntity.of(Optional.of(list));
     }
 }
