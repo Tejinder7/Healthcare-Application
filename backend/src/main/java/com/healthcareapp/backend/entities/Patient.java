@@ -77,4 +77,16 @@ public class Patient {
     public void setContact(String contact) {
         this.contact = contact;
     }
+
+    @Override
+    public String toString() {
+        return "Patient{" +
+                "P_id=" + P_id +
+                ", name='" + name + '\'' +
+                ", address='" + address + '\'' +
+                ", age=" + age +
+                ", sex='" + sex + '\'' +
+                ", contact='" + contact + '\'' +
+                '}';
+    }
 }

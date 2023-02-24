@@ -51,4 +51,13 @@ public class PendingQueue {
     public void setPatient(Patient patient) {
         this.patient = patient;
     }
+
+    @Override
+    public String toString() {
+        return "PendingQueue{" +
+                "pen_id=" + pen_id +
+                ", date_time='" + date_time + '\'' +
+                ", patient=" + patient +
+                '}';
+    }
 }
