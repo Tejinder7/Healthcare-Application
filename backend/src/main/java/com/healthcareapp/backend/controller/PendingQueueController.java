@@ -19,10 +19,14 @@ public class PendingQueueController {
 
     @GetMapping("/pendingQueue/{id}")
     public ResponseEntity<List<PendingQueue>> getPendingQueue(@PathVariable("id") int id){
-        List<PendingQueue> list = pendingQueueService.getPendingQueuebyDid(id);
 
-        if(list.size()==0)
+
+        try{
+            List<PendingQueue> list = pendingQueueService.getPendingQueuebyDid(id);
+            return ResponseEntity.of(Optional.of(list));
+        }catch (Exception e){
             return ResponseEntity.status(404).build();
-        return ResponseEntity.of(Optional.of(list));
+        }
+
     }
 }

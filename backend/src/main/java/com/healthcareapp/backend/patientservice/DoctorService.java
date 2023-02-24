@@ -15,6 +15,9 @@ public class DoctorService {
     public Hospital findHospitalfromDoctor(int id){
         Doctor d = dDao.findById(id);
 
+        if(d==null)
+            throw new RuntimeException();
+
         Hospital h = d.getHospital();
 
         if(h==null)

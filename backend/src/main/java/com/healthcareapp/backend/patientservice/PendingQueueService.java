@@ -22,6 +22,9 @@ public class PendingQueueService {
 
         List<PendingQueue> list = pqDao.findByHospital(h1);
 
+        if(list.size()==0)
+            throw new RuntimeException();
+
         return list;
     }
 }
