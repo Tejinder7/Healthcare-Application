@@ -14,16 +14,18 @@ public class PendingQueue {
     @JoinColumn(name= "patient_id", referencedColumnName = "p_id")
     private Patient patient;
 
-    //Need to add hospital_id afterwards
+    @OneToOne
+    private Hospital hospital;
 
 
     public PendingQueue() {
     }
 
-    public PendingQueue(int pen_id, String date_time, Patient patient) {
+    public PendingQueue(int pen_id, String date_time, Patient patient, Hospital hospital) {
         this.pen_id = pen_id;
         this.date_time = date_time;
         this.patient = patient;
+        this.hospital = hospital;
     }
 
     public int getPen_id() {
@@ -50,12 +52,21 @@ public class PendingQueue {
         this.patient = patient;
     }
 
+    public Hospital getHospital() {
+        return hospital;
+    }
+
+    public void setHospital(Hospital hospital) {
+        this.hospital = hospital;
+    }
+
     @Override
     public String toString() {
         return "PendingQueue{" +
                 "pen_id=" + pen_id +
                 ", date_time='" + date_time + '\'' +
                 ", patient=" + patient +
+                ", hospital=" + hospital +
                 '}';
     }
 }

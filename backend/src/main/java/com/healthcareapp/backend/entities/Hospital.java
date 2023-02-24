@@ -18,7 +18,7 @@ public class Hospital {
     @OneToMany(mappedBy = "hospital")
     private List<Doctor> doctorList;
 
-    //Need to add admin id and list of front desk
+    //Need to add admin id and list of front desk and pending queue
 
 
     public Hospital() {
