@@ -1,5 +1,6 @@
 package com.healthcareapp.backend.controller;
 
+<<<<<<< HEAD
 import com.healthcareapp.backend.entities.Hospital;
 import com.healthcareapp.backend.entities.Patient;
 import com.healthcareapp.backend.entities.PendingQueue;
@@ -12,10 +13,24 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+=======
+//import com.healthcareapp.backend.entities.PendingQueue;
+import com.healthcareapp.backend.patientservice.PendingQueueService;
+//import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+//import org.springframework.web.bind.annotation.PathVariable;
+//import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
+import java.util.Optional;
+
+>>>>>>> gaurang
 @RestController
 public class PendingQueueController {
 
     @Autowired
+<<<<<<< HEAD
     private PendingQueueServices pendingQueueServices;
 
     @Autowired
@@ -37,4 +52,20 @@ public class PendingQueueController {
         return p;
     }
 
+=======
+    private PendingQueueService pendingQueueService;
+
+    @GetMapping("/pendingQueue/{id}")
+    public ResponseEntity<List<PendingQueue>> getPendingQueue(@PathVariable("id") int id){
+
+
+        try{
+            List<PendingQueue> list = pendingQueueService.getPendingQueuebyDid(id);
+            return ResponseEntity.of(Optional.of(list));
+        }catch (Exception e){
+            return ResponseEntity.status(404).build();
+        }
+
+    }
+>>>>>>> gaurang
 }
