@@ -12,6 +12,6 @@ public class HospitalServices {
     private HospitalDao hospitalDao;
 
     public Hospital getHospitalById(int id){
-        return hospitalDao.findByHospId(id);
+        return hospitalDao.findById(id);
     }
 }

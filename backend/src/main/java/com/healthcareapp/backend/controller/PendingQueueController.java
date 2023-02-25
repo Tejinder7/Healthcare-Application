@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 //import com.healthcareapp.backend.entities.PendingQueue;
-import com.healthcareapp.backend.patientservice.PendingQueueService;
 //import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -41,11 +40,11 @@ public class PendingQueueController {
     @PostMapping("/addPendingQueue/{hosp_id}/{p_id}")
     public PendingQueue addPendingQueue(@RequestBody PendingQueue pq, @PathVariable("hosp_id") int hosp_id, @PathVariable("p_id") int p_id){
 
-//        Hospital hospital = this.hospitalServices.getHospitalById(hosp_id);
-//        Patient patient = this.patientServices.getPatientById(p_id);
-//
-//        pq.setHospital(hospital);
-//        pq.setPatient(patient);
+        Hospital hospital = this.hospitalServices.getHospitalById(hosp_id);
+        Patient patient = this.patientServices.getPatientById(p_id);
+
+        pq.setHospital(hospital);
+        pq.setPatient(patient);
 
         PendingQueue p = this.pendingQueueServices.addPendingQueue(pq);
         return p;
