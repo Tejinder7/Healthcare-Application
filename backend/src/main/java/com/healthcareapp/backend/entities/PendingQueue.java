@@ -11,7 +11,7 @@ public class PendingQueue {
     private String date_time;
 
     @OneToOne
-    @JoinColumn(name= "patient_id", referencedColumnName = "pid")
+    @JoinColumn(name= "patient_id", referencedColumnName = "pid", unique = true)
     private Patient patient;
 
     @OneToOne

@@ -7,6 +7,7 @@ import com.healthcareapp.backend.entities.PendingQueue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.time.DateTimeException;
 import java.util.List;
 
 @Component
@@ -20,6 +21,12 @@ public class PendingQueueServices {
 
     @Autowired
     private DoctorService doctorService;
+
+    @Autowired
+    private PatientServices patientServices;
+
+    @Autowired
+    private HospitalServices hospitalServices;
 
     public List<PendingQueue> getPendingQueuebyDid(int id){
         Hospital h1 = doctorService.findHospitalfromDoctor(id);
@@ -35,6 +42,37 @@ public class PendingQueueServices {
     public PendingQueue addPendingQueue(PendingQueue pq){
         PendingQueue c = pendingQueueDao.save(pq);
         return c;
+    }
+
+    public PendingQueue setPendingQueueDateTime(PendingQueue pq){
+        try {
+            String date = java.time.LocalDate.now().toString();
+            String time = java.time.LocalTime.now().toString();
+            String date_time = date + " " + time;
+            pq.setDate_time(date_time);
+            return pq;
+        }
+        catch (DateTimeException e){
+            throw new RuntimeException();
+        }
+    }
+
+    public PendingQueue setPendingQueuePatient(PendingQueue pq, int p_id){
+        Patient patient = this.patientServices.getPatientById(p_id);
+        if(patient == null){
+            throw new RuntimeException();
+        }
+        pq.setPatient(patient);
+        return pq;
+    }
+
+    public PendingQueue setPendingQueueHospital(PendingQueue pq, int hosp_id){
+        Hospital hospital = this.hospitalServices.getHospitalById(hosp_id);
+        if(hospital == null){
+            throw new RuntimeException();
+        }
+        pq.setHospital(hospital);
+        return pq;
     }
 
 }
