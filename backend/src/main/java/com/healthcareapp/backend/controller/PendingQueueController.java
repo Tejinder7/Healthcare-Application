@@ -34,12 +34,6 @@ public class PendingQueueController {
 
     private PendingQueueServices pendingQueueServices;
 
-    @Autowired
-    private HospitalServices hospitalServices;
-
-    @Autowired
-    private PatientServices patientServices;
-
     @PostMapping("/addPendingQueue/{hosp_id}/{p_id}")
     public ResponseEntity<PendingQueue> addPendingQueue(@RequestBody PendingQueue pq, @PathVariable("hosp_id") int hosp_id, @PathVariable("p_id") int p_id){
 
@@ -59,9 +53,6 @@ public class PendingQueueController {
         pendingQueueServices.addPendingQueue(pq);
         return ResponseEntity.of(Optional.of(pq));
     }
-
-
-//    private PendingQueueService pendingQueueService;
 
     @GetMapping("/pendingQueue/{id}")
     public ResponseEntity<List<PendingQueue>> getPendingQueue(@PathVariable("id") int id){
