@@ -12,9 +12,7 @@ public class PatientServices {
     private PatientDao patientDao;
 
     public Patient addPatient(Patient patient){
-//        System.out.println(course);
         Patient c = patientDao.save(patient);
-//        System.out.println(course);
         return c;
     }
 
