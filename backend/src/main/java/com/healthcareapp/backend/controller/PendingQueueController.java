@@ -1,24 +1,10 @@
 package com.healthcareapp.backend.controller;
 
-import com.healthcareapp.backend.entities.Hospital;
-import com.healthcareapp.backend.entities.Patient;
 import com.healthcareapp.backend.entities.PendingQueue;
-import com.healthcareapp.backend.patientservice.HospitalServices;
-import com.healthcareapp.backend.patientservice.PatientServices;
 import com.healthcareapp.backend.patientservice.PendingQueueServices;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-
-
-//import com.healthcareapp.backend.entities.PendingQueue;
-//import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-//import org.springframework.web.bind.annotation.PathVariable;
-//import org.springframework.web.bind.annotation.RestController;
-
-import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
