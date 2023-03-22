@@ -1,5 +1,7 @@
 package com.healthcareapp.backend.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 @Entity
@@ -11,9 +13,11 @@ public class PendingQueue {
     private String dateTime;
 
     @OneToOne(mappedBy = "pendingQueueId")
+    @JsonManagedReference
     private Patient patientId;
 
     @ManyToOne
+    @JsonBackReference
     private Hospital hospId;
 
     public PendingQueue() {

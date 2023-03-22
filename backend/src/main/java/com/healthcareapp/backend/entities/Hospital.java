@@ -1,5 +1,7 @@
 package com.healthcareapp.backend.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -27,6 +29,7 @@ public class Hospital {
     private List<Doctor> doctorList;
 
     @OneToMany(mappedBy = "hospId")
+    @JsonManagedReference
     private List<PendingQueue> pendingQueueList;
 
     @OneToMany(mappedBy = "hospId")
