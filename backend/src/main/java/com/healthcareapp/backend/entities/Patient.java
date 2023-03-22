@@ -1,7 +1,9 @@
 package com.healthcareapp.backend.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -28,8 +30,11 @@ public class Patient {
     @ManyToOne
     private FieldWorker fieldWorkerId;
 
-    @OneToOne
+    @OneToOne(mappedBy = "patientId")
     @JsonBackReference
+//    @JsonIdentityInfo(
+//            generator = ObjectIdGenerators.PropertyGenerator.class,
+//            property = "patientId")
     private PendingQueue pendingQueueId;
 
     @OneToMany(mappedBy = "patientId")

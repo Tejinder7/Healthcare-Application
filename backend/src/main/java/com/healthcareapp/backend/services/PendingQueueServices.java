@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.time.DateTimeException;
+import java.util.List;
 
 @Component
 public class PendingQueueServices {
@@ -20,6 +21,9 @@ public class PendingQueueServices {
 
     @Autowired
     private HospitalServices hospitalServices;
+
+    @Autowired
+    private DoctorServices doctorServices;
 
     public PendingQueue addPendingQueue(int hospId, int pid){
 
@@ -45,6 +49,16 @@ public class PendingQueueServices {
         return pq;
     }
 
+    public List<PendingQueue> getPendingQueueByDocId(int docId){
+        Hospital hospital = doctorServices.getHospitalByDocId(docId);
 
+        List<PendingQueue> pqList = pendingQueueDao.findPendingQueueByHospId(hospital);
+
+        if(pqList.size() == 0){
+            throw new RuntimeException();
+        }
+
+        return pqList;
+    }
 
 }
