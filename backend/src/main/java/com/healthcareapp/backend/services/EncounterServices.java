@@ -38,8 +38,12 @@ public class EncounterServices {
         return encounter;
     }
 
-    public MedicalHistory saveEncounter(String pres, String symptoms, int patientId){
-        MedicalHistory mh = medicalHistoryServices.updateMedicalHistory(pres, symptoms, patientId);
+    public MedicalHistory saveEncounter(String pres, String symptoms, int encounterId){
+        Encounter encounter = encounterDao.getEncounterByEncounterId(encounterId);
+        if(encounter == null){
+            throw new RuntimeException();
+        }
+        MedicalHistory mh = medicalHistoryServices.updateMedicalHistory(pres, symptoms, encounter);
         return mh;
     }
 

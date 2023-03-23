@@ -1,6 +1,7 @@
 package com.healthcareapp.backend.services;
 
 import com.healthcareapp.backend.dao.MedicalHistoryDao;
+import com.healthcareapp.backend.entities.Encounter;
 import com.healthcareapp.backend.entities.MedicalHistory;
 import com.healthcareapp.backend.entities.Patient;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,8 +33,8 @@ public class MedicalHistoryServices {
         return mh;
     }
 
-    public MedicalHistory updateMedicalHistory(String pres, String symptoms, int patientId){
-        MedicalHistory mh = getMedicalHistoryByPatientId(patientId);
+    public MedicalHistory updateMedicalHistory(String pres, String symptoms, Encounter encounterId){
+        MedicalHistory mh = medicalHistoryDao.findMedicalHistoryByEncounterId(encounterId);
         try {
             mh.setPrescription(pres);
             mh.setSymptoms(symptoms);

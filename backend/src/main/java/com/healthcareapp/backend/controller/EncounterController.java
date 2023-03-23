@@ -30,11 +30,11 @@ public class EncounterController {
         return ResponseEntity.of(Optional.of(en));
     }
 
-    @PostMapping("saveEncounter/{pid}")
-    public ResponseEntity<MedicalHistory> saveEncounter(@RequestBody MedicalHistory medicalHistory, @PathVariable int pid){
+    @PostMapping("saveEncounter/{eid}")
+    public ResponseEntity<MedicalHistory> saveEncounter(@RequestBody MedicalHistory medicalHistory, @PathVariable int eid){
         MedicalHistory mh;
         try {
-            mh = encounterServices.saveEncounter(medicalHistory.getPrescription(), medicalHistory.getSymptoms(), pid);
+            mh = encounterServices.saveEncounter(medicalHistory.getPrescription(), medicalHistory.getSymptoms(), eid);
         }catch (Exception e){
             return ResponseEntity.status(404).build();
         }
