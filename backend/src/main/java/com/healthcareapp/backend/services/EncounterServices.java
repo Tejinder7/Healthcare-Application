@@ -29,10 +29,6 @@ public class EncounterServices {
         Doctor doctor = doctorServices.getDoctorByDocId(docId);
         encounter.setDoctorId(doctor);
 
-        medicalHistoryServices.addMedicalHistory(patientId);
-        MedicalHistory mh = medicalHistoryServices.getMedicalHistoryByPatientId(patientId);
-        encounter.setMedicalHistoryId(mh);
-
         encounterDao.save(encounter);
 
         return encounter;
@@ -43,6 +39,10 @@ public class EncounterServices {
         if(encounter == null){
             throw new RuntimeException();
         }
+        Patient patient = encounter.getPatientId();
+        MedicalHistory medicalHistory = medicalHistoryServices.addMedicalHistory(patient,encounter);
+        encounter.setMedicalHistoryId(medicalHistory);
+        encounterDao.save(encounter);
         MedicalHistory mh = medicalHistoryServices.updateMedicalHistory(pres, symptoms, encounter);
         return mh;
     }

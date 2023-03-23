@@ -7,6 +7,8 @@ import com.healthcareapp.backend.entities.Patient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 public class MedicalHistoryServices {
 
@@ -16,25 +18,33 @@ public class MedicalHistoryServices {
     @Autowired
     private PatientServices patientServices;
 
-    public MedicalHistory getMedicalHistoryByPatientId(int patientId){
+    public List<MedicalHistory> getMedicalHistoryByPatientId(int patientId){
         Patient patient = patientServices.getPatientById(patientId);
-        MedicalHistory mh = medicalHistoryDao.findMedicalHistoriesByPatientId(patient);
+        List<MedicalHistory> mhList = medicalHistoryDao.findMedicalHistoriesByPatientId(patient);
+        if(mhList.size() == 0){
+            throw new RuntimeException();
+        }
+        return mhList;
+    }
+
+    public MedicalHistory addMedicalHistory(Patient patient, Encounter encounter){
+        MedicalHistory mh = new MedicalHistory();
+        mh.setPatientId(patient);
+        mh.setEncounterId(encounter);
+        medicalHistoryDao.save(mh);
+        return mh;
+    }
+
+    public MedicalHistory getMedicalHistoryByEncounter(Encounter encounterId){
+        MedicalHistory mh = medicalHistoryDao.findMedicalHistoryByEncounterId(encounterId);
         if(mh == null){
             throw new RuntimeException();
         }
         return mh;
     }
 
-    public MedicalHistory addMedicalHistory(int patientId){
-        MedicalHistory mh = new MedicalHistory();
-        Patient patient = patientServices.getPatientById(patientId);
-        mh.setPatientId(patient);
-        medicalHistoryDao.save(mh);
-        return mh;
-    }
-
     public MedicalHistory updateMedicalHistory(String pres, String symptoms, Encounter encounterId){
-        MedicalHistory mh = medicalHistoryDao.findMedicalHistoryByEncounterId(encounterId);
+        MedicalHistory mh = getMedicalHistoryByEncounter(encounterId);
         try {
             mh.setPrescription(pres);
             mh.setSymptoms(symptoms);
@@ -44,5 +54,4 @@ public class MedicalHistoryServices {
         }
         return mh;
     }
-
 }
