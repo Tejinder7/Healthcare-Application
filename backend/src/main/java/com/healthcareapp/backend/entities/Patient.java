@@ -25,6 +25,7 @@ public class Patient {
     private String contact;
 
     @OneToMany(mappedBy = "patientId")
+    @JsonManagedReference(value = "Patient-MedicalHistory")
     private List<MedicalHistory> medicalHistoryList;
 
     @ManyToOne
@@ -32,12 +33,10 @@ public class Patient {
 
     @OneToOne(mappedBy = "patientId")
     @JsonBackReference
-//    @JsonIdentityInfo(
-//            generator = ObjectIdGenerators.PropertyGenerator.class,
-//            property = "patientId")
     private PendingQueue pendingQueueId;
 
     @OneToMany(mappedBy = "patientId")
+    @JsonManagedReference(value = "Encounter-Patient")
     private List<Encounter> encounterList;
 
     @OneToMany(mappedBy = "patientId")
