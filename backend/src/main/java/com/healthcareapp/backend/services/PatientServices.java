@@ -1,4 +1,4 @@
-package com.healthcareapp.backend.patientservice;
+package com.healthcareapp.backend.services;
 
 import com.healthcareapp.backend.dao.PatientDao;
 import com.healthcareapp.backend.entities.Patient;
@@ -12,13 +12,15 @@ public class PatientServices {
     private PatientDao patientDao;
 
     public Patient addPatient(Patient patient){
-        Patient c = patientDao.save(patient);
-        return c;
+        patientDao.save(patient);
+        return patient;
     }
 
-    public Patient getPatientById(int id){
-        Patient c = patientDao.findByPid(id);
-        return c;
+    public Patient getPatientById(int Pid){
+        Patient patient = patientDao.findPatientByPatientId(Pid);
+        if(patient == null){
+            throw new RuntimeException();
+        }
+        return patient;
     }
-
 }

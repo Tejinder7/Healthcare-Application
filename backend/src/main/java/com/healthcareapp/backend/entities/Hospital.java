@@ -1,66 +1,102 @@
 package com.healthcareapp.backend.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 
 import java.util.List;
 
 @Entity
 public class Hospital {
     @Id
-    private int hosp_id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private int hospId;
 
-    private String hosp_name;
+    private String name;
 
-    private String hosp_address;
+    private String address;
 
-    @OneToMany(mappedBy = "hospital")
-//    @JsonBackReference
-    @JsonIdentityInfo(
-            generator = ObjectIdGenerators.PropertyGenerator.class,
-            property = "doc_id")
+    @OneToOne(mappedBy = "hospId")
+    private Admin admin;
+
+    @ManyToOne
+    private Supervisor supId;
+
+    @OneToMany(mappedBy = "hospId")
+    private List<FrontDesk> frontDeskList;
+
+    @OneToMany(mappedBy = "hospId")
     private List<Doctor> doctorList;
 
-    //Need to add admin id and list of front desk and pending queue
+    @OneToMany(mappedBy = "hospId")
+    @JsonManagedReference
+    private List<PendingQueue> pendingQueueList;
+
+    @OneToMany(mappedBy = "hospId")
+    private List<FollowUp> followUpList;
 
 
     public Hospital() {
     }
 
-    public Hospital(int hosp_id, String hosp_name, String hosp_address, List<Doctor> doctorList) {
-        this.hosp_id = hosp_id;
-        this.hosp_name = hosp_name;
-        this.hosp_address = hosp_address;
+    public Hospital(int hospId, String name, String address, Admin admin, Supervisor supId, List<FrontDesk> frontDeskList, List<Doctor> doctorList, List<PendingQueue> pendingQueueList, List<FollowUp> followUpList) {
+        this.hospId = hospId;
+        this.name = name;
+        this.address = address;
+        this.admin = admin;
+        this.supId = supId;
+        this.frontDeskList = frontDeskList;
         this.doctorList = doctorList;
+        this.pendingQueueList = pendingQueueList;
+        this.followUpList = followUpList;
     }
 
-    public int getHosp_id() {
-        return hosp_id;
+    public int getHospId() {
+        return hospId;
     }
 
-    public void setHosp_id(int hosp_id) {
-        this.hosp_id = hosp_id;
+    public void setHospId(int hospId) {
+        this.hospId = hospId;
     }
 
-    public String getHosp_name() {
-        return hosp_name;
+    public String getName() {
+        return name;
     }
 
-    public void setHosp_name(String hosp_name) {
-        this.hosp_name = hosp_name;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getHosp_address() {
-        return hosp_address;
+    public String getAddress() {
+        return address;
     }
 
-    public void setHosp_address(String hosp_address) {
-        this.hosp_address = hosp_address;
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public Admin getAdmin() {
+        return admin;
+    }
+
+    public void setAdmin(Admin admin) {
+        this.admin = admin;
+    }
+
+    public Supervisor getSupId() {
+        return supId;
+    }
+
+    public void setSupId(Supervisor supId) {
+        this.supId = supId;
+    }
+
+    public List<FrontDesk> getFrontDeskList() {
+        return frontDeskList;
+    }
+
+    public void setFrontDeskList(List<FrontDesk> frontDeskList) {
+        this.frontDeskList = frontDeskList;
     }
 
     public List<Doctor> getDoctorList() {
@@ -71,13 +107,34 @@ public class Hospital {
         this.doctorList = doctorList;
     }
 
+    public List<PendingQueue> getPendingQueueList() {
+        return pendingQueueList;
+    }
+
+    public void setPendingQueueList(List<PendingQueue> pendingQueueList) {
+        this.pendingQueueList = pendingQueueList;
+    }
+
+    public List<FollowUp> getFollowUpList() {
+        return followUpList;
+    }
+
+    public void setFollowUpList(List<FollowUp> followUpList) {
+        this.followUpList = followUpList;
+    }
+
     @Override
     public String toString() {
         return "Hospital{" +
-                "hosp_id=" + hosp_id +
-                ", hosp_name='" + hosp_name + '\'' +
-                ", hosp_address='" + hosp_address + '\'' +
+                "hospId=" + hospId +
+                ", name='" + name + '\'' +
+                ", address='" + address + '\'' +
+                ", admin=" + admin +
+                ", supId=" + supId +
+                ", frontDeskList=" + frontDeskList +
                 ", doctorList=" + doctorList +
+                ", pendingQueueList=" + pendingQueueList +
+                ", followUpList=" + followUpList +
                 '}';
     }
 }
