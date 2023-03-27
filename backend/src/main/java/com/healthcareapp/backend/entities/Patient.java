@@ -1,5 +1,6 @@
 package com.healthcareapp.backend.entities;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -33,6 +34,7 @@ public class Patient {
     private List<Encounter> encounterList;
 
     @OneToMany(mappedBy = "patientId")
+    @JsonManagedReference("PAT-FUL")
     private List<FollowUp> followUpList;
 
 

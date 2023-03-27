@@ -53,13 +53,13 @@ public class FieldWorkerServices {
             throw new RuntimeException();
         }
 
-        List<FieldWorker> fieldWorkerList = fieldWorkerDao.findBySupId(sup);
+        List<FieldWorker> list = fieldWorkerDao.findBySupId(sup);
 
-        if(fieldWorkerList.size()==0)
+        if(list.size()==0)
         {
             throw new RuntimeException();
         }
         else
-            return fieldWorkerList;
+            return list;
     }
 }

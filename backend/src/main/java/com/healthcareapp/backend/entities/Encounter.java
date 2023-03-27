@@ -1,5 +1,6 @@
 package com.healthcareapp.backend.entities;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -15,6 +16,7 @@ public class Encounter {
     private Doctor doctorId;
 
     @OneToMany(mappedBy = "encounterId")
+    @JsonManagedReference("FUL-ENC")
     private List<FollowUp> followUpList;
 
     @OneToOne

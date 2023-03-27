@@ -1,5 +1,6 @@
 package com.healthcareapp.backend.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 @Entity
@@ -13,6 +14,7 @@ public class FrontDesk extends Authorization{
     private String name;
 
     @ManyToOne
+    @JsonBackReference("HOS-FD")
     private Hospital hospId;
 
     public FrontDesk() {

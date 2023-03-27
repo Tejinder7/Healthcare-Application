@@ -4,7 +4,6 @@ import com.healthcareapp.backend.dao.HospitalDao;
 import com.healthcareapp.backend.entities.Hospital;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Controller;
 
 @Component
 public class HospitalServices {
@@ -18,6 +17,24 @@ public class HospitalServices {
             throw new RuntimeException();
         }
         return hospital;
+    }
+
+    public Hospital addHospital(int hospId, String name, String address){
+
+        Hospital hosp = new Hospital();
+
+        hosp.setHospId(hospId);
+        hosp.setAddress(address);
+        hosp.setName(name);
+
+        try {
+            hosp = hospitalDao.save(hosp);
+        }
+        catch (Exception e)
+        {
+            throw new RuntimeException();
+        }
+        return hosp;
     }
 
 }
