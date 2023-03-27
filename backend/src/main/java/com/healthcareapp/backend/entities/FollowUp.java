@@ -1,5 +1,6 @@
 package com.healthcareapp.backend.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 @Entity
@@ -10,6 +11,7 @@ public class FollowUp {
     private int followUpId;
 
     @ManyToOne
+    @JsonBackReference("FUL-ENC")
     private Encounter encounterId;
 
     private String date;
@@ -21,9 +23,11 @@ public class FollowUp {
     private String lastSyncDate;
 
     @ManyToOne
+    @JsonBackReference("HOS-FUL")
     private Hospital hospId;
 
     @ManyToOne
+    @JsonBackReference("PAT-FUL")
     private Patient patientId;
 
 
