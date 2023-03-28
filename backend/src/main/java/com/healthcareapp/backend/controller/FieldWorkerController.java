@@ -31,14 +31,14 @@ public class FieldWorkerController {
 
     @GetMapping("/getFieldWorkers")
     public ResponseEntity<List<FieldWorker>> getFieldWorkers(@RequestParam("supId") int supId){
-        List<FieldWorker> list;
+        List<FieldWorker> fieldWorkerList;
 
         try{
-            list = fieldWorkerService.getFieldWorkers(supId);
+            fieldWorkerList = fieldWorkerService.getFieldWorkers(supId);
         }
         catch (Exception e){
             return ResponseEntity.status(404).build();
         }
-        return ResponseEntity.ok(list);
+        return ResponseEntity.ok(fieldWorkerList);
     }
 }
