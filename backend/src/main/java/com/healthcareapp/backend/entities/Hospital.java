@@ -29,10 +29,11 @@ public class Hospital {
     private List<Doctor> doctorList;
 
     @OneToMany(mappedBy = "hospId")
-    @JsonManagedReference
+    @JsonManagedReference(value = "Hospital-PendingQueue")
     private List<PendingQueue> pendingQueueList;
 
     @OneToMany(mappedBy = "hospId")
+    @JsonManagedReference(value = "Hospital-FollowUp")
     private List<FollowUp> followUpList;
 
 

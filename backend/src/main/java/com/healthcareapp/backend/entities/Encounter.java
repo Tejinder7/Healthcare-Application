@@ -18,6 +18,7 @@ public class Encounter {
     private Doctor doctorId;
 
     @OneToMany(mappedBy = "encounterId")
+    @JsonManagedReference(value = "Encounter-FollowUp")
     private List<FollowUp> followUpList;
 
     @OneToOne
