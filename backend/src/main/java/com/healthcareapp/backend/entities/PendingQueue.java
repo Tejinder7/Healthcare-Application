@@ -16,11 +16,11 @@ public class PendingQueue {
 
 
     @OneToOne
-    @JsonBackReference(value = "Patient-PendingQueue")
+//    @JsonBackReference(value = "Patient-PendingQueue")
     private Patient patientId;
 
     @ManyToOne
-    @JsonBackReference(value = "Hospital-PendingQueue")
+//    @JsonBackReference(value = "Hospital-PendingQueue")
     private Hospital hospId;
 
     public PendingQueue() {

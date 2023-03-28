@@ -22,6 +22,9 @@ public class FollowUpServices {
     @Autowired
     private SupervisorDao supervisorDao;
 
+    @Autowired
+    private EncounterServices encounterServices;
+
     public List<FollowUp> getCurrentDateFollowUps(String date, int fwId){
         FieldWorker fieldWorker;
 
@@ -77,5 +80,29 @@ public class FollowUpServices {
         hospitalList.forEach(hospital -> {followUpList.add(followUpDao.findByHospId(hospital));});
 
         return followUpList;
+    }
+
+    public List<FollowUp> addFollowUps(List<String> dateList, int en_id){
+        Encounter encounter = encounterServices.getEncounterById(en_id);
+        Patient patient = encounter.getPatientId();
+        Doctor doctor = encounter.getDoctorId();
+        Hospital hospital = doctor.getHospId();
+        List<FollowUp> fuList = new ArrayList<>();
+        try {
+            for (int i = 0; i < dateList.size(); i++) {
+                FollowUp fu = new FollowUp();
+                fu.setEncounterId(encounter);
+                fu.setDate(dateList.get(i));
+                fu.setFlag(false);
+                fu.setPatientId(patient);
+                fu.setHospId(hospital);
+                followUpDao.save(fu);
+
+                fuList.add(fu);
+            }
+        }catch (Exception e){
+            throw new RuntimeException();
+        }
+        return fuList;
     }
 }

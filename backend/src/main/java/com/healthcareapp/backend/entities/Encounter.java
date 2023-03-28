@@ -2,6 +2,7 @@ package com.healthcareapp.backend.entities;
 
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
@@ -15,19 +16,20 @@ public class Encounter {
     private int encounterId;
 
     @ManyToOne
-    @JsonBackReference(value = "Encounter-Doctor")
+//    @JsonBackReference(value = "Encounter-Doctor")
     private Doctor doctorId;
 
     @OneToMany(mappedBy = "encounterId")
-    @JsonManagedReference(value = "Encounter-FollowUp")
+//    @JsonManagedReference(value = "Encounter-FollowUp")
+    @JsonIgnore
     private List<FollowUp> followUpList;
 
     @OneToOne
-    @JsonManagedReference(value = "Encounter-MH")
+//    @JsonManagedReference(value = "Encounter-MH")
     private MedicalHistory medicalHistoryId;
 
     @ManyToOne
-    @JsonBackReference(value = "Encounter-Patient")
+//    @JsonBackReference(value = "Encounter-Patient")
     private Patient patientId;
 
     public Encounter() {

@@ -1,10 +1,7 @@
 package com.healthcareapp.backend.entities;
 
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.*;
 
 
 import jakarta.persistence.*;
@@ -28,22 +25,26 @@ public class Patient {
     private String contact;
 
     @OneToMany(mappedBy = "patientId")
-    @JsonManagedReference(value = "Patient-MedicalHistory")
+//    @JsonManagedReference(value = "Patient-MedicalHistory")
+    @JsonIgnore
     private List<MedicalHistory> medicalHistoryList;
 
     @ManyToOne
     private FieldWorker fieldWorkerId;
 
     @OneToOne(mappedBy = "patientId")
-    @JsonManagedReference(value = "Patient-PendingQueue")
+//    @JsonManagedReference(value = "Patient-PendingQueue")
+    @JsonIgnore
     private PendingQueue pendingQueueId;
 
     @OneToMany(mappedBy = "patientId")
-    @JsonManagedReference(value = "Encounter-Patient")
+//    @JsonManagedReference(value = "Encounter-Patient")
+    @JsonIgnore
     private List<Encounter> encounterList;
 
     @OneToMany(mappedBy = "patientId")
-    @JsonManagedReference(value="Patient-FollowUp")
+//    @JsonManagedReference(value="Patient-FollowUp")
+    @JsonIgnore
     private List<FollowUp> followUpList;
 
     public Patient() {

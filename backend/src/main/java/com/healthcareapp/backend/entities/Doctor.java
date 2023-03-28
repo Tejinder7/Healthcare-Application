@@ -1,6 +1,7 @@
 package com.healthcareapp.backend.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
@@ -28,7 +29,8 @@ public class Doctor extends Authorization{
     private Hospital hospId;
 
     @OneToMany(mappedBy = "doctorId")
-    @JsonManagedReference(value = "Encounter-Doctor")
+//    @JsonManagedReference(value = "Encounter-Doctor")
+    @JsonIgnore
     private List<Encounter> encounterList;
 
     public Doctor() {

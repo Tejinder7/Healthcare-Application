@@ -2,6 +2,7 @@ package com.healthcareapp.backend.entities;
 
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
@@ -33,11 +34,13 @@ public class Hospital {
     
 
     @OneToMany(mappedBy = "hospId")
-    @JsonManagedReference(value = "Hospital-PendingQueue")
+//    @JsonManagedReference(value = "Hospital-PendingQueue")
+    @JsonIgnore
     private List<PendingQueue> pendingQueueList;
 
     @OneToMany(mappedBy = "hospId")
-    @JsonManagedReference(value = "Hospital-FollowUp")
+//    @JsonManagedReference(value = "Hospital-FollowUp")
+    @JsonIgnore
     private List<FollowUp> followUpList;
 
 

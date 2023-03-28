@@ -12,7 +12,7 @@ public class FollowUp {
     private int followUpId;
 
     @ManyToOne
-    @JsonBackReference(value="Encounter-FollowUp")
+//    @JsonBackReference(value="Encounter-FollowUp")
     private Encounter encounterId;
 
     private String date;
@@ -24,11 +24,11 @@ public class FollowUp {
     private String lastSyncDate;
 
     @ManyToOne
-    @JsonBackReference(value="Hospital-FollowUp")
+//    @JsonBackReference(value="Hospital-FollowUp")
     private Hospital hospId;
 
     @ManyToOne
-    @JsonBackReference("Patient-FollowUp")
+//    @JsonBackReference("Patient-FollowUp")
     private Patient patientId;
 
 
