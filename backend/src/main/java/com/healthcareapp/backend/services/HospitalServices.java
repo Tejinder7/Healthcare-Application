@@ -20,4 +20,22 @@ public class HospitalServices {
         return hospital;
     }
 
+    public Hospital addHospital(int hospId, String name, String address){
+
+        Hospital hosp = new Hospital();
+
+        hosp.setHospId(hospId);
+        hosp.setAddress(address);
+        hosp.setName(name);
+
+        try {
+            hosp = hospitalDao.save(hosp);
+        }
+        catch (Exception e)
+        {
+            throw new RuntimeException();
+        }
+        return hosp;
+    }
+
 }

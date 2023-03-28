@@ -28,7 +28,7 @@ public class FollowUp {
     private Hospital hospId;
 
     @ManyToOne
-    @JsonBackReference(value = "Patient-FollowUp")
+    @JsonBackReference("Patient-FollowUp")
     private Patient patientId;
 
 
