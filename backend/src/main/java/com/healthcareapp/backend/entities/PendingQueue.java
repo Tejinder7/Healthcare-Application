@@ -14,15 +14,13 @@ public class PendingQueue {
 
     private String dateTime;
 
+
     @OneToOne
-    @JsonManagedReference
-//    @JsonIdentityInfo(
-//            generator = ObjectIdGenerators.PropertyGenerator.class,
-//            property = "pendingQueueId")
+    @JsonBackReference(value = "Patient-PendingQueue")
     private Patient patientId;
 
     @ManyToOne
-    @JsonBackReference
+    @JsonBackReference(value = "Hospital-PendingQueue")
     private Hospital hospId;
 
     public PendingQueue() {

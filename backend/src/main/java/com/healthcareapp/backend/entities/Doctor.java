@@ -24,6 +24,7 @@ public class Doctor extends Authorization{
     private String docSpecialization;
 
     @ManyToOne
+    @JsonBackReference("HOS-DOC")
     private Hospital hospId;
 
     @OneToMany(mappedBy = "doctorId")

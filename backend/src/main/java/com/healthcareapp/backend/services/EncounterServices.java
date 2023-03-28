@@ -35,10 +35,7 @@ public class EncounterServices {
     }
 
     public MedicalHistory saveEncounter(String pres, String symptoms, int encounterId){
-        Encounter encounter = encounterDao.getEncounterByEncounterId(encounterId);
-        if(encounter == null){
-            throw new RuntimeException();
-        }
+        Encounter encounter = getEncounterById(encounterId);
         Patient patient = encounter.getPatientId();
         MedicalHistory medicalHistory = medicalHistoryServices.addMedicalHistory(patient,encounter);
         encounter.setMedicalHistoryId(medicalHistory);
@@ -47,4 +44,11 @@ public class EncounterServices {
         return mh;
     }
 
+    public Encounter getEncounterById(int encounterId){
+        Encounter encounter = encounterDao.getEncounterByEncounterId(encounterId);
+        if(encounter == null){
+            throw new RuntimeException();
+        }
+        return encounter;
+    }
 }
