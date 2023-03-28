@@ -1,72 +1,76 @@
 package com.healthcareapp.backend.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 
 @Entity
 public class PendingQueue {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int pen_id;
+    private int penId;
 
-    private String date_time;
-
-    @OneToOne
-    @JoinColumn(name= "patient_id", referencedColumnName = "pid", unique = true)
-    private Patient patient;
+    private String dateTime;
 
     @OneToOne
-    private Hospital hospital;
+    @JsonBackReference(value = "Patient-PendingQueue")
+    private Patient patientId;
 
+    @ManyToOne
+    @JsonBackReference(value = "Hospital-PendingQueue")
+    private Hospital hospId;
 
     public PendingQueue() {
     }
 
-    public PendingQueue(int pen_id, String date_time, Patient patient, Hospital hospital) {
-        this.pen_id = pen_id;
-        this.date_time = date_time;
-        this.patient = patient;
-        this.hospital = hospital;
+    public PendingQueue(int penId, String dateTime, Patient patientId, Hospital hospId) {
+        this.penId = penId;
+        this.dateTime = dateTime;
+        this.patientId = patientId;
+        this.hospId = hospId;
     }
 
-    public int getPen_id() {
-        return pen_id;
+    public int getPenId() {
+        return penId;
     }
 
-    public void setPen_id(int pen_id) {
-        this.pen_id = pen_id;
+    public void setPenId(int penId) {
+        this.penId = penId;
     }
 
-    public String getDate_time() {
-        return date_time;
+    public String getDateTime() {
+        return dateTime;
     }
 
-    public void setDate_time(String date_time) {
-        this.date_time = date_time;
+    public void setDateTime(String dateTime) {
+        this.dateTime = dateTime;
     }
 
-    public Patient getPatient() {
-        return patient;
+    public Patient getPatientId() {
+        return patientId;
     }
 
-    public void setPatient(Patient patient) {
-        this.patient = patient;
+    public void setPatientId(Patient patientId) {
+        this.patientId = patientId;
     }
 
-    public Hospital getHospital() {
-        return hospital;
+    public Hospital getHospId() {
+        return hospId;
     }
 
-    public void setHospital(Hospital hospital) {
-        this.hospital = hospital;
+    public void setHospId(Hospital hospId) {
+        this.hospId = hospId;
     }
 
     @Override
     public String toString() {
         return "PendingQueue{" +
-                "pen_id=" + pen_id +
-                ", date_time='" + date_time + '\'' +
-                ", patient=" + patient +
-                ", hospital=" + hospital +
+                "penId=" + penId +
+                ", dateTime='" + dateTime + '\'' +
+                ", patientId=" + patientId +
+                ", hospId=" + hospId +
                 '}';
     }
 }

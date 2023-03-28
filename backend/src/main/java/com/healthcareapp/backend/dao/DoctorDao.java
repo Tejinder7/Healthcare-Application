@@ -2,10 +2,10 @@ package com.healthcareapp.backend.dao;
 
 import com.healthcareapp.backend.entities.Doctor;
 import com.healthcareapp.backend.entities.Hospital;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface DoctorDao extends CrudRepository<Doctor, Integer> {
+public interface DoctorDao extends JpaRepository<Doctor, Integer> {
 
-    public Doctor findById(int id);
+    public Doctor findDoctorByDocId(int id);
 
 }
