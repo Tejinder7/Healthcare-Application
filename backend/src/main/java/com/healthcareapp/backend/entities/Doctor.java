@@ -28,6 +28,7 @@ public class Doctor extends Authorization{
     private Hospital hospId;
 
     @OneToMany(mappedBy = "doctorId")
+    @JsonManagedReference(value = "Encounter-Doctor")
     private List<Encounter> encounterList;
 
     public Doctor() {

@@ -16,6 +16,7 @@ public class DoctorServices {
     @Autowired
     private HospitalDao hospitalDao;
 
+
     public Doctor getDoctorByDocId(int docId){
         Doctor doc = doctorDao.findDoctorByDocId(docId);
         if(doc == null){
