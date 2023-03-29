@@ -17,11 +17,11 @@ public class FieldWorkerController {
     private FieldWorkerService fieldWorkerService;
 
     @PostMapping("/addFieldWorker")
-    public ResponseEntity<FieldWorker> addFieldWorker(@RequestParam("name") String name, @RequestParam("address") String address,  @RequestParam("phoneNum") String phoneNum,@RequestParam("supId") int supId) {
+    public ResponseEntity<FieldWorker> addFieldWorker(@RequestParam("name") String name, @RequestParam("address") String address,  @RequestParam("phoneNum") String phoneNum,@RequestParam("supId") int supId, @RequestParam("userId") String userId, @RequestParam("password") String password) {
         FieldWorker fieldWorker;
 
         try {
-            fieldWorker = fieldWorkerService.addFieldWorker(name, address, phoneNum, supId);
+            fieldWorker = fieldWorkerService.addFieldWorker(name, address, phoneNum, supId, userId, password);
         }catch (Exception e){
             return ResponseEntity.status(404).build();
         }

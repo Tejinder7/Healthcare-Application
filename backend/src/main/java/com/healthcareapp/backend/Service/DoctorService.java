@@ -35,7 +35,7 @@ public class DoctorService {
         return hospital;
     }
 
-    public Doctor addDoctor(String name, String licId, String phNum, String doctorSpec, int hospId){
+    public Doctor addDoctor(String name, String licId, String phNum, String doctorSpec, int hospId, String userId, String password){
         Doctor doc = new Doctor();
 
         Hospital hosp = hospitalRepository.getHospitalsByHospId(hospId);
@@ -49,6 +49,9 @@ public class DoctorService {
         doc.setPhoneNum(phNum);
         doc.setDocSpecialization(doctorSpec);
         doc.setHospId(hosp);
+        doc.setUserId(userId);
+        doc.setPassword(password);
+        doc.setUserType("Doctor");
 
         try {
             doc = doctorRepository.save(doc);

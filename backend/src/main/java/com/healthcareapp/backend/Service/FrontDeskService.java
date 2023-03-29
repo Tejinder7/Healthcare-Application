@@ -16,7 +16,7 @@ public class FrontDeskService {
     @Autowired
     private HospitalRepository hospitalRepository;
 
-    public FrontDesk addFrontDesk(String name, int hospId){
+    public FrontDesk addFrontDesk(String name, int hospId, String userId, String password){
         FrontDesk frontDesk = new FrontDesk();
 
         Hospital hosp;
@@ -30,6 +30,9 @@ public class FrontDeskService {
 
         frontDesk.setName(name);
         frontDesk.setHospId(hosp);
+        frontDesk.setUserId(userId);
+        frontDesk.setPassword(password);
+        frontDesk.setUserType("FrontDesk");
 
         try {
             frontDeskRepository.save(frontDesk);

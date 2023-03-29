@@ -19,11 +19,11 @@ public class FrontDeskController {
     private FrontDeskService frontDeskServices;
 
     @PostMapping("/addFrontDesk")
-    public ResponseEntity<FrontDesk> addFrontDesk(@RequestParam("name") String name, @RequestParam("hospId") int hospId) {
+    public ResponseEntity<FrontDesk> addFrontDesk(@RequestParam("name") String name, @RequestParam("hospId") int hospId, @RequestParam("userId") String userId, @RequestParam("password") String password) {
         FrontDesk frontDesk;
 
         try {
-            frontDesk = frontDeskServices.addFrontDesk(name, hospId);
+            frontDesk = frontDeskServices.addFrontDesk(name, hospId, userId, password);
         }catch (Exception e){
             return ResponseEntity.status(404).build();
         }

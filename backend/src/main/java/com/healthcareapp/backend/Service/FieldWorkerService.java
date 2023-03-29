@@ -32,7 +32,7 @@ public class FieldWorkerService {
     @Autowired
     private PatientRepository patientRepository;
 
-    public FieldWorker addFieldWorker(String name, String address, String phoneNum, int supId){
+    public FieldWorker addFieldWorker(String name, String address, String phoneNum, int supId, String userId, String password){
         FieldWorker fieldWorker = new FieldWorker();
 
         Supervisor supervisor;
@@ -49,6 +49,9 @@ public class FieldWorkerService {
         fieldWorker.setPhoneNo(phoneNum);
         fieldWorker.setSupId(supervisor);
         fieldWorker.setPatientList(new ArrayList<>());
+        fieldWorker.setUserId(userId);
+        fieldWorker.setPassword(password);
+        fieldWorker.setUserType("FieldWorker");
 
         try {
             fieldWorker = fieldWorkerRepository.save(fieldWorker);
