@@ -37,6 +37,10 @@ public class HospitalService {
 
         Supervisor supervisor = supervisorRepository.findByAddress(hospital.getAddress());
 
+        if(supervisor == null){
+            throw new RuntimeException();
+        }
+
         hospital.setAddress(hospital.getAddress());
         hospital.setName(hospital.getName());
         hospital.setSupId(supervisor);
