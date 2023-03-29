@@ -41,4 +41,19 @@ public class FieldWorkerController {
         }
         return ResponseEntity.ok(fieldWorkerList);
     }
+
+
+    @PutMapping ("/assignFollowUp")
+    public ResponseEntity<FieldWorker> assignFollowUp(@RequestParam("fieldWorkerId") int fieldWorkerId, @RequestParam("followUpId") int followUpId){
+        FieldWorker fieldWorker;
+
+        try {
+            fieldWorker = fieldWorkerService.assignFollowUp(followUpId, fieldWorkerId);
+        }catch (Exception e){
+            return ResponseEntity.status(404).build();
+        }
+
+        return ResponseEntity.of(Optional.of(fieldWorker));
+    }
+
 }

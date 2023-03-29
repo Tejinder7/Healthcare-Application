@@ -2,6 +2,7 @@ package com.healthcareapp.backend.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -25,6 +26,7 @@ public class FieldWorker extends Authorization{
     private Supervisor supId;
 
     @OneToMany(mappedBy = "fieldWorkerId")
+    @JsonManagedReference(value = "FieldWorker-Patient")
     private List<Patient> patientList;
 
     public FieldWorker() {

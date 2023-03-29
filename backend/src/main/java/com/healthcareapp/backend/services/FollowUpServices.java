@@ -53,8 +53,12 @@ public class FollowUpServices {
             throw new RuntimeException();
         }
 
+        validFollowUp.setFlag(followUp.isFlag());
+        validFollowUp.setLastSyncDate(followUp.getLastSyncDate());
+        validFollowUp.setRemarks(followUp.getRemarks());
+
         try {
-            followUp = followUpDao.save(followUp);
+            followUp = followUpDao.save(validFollowUp);
         }catch (Exception e){
             throw new RuntimeException();
         }
