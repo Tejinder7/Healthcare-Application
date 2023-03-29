@@ -17,8 +17,9 @@ public class PendingQueueController {
     private PendingQueueService pendingQueueService;
 
     @PostMapping("/addPendingQueue/{hosp_id}/{p_id}")
-    public ResponseEntity<PendingQueue> addPendingQueue(@RequestBody PendingQueue pq, @PathVariable("hosp_id") int hosp_id, @PathVariable("p_id") int p_id){
+    public ResponseEntity<PendingQueue> addPendingQueue(@PathVariable("hosp_id") int hosp_id, @PathVariable("p_id") int p_id){
 
+        PendingQueue pq;
         try {
             pq = this.pendingQueueService.addPendingQueue(hosp_id, p_id);
         }
