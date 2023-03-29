@@ -11,7 +11,6 @@ public class AuthorizationService {
     public AuthorizationService(AuthorizationRepository authorizationRepository) {
         this.authorizationRepository = authorizationRepository;
     }
-
     public boolean loginAuthorization(Authorization authorization){
         Authorization authorization1= authorizationRepository.findByUserIdAndPasswordAndUserType(authorization.getUserId(), authorization.getPassword(), authorization.getUserType());
 

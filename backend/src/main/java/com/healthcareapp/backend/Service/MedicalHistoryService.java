@@ -1,57 +1,53 @@
 package com.healthcareapp.backend.Service;
 
-import com.healthcareapp.backend.Repository.MedicalHistoryRepository;
 import com.healthcareapp.backend.Model.Encounter;
 import com.healthcareapp.backend.Model.MedicalHistory;
 import com.healthcareapp.backend.Model.Patient;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.healthcareapp.backend.Repository.MedicalHistoryRepository;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 @Component
 public class MedicalHistoryService {
-
-    @Autowired
     private MedicalHistoryRepository medicalHistoryRepository;
+    private PatientService patientService;
 
-    @Autowired
-    private PatientService patientServices;
-
+    public MedicalHistoryService(MedicalHistoryRepository medicalHistoryRepository, PatientService patientService) {
+        this.medicalHistoryRepository = medicalHistoryRepository;
+        this.patientService = patientService;
+    }
     public List<MedicalHistory> getMedicalHistoryByPatientId(int patientId){
-        Patient patient = patientServices.getPatientById(patientId);
-        List<MedicalHistory> mhList = medicalHistoryRepository.findMedicalHistoriesByPatientId(patient);
-        if(mhList.size() == 0){
+        Patient patient = patientService.getPatientById(patientId);
+        List<MedicalHistory> medicalHistoryList = medicalHistoryRepository.findMedicalHistoriesByPatientId(patient);
+        if(medicalHistoryList.size() == 0){
             throw new RuntimeException();
         }
-        return mhList;
+        return medicalHistoryList;
     }
-
     public MedicalHistory addMedicalHistory(Patient patient, Encounter encounter){
-        MedicalHistory mh = new MedicalHistory();
-        mh.setPatientId(patient);
-        mh.setEncounterId(encounter);
-        medicalHistoryRepository.save(mh);
-        return mh;
+        MedicalHistory medicalHistory = new MedicalHistory();
+        medicalHistory.setPatientId(patient);
+        medicalHistory.setEncounterId(encounter);
+        medicalHistoryRepository.save(medicalHistory);
+        return medicalHistory;
     }
-
     public MedicalHistory getMedicalHistoryByEncounter(Encounter encounterId){
-        MedicalHistory mh = medicalHistoryRepository.findMedicalHistoryByEncounterId(encounterId);
-        if(mh == null){
+        MedicalHistory medicalHistory = medicalHistoryRepository.findMedicalHistoryByEncounterId(encounterId);
+        if(medicalHistory == null){
             throw new RuntimeException();
         }
-        return mh;
+        return medicalHistory;
     }
-
-    public MedicalHistory updateMedicalHistory(String pres, String symptoms, Encounter encounterId){
-        MedicalHistory mh = getMedicalHistoryByEncounter(encounterId);
+    public MedicalHistory updateMedicalHistory(String prescription, String symptoms, Encounter encounterId){
+        MedicalHistory medicalHistory = getMedicalHistoryByEncounter(encounterId);
         try {
-            mh.setPrescription(pres);
-            mh.setSymptoms(symptoms);
-            medicalHistoryRepository.save(mh);
+            medicalHistory.setPrescription(prescription);
+            medicalHistory.setSymptoms(symptoms);
+            medicalHistoryRepository.save(medicalHistory);
         }catch (Exception e){
             throw new RuntimeException();
         }
-        return mh;
+        return medicalHistory;
     }
 }

@@ -1,10 +1,9 @@
 package com.healthcareapp.backend.Service;
 
-import com.healthcareapp.backend.Repository.PendingQueueRepository;
 import com.healthcareapp.backend.Model.Hospital;
 import com.healthcareapp.backend.Model.Patient;
 import com.healthcareapp.backend.Model.PendingQueue;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.healthcareapp.backend.Repository.PendingQueueRepository;
 import org.springframework.stereotype.Component;
 
 import java.time.DateTimeException;
@@ -12,53 +11,52 @@ import java.util.List;
 
 @Component
 public class PendingQueueService {
-
-    @Autowired
     private PendingQueueRepository pendingQueueRepository;
-
-    @Autowired
     private PatientService patientService;
-
-    @Autowired
     private HospitalService hospitalService;
+    private DoctorService doctorService;
 
-    @Autowired
-    private DoctorService doctorServices;
+    public PendingQueueService(PendingQueueRepository pendingQueueRepository, PatientService patientService, HospitalService hospitalService, DoctorService doctorService) {
+        this.pendingQueueRepository = pendingQueueRepository;
+        this.patientService = patientService;
+        this.hospitalService = hospitalService;
+        this.doctorService = doctorService;
+    }
 
     public PendingQueue addPendingQueue(int hospId, int pid){
 
-        PendingQueue pq = new PendingQueue();
+        PendingQueue pendingQueue = new PendingQueue();
 
         Patient patient = patientService.getPatientById(pid);
-        pq.setPatientId(patient);
+        pendingQueue.setPatientId(patient);
 
         Hospital hospital = hospitalService.getHospitalById(hospId);
-        pq.setHospId(hospital);
+        pendingQueue.setHospId(hospital);
 
         try {
             String date = java.time.LocalDate.now().toString();
             String time = java.time.LocalTime.now().toString();
             String dateTime = date + " " + time;
-            pq.setDateTime(dateTime);
+            pendingQueue.setDateTime(dateTime);
         }
         catch (DateTimeException e){
             throw new RuntimeException();
         }
 
-        pendingQueueRepository.save(pq);
-        return pq;
+        pendingQueueRepository.save(pendingQueue);
+        return pendingQueue;
     }
 
     public List<PendingQueue> getPendingQueueByDocId(int docId){
-        Hospital hospital = doctorServices.getHospitalByDocId(docId);
+        Hospital hospital = doctorService.getHospitalByDocId(docId);
 
-        List<PendingQueue> pqList = pendingQueueRepository.findPendingQueueByHospId(hospital);
+        List<PendingQueue> pendingQueueList = pendingQueueRepository.findPendingQueueByHospId(hospital);
 
-        if(pqList.size() == 0){
+        if(pendingQueueList.size() == 0){
             throw new RuntimeException();
         }
 
-        return pqList;
+        return pendingQueueList;
     }
 
 }

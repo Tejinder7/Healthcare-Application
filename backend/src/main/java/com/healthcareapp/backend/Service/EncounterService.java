@@ -1,24 +1,25 @@
 package com.healthcareapp.backend.Service;
 
-import com.healthcareapp.backend.Repository.EncounterRepository;
 import com.healthcareapp.backend.Model.Doctor;
 import com.healthcareapp.backend.Model.Encounter;
 import com.healthcareapp.backend.Model.MedicalHistory;
 import com.healthcareapp.backend.Model.Patient;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.healthcareapp.backend.Repository.EncounterRepository;
 import org.springframework.stereotype.Component;
 
 @Component
 public class EncounterService {
-
-    @Autowired
     private MedicalHistoryService medicalHistoryService;
-    @Autowired
     private DoctorService doctorServices;
-    @Autowired
     private PatientService patientServices;
-    @Autowired
     private EncounterRepository encounterRepository;
+
+    public EncounterService(MedicalHistoryService medicalHistoryService, DoctorService doctorServices, PatientService patientServices, EncounterRepository encounterRepository) {
+        this.medicalHistoryService = medicalHistoryService;
+        this.doctorServices = doctorServices;
+        this.patientServices = patientServices;
+        this.encounterRepository = encounterRepository;
+    }
 
     public Encounter addEncounter(int patientId, int docId){
         Encounter encounter = new Encounter();
@@ -33,15 +34,15 @@ public class EncounterService {
 
         return encounter;
     }
-
-    public MedicalHistory saveEncounter(String pres, String symptoms, int encounterId){
+    public MedicalHistory saveEncounter(String prescription, String symptoms, int encounterId){
         Encounter encounter = getEncounterById(encounterId);
         Patient patient = encounter.getPatientId();
         MedicalHistory medicalHistory = medicalHistoryService.addMedicalHistory(patient,encounter);
         encounter.setMedicalHistoryId(medicalHistory);
         encounterRepository.save(encounter);
-        MedicalHistory mh = medicalHistoryService.updateMedicalHistory(pres, symptoms, encounter);
-        return mh;
+
+        MedicalHistory updatedMedicalHistory = medicalHistoryService.updateMedicalHistory(prescription, symptoms, encounter);
+        return updatedMedicalHistory;
     }
 
     public Encounter getEncounterById(int encounterId){
