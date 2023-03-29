@@ -3,7 +3,6 @@ package com.healthcareapp.backend.Service;
 import com.healthcareapp.backend.Model.Admin;
 import com.healthcareapp.backend.Model.Hospital;
 import com.healthcareapp.backend.Repository.AdminRepository;
-import com.healthcareapp.backend.Repository.HospitalRepository;
 import org.springframework.stereotype.Component;
 
 @Component

@@ -14,9 +14,11 @@ import java.util.Optional;
 @RestController
 @CrossOrigin
 public class FrontDeskController {
-
-    @Autowired
     private FrontDeskService frontDeskServices;
+
+    public FrontDeskController(FrontDeskService frontDeskServices) {
+        this.frontDeskServices = frontDeskServices;
+    }
 
     @PostMapping("/addFrontDesk")
     public ResponseEntity<FrontDesk> addFrontDesk(@RequestParam("name") String name, @RequestParam("hospId") int hospId) {

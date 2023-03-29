@@ -1,11 +1,7 @@
 package com.healthcareapp.backend.Controller;
 
 import com.healthcareapp.backend.Model.Admin;
-import com.healthcareapp.backend.Model.Hospital;
 import com.healthcareapp.backend.Service.AdminService;
-import com.healthcareapp.backend.Service.DoctorService;
-import org.apache.coyote.Response;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,8 +10,6 @@ import java.util.Optional;
 @RestController
 @CrossOrigin
 public class AdminController {
-
-
     private AdminService adminService;
     public AdminController(AdminService adminService) {
         this.adminService = adminService;

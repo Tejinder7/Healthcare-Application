@@ -1,9 +1,7 @@
 package com.healthcareapp.backend.Controller;
 
 import com.healthcareapp.backend.Model.FollowUp;
-import com.healthcareapp.backend.Model.Hospital;
 import com.healthcareapp.backend.Service.FollowUpService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,11 +11,13 @@ import java.util.Optional;
 @RestController
 @CrossOrigin
 public class FollowUpController {
-
-    @Autowired
     private FollowUpService followUpService;
 
-    @GetMapping("/getTodaysFollowUps")
+    public FollowUpController(FollowUpService followUpService) {
+        this.followUpService = followUpService;
+    }
+
+    @GetMapping("/getTodayFollowUps")
     public ResponseEntity<List<FollowUp>> getTodayFollowUp(@RequestParam("date") String date, @RequestParam("fwId") int fwId){
         List<FollowUp> followUpList;
 
@@ -56,7 +56,7 @@ public class FollowUpController {
 
     @PostMapping("/addFollowUps/{en_id}")
     public ResponseEntity<List<FollowUp>> addFollowUps(@RequestBody List<String> dateList, @PathVariable int en_id){
-        List<FollowUp> fuList = followUpService.addFollowUps(dateList, en_id);
-        return ResponseEntity.of(Optional.of(fuList));
+        List<FollowUp> followUpList = followUpService.addFollowUps(dateList, en_id);
+        return ResponseEntity.of(Optional.of(followUpList));
     }
 }

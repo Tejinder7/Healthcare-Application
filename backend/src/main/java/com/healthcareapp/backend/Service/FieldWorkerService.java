@@ -1,17 +1,13 @@
 package com.healthcareapp.backend.Service;
 
+import com.healthcareapp.backend.Model.FieldWorker;
 import com.healthcareapp.backend.Model.FollowUp;
 import com.healthcareapp.backend.Model.Patient;
+import com.healthcareapp.backend.Model.Supervisor;
+import com.healthcareapp.backend.Repository.FieldWorkerRepository;
 import com.healthcareapp.backend.Repository.FollowUpRepository;
 import com.healthcareapp.backend.Repository.PatientRepository;
-
-
-import com.healthcareapp.backend.Repository.FieldWorkerRepository;
 import com.healthcareapp.backend.Repository.SupervisorRepository;
-import com.healthcareapp.backend.Model.FieldWorker;
-import com.healthcareapp.backend.Model.Supervisor;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -19,18 +15,17 @@ import java.util.List;
 
 @Component
 public class FieldWorkerService {
-
-    @Autowired
     private FieldWorkerRepository fieldWorkerRepository;
-
-    @Autowired
     private SupervisorRepository supervisorRepository;
-
-    @Autowired
     private FollowUpRepository followUpRepository;
-
-    @Autowired
     private PatientRepository patientRepository;
+
+    public FieldWorkerService(FieldWorkerRepository fieldWorkerRepository, SupervisorRepository supervisorRepository, FollowUpRepository followUpRepository, PatientRepository patientRepository) {
+        this.fieldWorkerRepository = fieldWorkerRepository;
+        this.supervisorRepository = supervisorRepository;
+        this.followUpRepository = followUpRepository;
+        this.patientRepository = patientRepository;
+    }
 
     public FieldWorker addFieldWorker(String name, String address, String phoneNum, int supId){
         FieldWorker fieldWorker = new FieldWorker();
@@ -61,14 +56,14 @@ public class FieldWorkerService {
 
 
     public List<FieldWorker> getFieldWorkers(int supId){
-        Supervisor sup = supervisorRepository.findSupervisorBySupId(supId);
+        Supervisor supervisor = supervisorRepository.findSupervisorBySupId(supId);
 
-        if(sup==null)
+        if(supervisor==null)
         {
             throw new RuntimeException();
         }
 
-        List<FieldWorker> fieldWorkerList = fieldWorkerRepository.findBySupId(sup);
+        List<FieldWorker> fieldWorkerList = fieldWorkerRepository.findBySupId(supervisor);
 
         if(fieldWorkerList.size()==0)
         {

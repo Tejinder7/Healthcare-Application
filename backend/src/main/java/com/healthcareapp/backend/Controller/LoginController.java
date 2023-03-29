@@ -2,8 +2,10 @@ package com.healthcareapp.backend.Controller;
 
 import com.healthcareapp.backend.Model.Authorization;
 import com.healthcareapp.backend.Service.AuthorizationService;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")

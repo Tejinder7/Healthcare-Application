@@ -1,35 +1,35 @@
 package com.healthcareapp.backend.Service;
 
-import com.healthcareapp.backend.Repository.FrontDeskRepository;
-import com.healthcareapp.backend.Repository.HospitalRepository;
 import com.healthcareapp.backend.Model.FrontDesk;
 import com.healthcareapp.backend.Model.Hospital;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.healthcareapp.backend.Repository.FrontDeskRepository;
+import com.healthcareapp.backend.Repository.HospitalRepository;
 import org.springframework.stereotype.Component;
 
 @Component
 public class FrontDeskService {
-
-    @Autowired
     private FrontDeskRepository frontDeskRepository;
-
-    @Autowired
     private HospitalRepository hospitalRepository;
+
+    public FrontDeskService(FrontDeskRepository frontDeskRepository, HospitalRepository hospitalRepository) {
+        this.frontDeskRepository = frontDeskRepository;
+        this.hospitalRepository = hospitalRepository;
+    }
 
     public FrontDesk addFrontDesk(String name, int hospId){
         FrontDesk frontDesk = new FrontDesk();
 
-        Hospital hosp;
+        Hospital hospital;
 
-        hosp = hospitalRepository.getHospitalsByHospId(hospId);
+        hospital = hospitalRepository.getHospitalsByHospId(hospId);
 
-        if(hosp==null)
+        if(hospital==null)
         {
             throw new RuntimeException();
         }
 
         frontDesk.setName(name);
-        frontDesk.setHospId(hosp);
+        frontDesk.setHospId(hospital);
 
         try {
             frontDeskRepository.save(frontDesk);
