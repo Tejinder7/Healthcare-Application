@@ -10,17 +10,16 @@ import java.util.Optional;
 @CrossOrigin
 public class DoctorController {
     private DoctorService doctorService;
-
     public DoctorController(DoctorService doctorService) {
         this.doctorService = doctorService;
     }
 
-    @PostMapping("/addDoctor/{hospId}")
-    public ResponseEntity<Doctor> addDoctor(@RequestBody Doctor doctor, @PathVariable("hospId") int hospId){
-        Doctor doctor1;
+    @PostMapping("/addDoctor")
+    public ResponseEntity<Doctor> addDoctor(@RequestParam("name") String name, @RequestParam("licId") String licId, @RequestParam("phoneNum") String phoneNum, @RequestParam("docSpecialization") String docSpecialization, @RequestParam("hospId") int hospId, @RequestParam("userId") String userId, @RequestParam("password") String password){
+        Doctor doc;
 
         try{
-            doctor1 = doctorService.addDoctor(doctor, hospId);
+            doc = doctorService.addDoctor(name, licId, phoneNum, docSpecialization, hospId, userId, password);
         }catch (Exception e){
             return ResponseEntity.status(404).build();
         }

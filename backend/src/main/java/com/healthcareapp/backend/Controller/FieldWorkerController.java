@@ -12,17 +12,17 @@ import java.util.Optional;
 @CrossOrigin
 public class FieldWorkerController {
     private FieldWorkerService fieldWorkerService;
-
     public FieldWorkerController(FieldWorkerService fieldWorkerService) {
         this.fieldWorkerService = fieldWorkerService;
     }
 
-    @PostMapping("/addFieldWorker/{supId}")
-    public ResponseEntity<FieldWorker> addFieldWorker(@RequestBody FieldWorker fieldWorker, @PathVariable("supId") int supId) {
-        FieldWorker fieldWorker1;
+
+    @PostMapping("/addFieldWorker")
+    public ResponseEntity<FieldWorker> addFieldWorker(@RequestParam("name") String name, @RequestParam("address") String address,  @RequestParam("phoneNum") String phoneNum,@RequestParam("supId") int supId, @RequestParam("userId") String userId, @RequestParam("password") String password) {
+        FieldWorker fieldWorker;
 
         try {
-            fieldWorker1 = fieldWorkerService.addFieldWorker(fieldWorker.getName(), fieldWorker.getAddress(), fieldWorker.getPhoneNo(), supId);
+            fieldWorker = fieldWorkerService.addFieldWorker(name, address, phoneNum, supId, userId, password);
         }catch (Exception e){
             return ResponseEntity.status(404).build();
         }

@@ -35,14 +35,26 @@ public class DoctorService {
         return hospital;
     }
 
-    public Doctor addDoctor(Doctor doctor, int hospId){
-        Hospital hospital = hospitalRepository.getHospitalsByHospId(hospId);
+
+    public Doctor addDoctor(String name, String licId, String phNum, String doctorSpec, int hospId, String userId, String password){
+        Doctor doc = new Doctor();
+
+        Hospital hosp = hospitalRepository.getHospitalsByHospId(hospId);
+
 
         if(hospital == null){
             throw new RuntimeException();
         }
 
-        doctor.setHospId(hospital);
+        doc.setName(name);
+        doc.setLicId(licId);
+        doc.setPhoneNum(phNum);
+        doc.setDocSpecialization(doctorSpec);
+        doc.setHospId(hosp);
+        doc.setUserId(userId);
+        doc.setPassword(password);
+        doc.setUserType("Doctor");
+
 
         try{
             doctor = doctorRepository.save(doctor);

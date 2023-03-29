@@ -19,7 +19,7 @@ public class FieldWorkerService {
     private SupervisorRepository supervisorRepository;
     private FollowUpRepository followUpRepository;
     private PatientRepository patientRepository;
-
+    
     public FieldWorkerService(FieldWorkerRepository fieldWorkerRepository, SupervisorRepository supervisorRepository, FollowUpRepository followUpRepository, PatientRepository patientRepository) {
         this.fieldWorkerRepository = fieldWorkerRepository;
         this.supervisorRepository = supervisorRepository;
@@ -27,7 +27,9 @@ public class FieldWorkerService {
         this.patientRepository = patientRepository;
     }
 
-    public FieldWorker addFieldWorker(String name, String address, String phoneNum, int supId){
+
+    public FieldWorker addFieldWorker(String name, String address, String phoneNum, int supId, String userId, String password){
+
         FieldWorker fieldWorker = new FieldWorker();
 
         Supervisor supervisor;
@@ -44,6 +46,9 @@ public class FieldWorkerService {
         fieldWorker.setPhoneNo(phoneNum);
         fieldWorker.setSupId(supervisor);
         fieldWorker.setPatientList(new ArrayList<>());
+        fieldWorker.setUserId(userId);
+        fieldWorker.setPassword(password);
+        fieldWorker.setUserType("FieldWorker");
 
         try {
             fieldWorker = fieldWorkerRepository.save(fieldWorker);

@@ -10,13 +10,15 @@ import org.springframework.stereotype.Component;
 public class FrontDeskService {
     private FrontDeskRepository frontDeskRepository;
     private HospitalRepository hospitalRepository;
-
+    
     public FrontDeskService(FrontDeskRepository frontDeskRepository, HospitalRepository hospitalRepository) {
         this.frontDeskRepository = frontDeskRepository;
         this.hospitalRepository = hospitalRepository;
     }
 
-    public FrontDesk addFrontDesk(String name, int hospId){
+
+    public FrontDesk addFrontDesk(String name, int hospId, String userId, String password){
+
         FrontDesk frontDesk = new FrontDesk();
 
         Hospital hospital;
@@ -29,7 +31,11 @@ public class FrontDeskService {
         }
 
         frontDesk.setName(name);
-        frontDesk.setHospId(hospital);
+        frontDesk.setHospId(hosp);
+        frontDesk.setUserId(userId);
+        frontDesk.setPassword(password);
+        frontDesk.setUserType("FrontDesk");
+
 
         try {
             frontDeskRepository.save(frontDesk);
