@@ -4,7 +4,9 @@ import com.healthcareapp.backend.Model.Admin;
 import com.healthcareapp.backend.Model.Hospital;
 import com.healthcareapp.backend.Repository.AdminRepository;
 import com.healthcareapp.backend.Repository.HospitalRepository;
+import org.springframework.stereotype.Component;
 
+@Component
 public class AdminService {
     AdminRepository adminRepository;
     HospitalService hospitalService;
@@ -15,16 +17,17 @@ public class AdminService {
     }
 
     public Admin addAdmin(Admin admin, int hospId){
-        if(adminRepository.findAdminByAuthId(admin.getAuthId())!= null){
-            //Admin already exists
-            throw new RuntimeException();
-        }
+//        if(adminRepository.findAdminByAuthId(admin.getAuthId())!= null){
+//            //Admin already exists
+//            throw new RuntimeException();
+//        }
 
         Hospital hospital= hospitalService.getHospitalById(hospId);
         admin.setHospId(hospital);
 
         try{
-            return adminRepository.save(admin);
+            adminRepository.save(admin);
+            return admin;
         }
         catch (Exception e){
             throw new RuntimeException();
