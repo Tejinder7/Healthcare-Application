@@ -4,10 +4,7 @@ import com.healthcareapp.backend.Model.Hospital;
 import com.healthcareapp.backend.Service.HospitalService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
@@ -19,10 +16,10 @@ public class HospitalController {
     private HospitalService hospitalService;
 
     @PostMapping("/addHospital")
-    public ResponseEntity<Hospital> addHospital(@RequestParam("name") String name, @RequestParam("address") String address){
+    public ResponseEntity<Hospital> addHospital(@RequestBody Hospital hospital){
         Hospital hosp;
         try{
-            hosp = hospitalService.addHospital(name, address);
+            hosp = hospitalService.addHospital(hospital.getName(), hospital.getAddress());
         }
         catch (Exception e)
         {

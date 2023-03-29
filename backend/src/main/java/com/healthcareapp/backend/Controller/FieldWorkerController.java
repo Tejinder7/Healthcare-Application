@@ -16,16 +16,16 @@ public class FieldWorkerController {
     @Autowired
     private FieldWorkerService fieldWorkerService;
 
-    @PostMapping("/addFieldWorker")
-    public ResponseEntity<FieldWorker> addFieldWorker(@RequestParam("name") String name, @RequestParam("address") String address,  @RequestParam("phoneNum") String phoneNum,@RequestParam("supId") int supId) {
-        FieldWorker fieldWorker;
+    @PostMapping("/addFieldWorker/{supId}")
+    public ResponseEntity<FieldWorker> addFieldWorker(@RequestBody FieldWorker fieldWorker, @PathVariable("supId") int supId) {
+        FieldWorker fieldWorker1;
 
         try {
-            fieldWorker = fieldWorkerService.addFieldWorker(name, address, phoneNum, supId);
+            fieldWorker1 = fieldWorkerService.addFieldWorker(fieldWorker.getName(), fieldWorker.getAddress(), fieldWorker.getPhoneNo(), supId);
         }catch (Exception e){
             return ResponseEntity.status(404).build();
         }
-        return ResponseEntity.of(Optional.of(fieldWorker));
+        return ResponseEntity.of(Optional.of(fieldWorker1));
     }
 
     @GetMapping("/getFieldWorkers")

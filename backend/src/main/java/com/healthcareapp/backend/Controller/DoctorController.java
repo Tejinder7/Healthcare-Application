@@ -4,10 +4,7 @@ import com.healthcareapp.backend.Model.Doctor;
 import com.healthcareapp.backend.Service.DoctorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
@@ -18,12 +15,12 @@ public class DoctorController {
     @Autowired
     private DoctorService doctorService;
 
-    @PostMapping("/addDoctor")
-    public ResponseEntity<Doctor> addDoctor(@RequestParam("name") String name, @RequestParam("licId") String licId, @RequestParam("phoneNum") String phoneNum, @RequestParam("docSpecialization") String docSpecialization, @RequestParam("hospId") int hospId){
+    @PostMapping("/addDoctor/{hospId}")
+    public ResponseEntity<Doctor> addDoctor(@RequestBody Doctor doctor, @PathVariable("hospId") int hospId){
         Doctor doc;
 
         try{
-            doc = doctorService.addDoctor(name, licId, phoneNum, docSpecialization, hospId);
+            doc = doctorService.addDoctor(doctor.getName(), doctor.getLicId(), doctor.getPhoneNum(), doctor.getDocSpecialization(), hospId);
         }catch (Exception e){
             return ResponseEntity.status(404).build();
         }
