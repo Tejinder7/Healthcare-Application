@@ -1,9 +1,10 @@
 package com.healthcareapp.backend.Service;
 
+import com.healthcareapp.backend.Model.*;
 import com.healthcareapp.backend.Repository.FieldWorkerRepository;
 import com.healthcareapp.backend.Repository.FollowUpRepository;
 import com.healthcareapp.backend.Repository.SupervisorRepository;
-import com.healthcareapp.backend.Model.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -11,20 +12,18 @@ import java.util.List;
 
 @Component
 public class FollowUpService {
+
+    @Autowired
     private FollowUpRepository followUpRepository;
 
+    @Autowired
     private FieldWorkerRepository fieldWorkerRepository;
 
+    @Autowired
     private SupervisorRepository supervisorRepository;
 
+    @Autowired
     private EncounterService encounterService;
-
-    public FollowUpService(FollowUpRepository followUpRepository, FieldWorkerRepository fieldWorkerRepository, SupervisorRepository supervisorRepository, EncounterService encounterService) {
-        this.followUpRepository = followUpRepository;
-        this.fieldWorkerRepository = fieldWorkerRepository;
-        this.supervisorRepository = supervisorRepository;
-        this.encounterService = encounterService;
-    }
 
     public List<FollowUp> getCurrentDateFollowUps(String date, int fwId){
         FieldWorker fieldWorker;
@@ -57,13 +56,17 @@ public class FollowUpService {
             throw new RuntimeException();
         }
 
+        validFollowUp.setFlag(followUp.isFlag());
+        validFollowUp.setLastSyncDate(followUp.getLastSyncDate());
+        validFollowUp.setRemarks(followUp.getRemarks());
+
         try {
-            followUp = followUpRepository.save(followUp);
+            validFollowUp = followUpRepository.save(validFollowUp);
         }catch (Exception e){
             throw new RuntimeException();
         }
 
-        return followUp;
+        return validFollowUp;
     }
 
     public List<FollowUp> getAllFollowUp(int supId){
@@ -78,7 +81,9 @@ public class FollowUpService {
 
         List<Hospital> hospitalList = sup.getHospitalList();
 
-        hospitalList.forEach(hospital -> {followUpList.add(followUpRepository.findByHospId(hospital));});
+        //System.out.printf(hospitalList.toString());
+
+        hospitalList.forEach(hospital -> {followUpList.addAll(followUpRepository.findByHospId(hospital));});
 
         return followUpList;
     }

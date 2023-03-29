@@ -13,5 +13,5 @@ public interface FollowUpRepository extends JpaRepository<FollowUp, Integer> {
 
     public FollowUp findById(int id);
 
-    public FollowUp findByHospId(Hospital hospital);
+    public List<FollowUp> findByHospId(Hospital hospital);
 }

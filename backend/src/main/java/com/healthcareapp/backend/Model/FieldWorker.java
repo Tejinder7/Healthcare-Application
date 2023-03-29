@@ -2,6 +2,8 @@ package com.healthcareapp.backend.Model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -21,10 +23,12 @@ public class FieldWorker extends Authorization{
     private String phoneNo;
 
     @ManyToOne
-    @JsonBackReference("FW-SUP")
+//    @JsonBackReference("FW-SUP")
+    @JsonIgnore
     private Supervisor supId;
 
     @OneToMany(mappedBy = "fieldWorkerId")
+    @JsonIgnore
     private List<Patient> patientList;
 
     public FieldWorker() {

@@ -1,6 +1,7 @@
 package com.healthcareapp.backend.Controller;
 
 import com.healthcareapp.backend.Model.FollowUp;
+import com.healthcareapp.backend.Model.Hospital;
 import com.healthcareapp.backend.Service.FollowUpService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

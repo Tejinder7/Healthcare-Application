@@ -1,5 +1,6 @@
 package com.healthcareapp.backend.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
@@ -20,10 +21,11 @@ public class Supervisor extends Authorization{
     private String address;
 
     @OneToMany(mappedBy = "supId")
-    @JsonManagedReference("FW-SUP")
+//    @JsonManagedReference("FW-SUP")
     private List<FieldWorker> fieldWorkerList;
 
     @OneToMany(mappedBy = "supId")
+    @JsonIgnore
     private List<Hospital> hospitalList;
 
     public Supervisor() {

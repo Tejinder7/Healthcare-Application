@@ -18,17 +18,18 @@ public class Hospital {
     private String address;
 
     @OneToOne(mappedBy = "hospId")
+    @JsonIgnore
     private Admin admin;
 
     @ManyToOne
     private Supervisor supId;
 
     @OneToMany(mappedBy = "hospId")
-    @JsonManagedReference("HOS-FD")
+    @JsonIgnore
     private List<FrontDesk> frontDeskList;
     
     @OneToMany(mappedBy = "hospId")
-    @JsonManagedReference("HOS-DOC")
+    @JsonIgnore
     private List<Doctor> doctorList;
     
 

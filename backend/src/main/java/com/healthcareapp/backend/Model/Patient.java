@@ -30,6 +30,7 @@ public class Patient {
     private List<MedicalHistory> medicalHistoryList;
 
     @ManyToOne
+//    @JsonBackReference(value = "FieldWorker-Patient")
     private FieldWorker fieldWorkerId;
 
     @OneToOne(mappedBy = "patientId")

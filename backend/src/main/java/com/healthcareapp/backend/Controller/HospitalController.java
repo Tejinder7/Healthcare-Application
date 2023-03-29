@@ -19,10 +19,10 @@ public class HospitalController {
     private HospitalService hospitalService;
 
     @PostMapping("/addHospital")
-    public ResponseEntity<Hospital> addHospital(@RequestParam("id") int id,@RequestParam("name") String name, @RequestParam("address") String address){
+    public ResponseEntity<Hospital> addHospital(@RequestParam("name") String name, @RequestParam("address") String address){
         Hospital hosp;
         try{
-            hosp = hospitalService.addHospital(id, name, address);
+            hosp = hospitalService.addHospital(name, address);
         }
         catch (Exception e)
         {

@@ -19,11 +19,10 @@ public class HospitalService {
         return hospital;
     }
 
-    public Hospital addHospital(int hospId, String name, String address){
+    public Hospital addHospital(String name, String address){
 
         Hospital hosp = new Hospital();
 
-        hosp.setHospId(hospId);
         hosp.setAddress(address);
         hosp.setName(name);
 

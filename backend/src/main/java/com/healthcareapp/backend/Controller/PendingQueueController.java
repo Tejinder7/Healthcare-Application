@@ -1,5 +1,6 @@
 package com.healthcareapp.backend.Controller;
 
+import com.healthcareapp.backend.Model.Doctor;
 import com.healthcareapp.backend.Model.PendingQueue;
 import com.healthcareapp.backend.Service.PendingQueueService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import java.util.Optional;
 @RestController
 @CrossOrigin
 public class PendingQueueController {
+
 
     @Autowired
     private PendingQueueService pendingQueueService;
