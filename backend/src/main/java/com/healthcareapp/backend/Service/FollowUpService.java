@@ -4,7 +4,6 @@ import com.healthcareapp.backend.Model.*;
 import com.healthcareapp.backend.Repository.FieldWorkerRepository;
 import com.healthcareapp.backend.Repository.FollowUpRepository;
 import com.healthcareapp.backend.Repository.SupervisorRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -12,18 +11,17 @@ import java.util.List;
 
 @Component
 public class FollowUpService {
-
-    @Autowired
     private FollowUpRepository followUpRepository;
-
-    @Autowired
     private FieldWorkerRepository fieldWorkerRepository;
-
-    @Autowired
     private SupervisorRepository supervisorRepository;
-
-    @Autowired
     private EncounterService encounterService;
+
+    public FollowUpService(FollowUpRepository followUpRepository, FieldWorkerRepository fieldWorkerRepository, SupervisorRepository supervisorRepository, EncounterService encounterService) {
+        this.followUpRepository = followUpRepository;
+        this.fieldWorkerRepository = fieldWorkerRepository;
+        this.supervisorRepository = supervisorRepository;
+        this.encounterService = encounterService;
+    }
 
     public List<FollowUp> getCurrentDateFollowUps(String date, int fwId){
         FieldWorker fieldWorker;
@@ -70,16 +68,16 @@ public class FollowUpService {
     }
 
     public List<FollowUp> getAllFollowUp(int supId){
-        Supervisor sup = supervisorRepository.findSupervisorBySupId(supId);
+        Supervisor supervisor = supervisorRepository.findSupervisorBySupId(supId);
 
-        if(sup==null)
+        if(supervisor==null)
         {
             throw new RuntimeException();
         }
 
         List<FollowUp> followUpList = new ArrayList<FollowUp>();
 
-        List<Hospital> hospitalList = sup.getHospitalList();
+        List<Hospital> hospitalList = supervisor.getHospitalList();
 
         //System.out.printf(hospitalList.toString());
 
@@ -93,22 +91,22 @@ public class FollowUpService {
         Patient patient = encounter.getPatientId();
         Doctor doctor = encounter.getDoctorId();
         Hospital hospital = doctor.getHospId();
-        List<FollowUp> fuList = new ArrayList<>();
+        List<FollowUp> followUpList = new ArrayList<>();
         try {
             for (int i = 0; i < dateList.size(); i++) {
-                FollowUp fu = new FollowUp();
-                fu.setEncounterId(encounter);
-                fu.setDate(dateList.get(i));
-                fu.setFlag(false);
-                fu.setPatientId(patient);
-                fu.setHospId(hospital);
-                followUpRepository.save(fu);
+                FollowUp followUp = new FollowUp();
+                followUp.setEncounterId(encounter);
+                followUp.setDate(dateList.get(i));
+                followUp.setFlag(false);
+                followUp.setPatientId(patient);
+                followUp.setHospId(hospital);
+                followUpRepository.save(followUp);
 
-                fuList.add(fu);
+                followUpList.add(followUp);
             }
         }catch (Exception e){
             throw new RuntimeException();
         }
-        return fuList;
+        return followUpList;
     }
 }

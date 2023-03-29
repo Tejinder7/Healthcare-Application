@@ -2,7 +2,6 @@ package com.healthcareapp.backend.Controller;
 
 import com.healthcareapp.backend.Model.FieldWorker;
 import com.healthcareapp.backend.Service.FieldWorkerService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,9 +11,11 @@ import java.util.Optional;
 @RestController
 @CrossOrigin
 public class FieldWorkerController {
-
-    @Autowired
     private FieldWorkerService fieldWorkerService;
+    public FieldWorkerController(FieldWorkerService fieldWorkerService) {
+        this.fieldWorkerService = fieldWorkerService;
+    }
+
 
     @PostMapping("/addFieldWorker")
     public ResponseEntity<FieldWorker> addFieldWorker(@RequestParam("name") String name, @RequestParam("address") String address,  @RequestParam("phoneNum") String phoneNum,@RequestParam("supId") int supId, @RequestParam("userId") String userId, @RequestParam("password") String password) {
@@ -25,7 +26,7 @@ public class FieldWorkerController {
         }catch (Exception e){
             return ResponseEntity.status(404).build();
         }
-        return ResponseEntity.of(Optional.of(fieldWorker));
+        return ResponseEntity.of(Optional.of(fieldWorker1));
     }
 
     @GetMapping("/getFieldWorkers")

@@ -1,25 +1,32 @@
 package com.healthcareapp.backend.Service;
 
+
 import com.healthcareapp.backend.Model.Supervisor;
 import com.healthcareapp.backend.Repository.HospitalRepository;
 import com.healthcareapp.backend.Model.Hospital;
 import com.healthcareapp.backend.Repository.SupervisorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 @Component
 public class HospitalService {
+    private HospitalRepository hospitalRepository;
 
-    @Autowired
+ 
     private HospitalRepository hospitalDao;
-
-    @Autowired
     private SupervisorRepository supervisorRepository;
 
+
+    public HospitalService(HospitalRepository hospitalRepository, SupervisorRepository supervisorRepository) {
+        this.hospitalRepository = hospitalRepository;
+        this.supervisorRepository = supervisorRepository;
+    }
+
     public Hospital getHospitalById(int id){
-        Hospital hospital = hospitalDao.getHospitalsByHospId(id);
+        Hospital hospital = hospitalRepository.getHospitalsByHospId(id);
         if(hospital == null){
             throw new RuntimeException();
         }
@@ -28,7 +35,8 @@ public class HospitalService {
 
     public Hospital addHospital(String name, String address){
 
-        Hospital hosp = new Hospital();
+        Hospital hospital = new Hospital();
+
 
         Supervisor supervisor = supervisorRepository.findByAddress(address);
 
@@ -38,13 +46,13 @@ public class HospitalService {
 
 
         try {
-            hosp = hospitalDao.save(hosp);
+            hospital = hospitalRepository.save(hospital);
         }
         catch (Exception e)
         {
             throw new RuntimeException();
         }
-        return hosp;
+        return hospital;
     }
 
 }
