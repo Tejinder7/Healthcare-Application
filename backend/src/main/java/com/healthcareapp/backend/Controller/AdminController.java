@@ -26,5 +26,4 @@ public class AdminController {
         }
         return ResponseEntity.of(Optional.of(admin1));
     }
-
 }
