@@ -5,6 +5,7 @@ import com.healthcareapp.backend.Service.DoctorService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.print.Doc;
 import java.util.Optional;
 @RestController
 @CrossOrigin
@@ -14,12 +15,12 @@ public class DoctorController {
         this.doctorService = doctorService;
     }
 
-    @PostMapping("/addDoctor")
-    public ResponseEntity<Doctor> addDoctor(@RequestParam("name") String name, @RequestParam("licId") String licId, @RequestParam("phoneNum") String phoneNum, @RequestParam("docSpecialization") String docSpecialization, @RequestParam("hospId") int hospId, @RequestParam("userId") String userId, @RequestParam("password") String password){
-        Doctor doc;
+    @PostMapping("/addDoctor/{hospitalId}")
+    public ResponseEntity<Doctor> addDoctor(@RequestBody Doctor doctor, @PathVariable int hospitalId){
+        Doctor doctor1;
 
         try{
-            doc = doctorService.addDoctor(name, licId, phoneNum, docSpecialization, hospId, userId, password);
+            doctor1 = doctorService.addDoctor(doctor, hospitalId);
         }catch (Exception e){
             return ResponseEntity.status(404).build();
         }

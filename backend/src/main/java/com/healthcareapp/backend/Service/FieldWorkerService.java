@@ -28,9 +28,7 @@ public class FieldWorkerService {
     }
 
 
-    public FieldWorker addFieldWorker(String name, String address, String phoneNum, int supId, String userId, String password){
-
-        FieldWorker fieldWorker = new FieldWorker();
+    public FieldWorker addFieldWorker(FieldWorker fieldWorker, int supId){
 
         Supervisor supervisor;
 
@@ -41,13 +39,7 @@ public class FieldWorkerService {
             throw new RuntimeException();
         }
 
-        fieldWorker.setName(name);
-        fieldWorker.setAddress(address);
-        fieldWorker.setPhoneNo(phoneNum);
         fieldWorker.setSupId(supervisor);
-        fieldWorker.setPatientList(new ArrayList<>());
-        fieldWorker.setUserId(userId);
-        fieldWorker.setPassword(password);
         fieldWorker.setUserType("FieldWorker");
 
         try {

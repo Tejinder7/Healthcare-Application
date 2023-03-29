@@ -19,7 +19,7 @@ public class SupervisorController {
         this.supervisorService = supervisorService;
     }
 
-    @PostMapping("/addSupervisor/{hospId}")
+    @PostMapping("/addSupervisor")
     public ResponseEntity<Supervisor> addSupervisor(@RequestBody Supervisor supervisor){
         Supervisor supervisor1;
         try{

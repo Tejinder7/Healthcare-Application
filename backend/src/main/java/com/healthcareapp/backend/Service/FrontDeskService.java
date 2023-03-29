@@ -17,23 +17,18 @@ public class FrontDeskService {
     }
 
 
-    public FrontDesk addFrontDesk(String name, int hospId, String userId, String password){
-
-        FrontDesk frontDesk = new FrontDesk();
+    public FrontDesk addFrontDesk(FrontDesk frontDesk, int hospitalId){
 
         Hospital hospital;
 
-        hospital = hospitalRepository.getHospitalsByHospId(hospId);
+        hospital = hospitalRepository.getHospitalsByHospId(hospitalId);
 
         if(hospital==null)
         {
             throw new RuntimeException();
         }
 
-        frontDesk.setName(name);
-        frontDesk.setHospId(hosp);
-        frontDesk.setUserId(userId);
-        frontDesk.setPassword(password);
+        frontDesk.setHospId(hospital);
         frontDesk.setUserType("FrontDesk");
 
 

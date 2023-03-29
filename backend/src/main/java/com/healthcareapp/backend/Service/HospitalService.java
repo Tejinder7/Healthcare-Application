@@ -33,16 +33,13 @@ public class HospitalService {
         return hospital;
     }
 
-    public Hospital addHospital(String name, String address){
+    public Hospital addHospital(Hospital hospital){
 
-        Hospital hospital = new Hospital();
+        Supervisor supervisor = supervisorRepository.findByAddress(hospital.getAddress());
 
-
-        Supervisor supervisor = supervisorRepository.findByAddress(address);
-
-        hosp.setAddress(address);
-        hosp.setName(name);
-        hosp.setSupId(supervisor);
+        hospital.setAddress(hospital.getAddress());
+        hospital.setName(hospital.getName());
+        hospital.setSupId(supervisor);
 
 
         try {

@@ -23,7 +23,7 @@ public class HospitalController {
     public ResponseEntity<Hospital> addHospital(@RequestBody Hospital hospital){
         Hospital hospital1;
         try{
-            hospital1 = hospitalService.addHospital(hospital.getName(), hospital.getAddress());
+            hospital1 = hospitalService.addHospital(hospital);
         }
         catch (Exception e)
         {

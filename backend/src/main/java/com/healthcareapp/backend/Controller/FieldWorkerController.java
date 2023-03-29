@@ -17,24 +17,23 @@ public class FieldWorkerController {
     }
 
 
-    @PostMapping("/addFieldWorker")
-    public ResponseEntity<FieldWorker> addFieldWorker(@RequestParam("name") String name, @RequestParam("address") String address,  @RequestParam("phoneNum") String phoneNum,@RequestParam("supId") int supId, @RequestParam("userId") String userId, @RequestParam("password") String password) {
-        FieldWorker fieldWorker;
+    @PostMapping("/addFieldWorker/{supervisorId}")
+    public ResponseEntity<FieldWorker> addFieldWorker(@RequestBody FieldWorker fieldWorker, @PathVariable int supervisorId) {
 
         try {
-            fieldWorker = fieldWorkerService.addFieldWorker(name, address, phoneNum, supId, userId, password);
+            fieldWorker = fieldWorkerService.addFieldWorker(fieldWorker, supervisorId);
         }catch (Exception e){
             return ResponseEntity.status(404).build();
         }
-        return ResponseEntity.of(Optional.of(fieldWorker1));
+        return ResponseEntity.of(Optional.of(fieldWorker));
     }
 
-    @GetMapping("/getFieldWorkers")
-    public ResponseEntity<List<FieldWorker>> getFieldWorkers(@RequestParam("supId") int supId){
+    @GetMapping("/getFieldWorkers/{supervisorId}")
+    public ResponseEntity<List<FieldWorker>> getFieldWorkers(@PathVariable int supervisorId){
         List<FieldWorker> fieldWorkerList;
 
         try{
-            fieldWorkerList = fieldWorkerService.getFieldWorkers(supId);
+            fieldWorkerList = fieldWorkerService.getFieldWorkers(supervisorId);
         }
         catch (Exception e){
             return ResponseEntity.status(404).build();
@@ -43,8 +42,8 @@ public class FieldWorkerController {
     }
 
 
-    @PutMapping ("/assignFollowUp")
-    public ResponseEntity<FieldWorker> assignFollowUp(@RequestParam("fieldWorkerId") int fieldWorkerId, @RequestParam("followUpId") int followUpId){
+    @PutMapping ("/assignFollowUp/{fieldWorkerId}/{followUpId}")
+    public ResponseEntity<FieldWorker> assignFollowUp(@PathVariable int fieldWorkerId, @PathVariable int followUpId){
         FieldWorker fieldWorker;
 
         try {

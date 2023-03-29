@@ -15,8 +15,6 @@ import java.util.Optional;
 public class PatientController {
     private PatientService patientService;
 
-
-
     @PostMapping("/addPatients")
     public ResponseEntity<Patient> addPatient(@RequestBody Patient patient){
         try {

@@ -7,6 +7,7 @@ import jakarta.persistence.*;
 public class Authorization {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(unique = true)
     private int authId;
 
     private String userId;
