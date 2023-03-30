@@ -1,8 +1,9 @@
 package com.healthcareapp.backend.Model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.PrimaryKeyJoinColumn;
 
 import java.util.List;
 
@@ -15,12 +16,12 @@ public class Supervisor extends Authorization{
 
     private String address;
 
-    @OneToMany(mappedBy = "supAuthId")
+    @OneToMany(mappedBy = "supervisor")
 //    @JsonManagedReference("FW-SUP")
     @JsonIgnore
     private List<FieldWorker> fieldWorkerList;
 
-    @OneToMany(mappedBy = "supId")
+    @OneToMany(mappedBy = "supervisor")
     @JsonIgnore
     private List<Hospital> hospitalList;
 

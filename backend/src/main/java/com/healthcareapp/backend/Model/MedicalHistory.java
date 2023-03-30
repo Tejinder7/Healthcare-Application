@@ -11,27 +11,28 @@ public class MedicalHistory {
     private int medicalHistoryId;
 
     @ManyToOne
+    @JoinColumn(name= "patient_id", nullable = false)
 //    @JsonBackReference(value = "Patient-MedicalHistory")
-    private Patient patientId;
+    private Patient patient;
 
     private String symptoms;
 
     private String prescription;
 
-    @OneToOne(mappedBy = "medicalHistoryId")
+    @OneToOne(mappedBy = "medicalHistory")
 //    @JsonBackReference(value = "Encounter-MH")
     @JsonIgnore
-    private Encounter encounterId;
+    private Encounter encounter;
 
     public MedicalHistory() {
     }
 
-    public MedicalHistory(int medicalHistoryId, Patient patientId, String symptoms, String prescription, Encounter encounterId) {
+    public MedicalHistory(int medicalHistoryId, Patient patient, String symptoms, String prescription, Encounter encounter) {
         this.medicalHistoryId = medicalHistoryId;
-        this.patientId = patientId;
+        this.patient = patient;
         this.symptoms = symptoms;
         this.prescription = prescription;
-        this.encounterId = encounterId;
+        this.encounter = encounter;
     }
 
     public int getMedicalHistoryId() {
@@ -40,14 +41,6 @@ public class MedicalHistory {
 
     public void setMedicalHistoryId(int medicalHistoryId) {
         this.medicalHistoryId = medicalHistoryId;
-    }
-
-    public Patient getPatientId() {
-        return patientId;
-    }
-
-    public void setPatientId(Patient patientId) {
-        this.patientId = patientId;
     }
 
     public String getSymptoms() {
@@ -66,22 +59,30 @@ public class MedicalHistory {
         this.prescription = prescription;
     }
 
-    public Encounter getEncounterId() {
-        return encounterId;
+    public Patient getPatient() {
+        return patient;
     }
 
-    public void setEncounterId(Encounter encounterId) {
-        this.encounterId = encounterId;
+    public void setPatient(Patient patient) {
+        this.patient = patient;
+    }
+
+    public Encounter getEncounter() {
+        return encounter;
+    }
+
+    public void setEncounter(Encounter encounter) {
+        this.encounter = encounter;
     }
 
     @Override
     public String toString() {
         return "MedicalHistory{" +
                 "medicalHistoryId=" + medicalHistoryId +
-                ", patientId=" + patientId +
+                ", patient=" + patient +
                 ", symptoms='" + symptoms + '\'' +
                 ", prescription='" + prescription + '\'' +
-                ", encounterId=" + encounterId +
+                ", encounter=" + encounter +
                 '}';
     }
 }

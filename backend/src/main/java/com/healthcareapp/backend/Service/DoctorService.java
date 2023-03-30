@@ -27,7 +27,7 @@ public class DoctorService {
 
     public Hospital getHospitalByDocId(int authId){
         Doctor doctor = getDoctorByAuthId(authId);
-        Hospital hospital = doctor.getHospId();
+        Hospital hospital = doctor.getHospital();
 
         if(hospital == null){
             throw new RuntimeException();
@@ -43,7 +43,7 @@ public class DoctorService {
             throw new RuntimeException();
         }
 
-        doctor.setHospId(hospital);
+        doctor.setHospital(hospital);
         doctor.setUserType("Doctor");
 
         try{

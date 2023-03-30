@@ -1,9 +1,6 @@
 package com.healthcareapp.backend.Model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -18,21 +15,22 @@ public class FieldWorker extends Authorization{
     private String phoneNo;
 
     @ManyToOne
+    @JoinColumn(name= "supervisor_id", nullable = false)
 //    @JsonBackReference("FW-SUP")
-    private Supervisor supAuthId;
+    private Supervisor supervisor;
 
-    @OneToMany(mappedBy = "fieldWorkerId")
+    @OneToMany(mappedBy = "fieldWorker")
     @JsonIgnore
     private List<Patient> patientList;
 
     public FieldWorker() {
     }
 
-    public FieldWorker(String name, String address, String phoneNo, Supervisor supAuthId, List<Patient> patientList) {
+    public FieldWorker(String name, String address, String phoneNo, Supervisor supervisor, List<Patient> patientList) {
         this.name = name;
         this.address = address;
         this.phoneNo = phoneNo;
-        this.supAuthId = supAuthId;
+        this.supervisor = supervisor;
         this.patientList = patientList;
     }
 
@@ -60,12 +58,12 @@ public class FieldWorker extends Authorization{
         this.phoneNo = phoneNo;
     }
 
-    public Supervisor getSupAuthId() {
-        return supAuthId;
+    public Supervisor getSupervisor() {
+        return supervisor;
     }
 
-    public void setSupAuthId(Supervisor supAuthId) {
-        this.supAuthId = supAuthId;
+    public void setSupervisor(Supervisor supervisor) {
+        this.supervisor = supervisor;
     }
 
     public List<Patient> getPatientList() {
@@ -82,7 +80,7 @@ public class FieldWorker extends Authorization{
                 "name='" + name + '\'' +
                 ", address='" + address + '\'' +
                 ", phoneNo='" + phoneNo + '\'' +
-                ", supAuthId=" + supAuthId +
+                ", supervisor=" + supervisor +
                 ", patientList=" + patientList +
                 '}';
     }

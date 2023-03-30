@@ -24,26 +24,27 @@ public class Patient {
 
     private String contact;
 
-    @OneToMany(mappedBy = "patientId")
+    @OneToMany(mappedBy = "patient")
 //    @JsonManagedReference(value = "Patient-MedicalHistory")
     @JsonIgnore
     private List<MedicalHistory> medicalHistoryList;
 
     @ManyToOne
+    @JoinColumn(name= "field_worker_id", nullable = false)
 //    @JsonBackReference(value = "FieldWorker-Patient")
-    private FieldWorker fieldWorkerId;
+    private FieldWorker fieldWorker;
 
-    @OneToOne(mappedBy = "patientId")
+    @OneToOne(mappedBy = "patient")
 //    @JsonManagedReference(value = "Patient-PendingQueue")
     @JsonIgnore
-    private PendingQueue pendingQueueId;
+    private PendingQueue pendingQueue;
 
-    @OneToMany(mappedBy = "patientId")
+    @OneToMany(mappedBy = "patient")
 //    @JsonManagedReference(value = "Encounter-Patient")
     @JsonIgnore
     private List<Encounter> encounterList;
 
-    @OneToMany(mappedBy = "patientId")
+    @OneToMany(mappedBy = "patient")
 //    @JsonManagedReference(value="Patient-FollowUp")
     @JsonIgnore
     private List<FollowUp> followUpList;
@@ -51,7 +52,7 @@ public class Patient {
     public Patient() {
     }
 
-    public Patient(int patientId, String name, String address, int age, String sex, String contact, List<MedicalHistory> medicalHistoryList, FieldWorker fieldWorkerId, PendingQueue pendingQueueId, List<Encounter> encounterList, List<FollowUp> followUpList) {
+    public Patient(int patientId, String name, String address, int age, String sex, String contact, List<MedicalHistory> medicalHistoryList, FieldWorker fieldWorker, PendingQueue pendingQueue, List<Encounter> encounterList, List<FollowUp> followUpList) {
         this.patientId = patientId;
         this.name = name;
         this.address = address;
@@ -59,8 +60,8 @@ public class Patient {
         this.sex = sex;
         this.contact = contact;
         this.medicalHistoryList = medicalHistoryList;
-        this.fieldWorkerId = fieldWorkerId;
-        this.pendingQueueId = pendingQueueId;
+        this.fieldWorker = fieldWorker;
+        this.pendingQueue = pendingQueue;
         this.encounterList = encounterList;
         this.followUpList = followUpList;
     }
@@ -121,22 +122,6 @@ public class Patient {
         this.medicalHistoryList = medicalHistoryList;
     }
 
-    public FieldWorker getFieldWorkerId() {
-        return fieldWorkerId;
-    }
-
-    public void setFieldWorkerId(FieldWorker fieldWorkerId) {
-        this.fieldWorkerId = fieldWorkerId;
-    }
-
-    public PendingQueue getPendingQueueId() {
-        return pendingQueueId;
-    }
-
-    public void setPendingQueueId(PendingQueue pendingQueueId) {
-        this.pendingQueueId = pendingQueueId;
-    }
-
     public List<Encounter> getEncounterList() {
         return encounterList;
     }
@@ -153,6 +138,22 @@ public class Patient {
         this.followUpList = followUpList;
     }
 
+    public FieldWorker getFieldWorker() {
+        return fieldWorker;
+    }
+
+    public void setFieldWorker(FieldWorker fieldWorker) {
+        this.fieldWorker = fieldWorker;
+    }
+
+    public PendingQueue getPendingQueue() {
+        return pendingQueue;
+    }
+
+    public void setPendingQueue(PendingQueue pendingQueue) {
+        this.pendingQueue = pendingQueue;
+    }
+
     @Override
     public String toString() {
         return "Patient{" +
@@ -163,8 +164,8 @@ public class Patient {
                 ", sex='" + sex + '\'' +
                 ", contact='" + contact + '\'' +
                 ", medicalHistoryList=" + medicalHistoryList +
-                ", fieldWorkerId=" + fieldWorkerId +
-                ", pendingQueueId=" + pendingQueueId +
+                ", fieldWorker=" + fieldWorker +
+                ", pendingQueue=" + pendingQueue +
                 ", encounterList=" + encounterList +
                 ", followUpList=" + followUpList +
                 '}';

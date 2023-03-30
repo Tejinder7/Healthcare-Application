@@ -26,7 +26,7 @@ public class FollowUpService {
     public List<FollowUp> getCurrentDateFollowUps(String date, int fieldWorkerAuthId){
         FieldWorker fieldWorker;
 
-        fieldWorker = fieldWorkerRepository.findFieldWOrkerByAuthId(fieldWorkerAuthId);
+        fieldWorker = fieldWorkerRepository.findFieldWorkerByAuthId(fieldWorkerAuthId);
 
         if(fieldWorker==null)
         {
@@ -37,7 +37,7 @@ public class FollowUpService {
 
         List<FollowUp> followUpList = new ArrayList<>();
 
-        patientList.forEach(patient -> {followUpList.addAll(followUpRepository.findByDateAndPatientId(date, patient));});
+        patientList.forEach(patient -> {followUpList.addAll(followUpRepository.findByDateAndPatient(date, patient));});
 
         return followUpList;
     }
@@ -81,25 +81,25 @@ public class FollowUpService {
 
         //System.out.printf(hospitalList.toString());
 
-        hospitalList.forEach(hospital -> {followUpList.addAll(followUpRepository.findByHospId(hospital));});
+        hospitalList.forEach(hospital -> {followUpList.addAll(followUpRepository.findByHospital(hospital));});
 
         return followUpList;
     }
 
     public List<FollowUp> addFollowUps(List<String> dateList, int en_id){
         Encounter encounter = encounterService.getEncounterById(en_id);
-        Patient patient = encounter.getPatientId();
-        Doctor doctor = encounter.getDoctorAuthId();
-        Hospital hospital = doctor.getHospId();
+        Patient patient = encounter.getPatient();
+        Doctor doctor = encounter.getDoctor();
+        Hospital hospital = doctor.getHospital();
         List<FollowUp> followUpList = new ArrayList<>();
         try {
             for (int i = 0; i < dateList.size(); i++) {
                 FollowUp followUp = new FollowUp();
-                followUp.setEncounterId(encounter);
+                followUp.setEncounter(encounter);
                 followUp.setDate(dateList.get(i));
                 followUp.setFlag(false);
-                followUp.setPatientId(patient);
-                followUp.setHospId(hospital);
+                followUp.setPatient(patient);
+                followUp.setHospital(hospital);
                 followUpRepository.save(followUp);
 
                 followUpList.add(followUp);

@@ -1,6 +1,5 @@
 package com.healthcareapp.backend.Model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
@@ -18,10 +17,11 @@ public class Doctor extends Authorization{
     private String docSpecialization;
 
     @ManyToOne
+    @JoinColumn(name= "hosp_id", nullable = false)
 //    @JsonBackReference("HOS-DOC")
-    private Hospital hospId;
+    private Hospital hospital;
 
-    @OneToMany(mappedBy = "doctorAuthId")
+    @OneToMany(mappedBy = "doctor")
 //    @JsonManagedReference(value = "Encounter-Doctor")
     @JsonIgnore
     private List<Encounter> encounterList;
@@ -29,14 +29,15 @@ public class Doctor extends Authorization{
     public Doctor() {
     }
 
-    public Doctor(String name, String licId, String phoneNum, String docSpecialization, Hospital hospId, List<Encounter> encounterList) {
+    public Doctor(String name, String licId, String phoneNum, String docSpecialization, Hospital hospital, List<Encounter> encounterList) {
         this.name = name;
         this.licId = licId;
         this.phoneNum = phoneNum;
         this.docSpecialization = docSpecialization;
-        this.hospId = hospId;
+        this.hospital = hospital;
         this.encounterList = encounterList;
     }
+
     public String getName() {
         return name;
     }
@@ -69,12 +70,12 @@ public class Doctor extends Authorization{
         this.docSpecialization = docSpecialization;
     }
 
-    public Hospital getHospId() {
-        return hospId;
+    public Hospital getHospital() {
+        return hospital;
     }
 
-    public void setHospId(Hospital hospId) {
-        this.hospId = hospId;
+    public void setHospital(Hospital hospital) {
+        this.hospital = hospital;
     }
 
     public List<Encounter> getEncounterList() {
@@ -92,7 +93,7 @@ public class Doctor extends Authorization{
                 ", licId='" + licId + '\'' +
                 ", phoneNum='" + phoneNum + '\'' +
                 ", docSpecialization='" + docSpecialization + '\'' +
-                ", hospId=" + hospId +
+                ", hospital=" + hospital +
                 ", encounterList=" + encounterList +
                 '}';
     }

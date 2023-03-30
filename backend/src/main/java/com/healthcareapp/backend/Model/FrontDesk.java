@@ -1,7 +1,9 @@
 package com.healthcareapp.backend.Model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.PrimaryKeyJoinColumn;
 
 @Entity
 @PrimaryKeyJoinColumn(name = "authId")
@@ -9,15 +11,16 @@ public class FrontDesk extends Authorization{
     private String name;
 
     @ManyToOne
+    @JoinColumn(name= "hosp_id", nullable = false)
 //    @JsonBackReference("HOS-FD")
-    private Hospital hospId;
+    private Hospital hospital;
 
     public FrontDesk() {
     }
 
-    public FrontDesk(String name, Hospital hospId) {
+    public FrontDesk(String name, Hospital hospital) {
         this.name = name;
-        this.hospId = hospId;
+        this.hospital = hospital;
     }
 
     public String getName() {
@@ -29,18 +32,18 @@ public class FrontDesk extends Authorization{
     }
 
     public Hospital getHospId() {
-        return hospId;
+        return hospital;
     }
 
-    public void setHospId(Hospital hospId) {
-        this.hospId = hospId;
+    public void setHospId(Hospital hospital) {
+        this.hospital = hospital;
     }
 
     @Override
     public String toString() {
         return "FrontDesk{" +
                 "name='" + name + '\'' +
-                ", hospId=" + hospId +
+                ", hospital=" + hospital +
                 '}';
     }
 }

@@ -22,7 +22,7 @@ public class AdminService {
 //        }
 
         Hospital hospital= hospitalService.getHospitalById(hospId);
-        admin.setHospId(hospital);
+        admin.setHospital(hospital);
         admin.setUserType("Admin");
 
         try{
