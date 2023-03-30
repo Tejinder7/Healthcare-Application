@@ -21,14 +21,14 @@ public class EncounterService {
         this.encounterRepository = encounterRepository;
     }
 
-    public Encounter addEncounter(int patientId, int docId){
+    public Encounter addEncounter(int patientId, int authId){
         Encounter encounter = new Encounter();
 
         Patient patient = patientServices.getPatientById(patientId);
         encounter.setPatientId(patient);
 
-        Doctor doctor = doctorServices.getDoctorByDocId(docId);
-        encounter.setDoctorId(doctor);
+        Doctor doctor = doctorServices.getDoctorByAuthId(authId);
+        encounter.setDoctorAuthId(doctor);
 
         encounterRepository.save(encounter);
 

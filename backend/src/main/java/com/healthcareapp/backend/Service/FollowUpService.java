@@ -23,10 +23,10 @@ public class FollowUpService {
         this.encounterService = encounterService;
     }
 
-    public List<FollowUp> getCurrentDateFollowUps(String date, int fwId){
+    public List<FollowUp> getCurrentDateFollowUps(String date, int fieldWorkerAuthId){
         FieldWorker fieldWorker;
 
-        fieldWorker = fieldWorkerRepository.findByFwId(fwId);
+        fieldWorker = fieldWorkerRepository.findFieldWOrkerByAuthId(fieldWorkerAuthId);
 
         if(fieldWorker==null)
         {
@@ -67,8 +67,8 @@ public class FollowUpService {
         return validFollowUp;
     }
 
-    public List<FollowUp> getAllFollowUp(int supId){
-        Supervisor supervisor = supervisorRepository.findSupervisorBySupId(supId);
+    public List<FollowUp> getAllFollowUp(int authId){
+        Supervisor supervisor = supervisorRepository.findSupervisorByAuthId(authId);
 
         if(supervisor==null)
         {
@@ -89,7 +89,7 @@ public class FollowUpService {
     public List<FollowUp> addFollowUps(List<String> dateList, int en_id){
         Encounter encounter = encounterService.getEncounterById(en_id);
         Patient patient = encounter.getPatientId();
-        Doctor doctor = encounter.getDoctorId();
+        Doctor doctor = encounter.getDoctorAuthId();
         Hospital hospital = doctor.getHospId();
         List<FollowUp> followUpList = new ArrayList<>();
         try {

@@ -17,16 +17,16 @@ public class DoctorService {
         this.hospitalRepository = hospitalRepository;
     }
 
-    public Doctor getDoctorByDocId(int docId){
-        Doctor doctor = doctorRepository.findDoctorByDocId(docId);
+    public Doctor getDoctorByAuthId(int authId){
+        Doctor doctor = doctorRepository.findDoctorByAuthId(authId);
         if(doctor == null){
             throw new RuntimeException();
         }
         return doctor;
     }
 
-    public Hospital getHospitalByDocId(int docId){
-        Doctor doctor = getDoctorByDocId(docId);
+    public Hospital getHospitalByDocId(int authId){
+        Doctor doctor = getDoctorByAuthId(authId);
         Hospital hospital = doctor.getHospId();
 
         if(hospital == null){

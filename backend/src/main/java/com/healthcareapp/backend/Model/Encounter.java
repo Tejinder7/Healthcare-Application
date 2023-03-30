@@ -15,7 +15,7 @@ public class Encounter {
 
     @ManyToOne
 //    @JsonBackReference(value = "Encounter-Doctor")
-    private Doctor doctorId;
+    private Doctor doctorAuthId;
 
     @OneToMany(mappedBy = "encounterId")
 //    @JsonManagedReference(value = "Encounter-FollowUp")
@@ -33,9 +33,9 @@ public class Encounter {
     public Encounter() {
     }
 
-    public Encounter(int encounterId, Doctor doctorId, List<FollowUp> followUpList, MedicalHistory medicalHistoryId, Patient patientId) {
+    public Encounter(int encounterId, Doctor doctorAuthId, List<FollowUp> followUpList, MedicalHistory medicalHistoryId, Patient patientId) {
         this.encounterId = encounterId;
-        this.doctorId = doctorId;
+        this.doctorAuthId = doctorAuthId;
         this.followUpList = followUpList;
         this.medicalHistoryId = medicalHistoryId;
         this.patientId = patientId;
@@ -49,12 +49,12 @@ public class Encounter {
         this.encounterId = encounterId;
     }
 
-    public Doctor getDoctorId() {
-        return doctorId;
+    public Doctor getDoctorAuthId() {
+        return doctorAuthId;
     }
 
-    public void setDoctorId(Doctor doctorId) {
-        this.doctorId = doctorId;
+    public void setDoctorAuthId(Doctor doctorAuthId) {
+        this.doctorAuthId = doctorAuthId;
     }
 
     public List<FollowUp> getFollowUpList() {
@@ -85,7 +85,7 @@ public class Encounter {
     public String toString() {
         return "Encounter{" +
                 "encounterId=" + encounterId +
-                ", doctorId=" + doctorId +
+                ", doctorAuthId=" + doctorAuthId +
                 ", followUpList=" + followUpList +
                 ", medicalHistoryId=" + medicalHistoryId +
                 ", patientId=" + patientId +

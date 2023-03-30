@@ -5,5 +5,4 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface FrontDeskRepository extends JpaRepository<FrontDesk, Integer> {
 
-
 }

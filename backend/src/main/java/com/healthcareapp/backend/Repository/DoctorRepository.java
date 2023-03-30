@@ -5,6 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface DoctorRepository extends JpaRepository<Doctor, Integer> {
 
-    public Doctor findDoctorByDocId(int id);
+    public Doctor findDoctorByAuthId(int authId);
 
 }

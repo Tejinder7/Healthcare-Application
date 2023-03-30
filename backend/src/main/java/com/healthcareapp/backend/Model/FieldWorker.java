@@ -11,11 +11,6 @@ import java.util.List;
 @Entity
 @PrimaryKeyJoinColumn(name = "authId")
 public class FieldWorker extends Authorization{
-
-    @Column(unique = true)
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private int fwId;
-
     private String name;
 
     private String address;
@@ -24,7 +19,7 @@ public class FieldWorker extends Authorization{
 
     @ManyToOne
 //    @JsonBackReference("FW-SUP")
-    private Supervisor supId;
+    private Supervisor supAuthId;
 
     @OneToMany(mappedBy = "fieldWorkerId")
     @JsonIgnore
@@ -33,21 +28,12 @@ public class FieldWorker extends Authorization{
     public FieldWorker() {
     }
 
-    public FieldWorker(int fwId, String name, String address, String phoneNo, Supervisor supId, List<Patient> patientList) {
-        this.fwId = fwId;
+    public FieldWorker(String name, String address, String phoneNo, Supervisor supAuthId, List<Patient> patientList) {
         this.name = name;
         this.address = address;
         this.phoneNo = phoneNo;
-        this.supId = supId;
+        this.supAuthId = supAuthId;
         this.patientList = patientList;
-    }
-
-    public int getFwId() {
-        return fwId;
-    }
-
-    public void setFwId(int fwId) {
-        this.fwId = fwId;
     }
 
     public String getName() {
@@ -74,12 +60,12 @@ public class FieldWorker extends Authorization{
         this.phoneNo = phoneNo;
     }
 
-    public Supervisor getSupId() {
-        return supId;
+    public Supervisor getSupAuthId() {
+        return supAuthId;
     }
 
-    public void setSupId(Supervisor supId) {
-        this.supId = supId;
+    public void setSupAuthId(Supervisor supAuthId) {
+        this.supAuthId = supAuthId;
     }
 
     public List<Patient> getPatientList() {
@@ -93,11 +79,10 @@ public class FieldWorker extends Authorization{
     @Override
     public String toString() {
         return "FieldWorker{" +
-                "fwId=" + fwId +
-                ", name='" + name + '\'' +
+                "name='" + name + '\'' +
                 ", address='" + address + '\'' +
                 ", phoneNo='" + phoneNo + '\'' +
-                ", supId=" + supId +
+                ", supAuthId=" + supAuthId +
                 ", patientList=" + patientList +
                 '}';
     }

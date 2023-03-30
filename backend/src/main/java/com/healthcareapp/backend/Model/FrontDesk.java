@@ -6,11 +6,6 @@ import jakarta.persistence.*;
 @Entity
 @PrimaryKeyJoinColumn(name = "authId")
 public class FrontDesk extends Authorization{
-
-    @Column(unique = true)
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private int fDeskId;
-
     private String name;
 
     @ManyToOne
@@ -20,18 +15,9 @@ public class FrontDesk extends Authorization{
     public FrontDesk() {
     }
 
-    public FrontDesk(int fDeskId, String name, Hospital hospId) {
-        this.fDeskId = fDeskId;
+    public FrontDesk(String name, Hospital hospId) {
         this.name = name;
         this.hospId = hospId;
-    }
-
-    public int getfDeskId() {
-        return fDeskId;
-    }
-
-    public void setfDeskId(int fDeskId) {
-        this.fDeskId = fDeskId;
     }
 
     public String getName() {
@@ -53,8 +39,7 @@ public class FrontDesk extends Authorization{
     @Override
     public String toString() {
         return "FrontDesk{" +
-                "fDeskId=" + fDeskId +
-                ", name='" + name + '\'' +
+                "name='" + name + '\'' +
                 ", hospId=" + hospId +
                 '}';
     }
