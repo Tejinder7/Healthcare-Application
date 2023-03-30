@@ -22,6 +22,7 @@ public class Supervisor extends Authorization{
 
     @OneToMany(mappedBy = "supId")
 //    @JsonManagedReference("FW-SUP")
+    @JsonIgnore
     private List<FieldWorker> fieldWorkerList;
 
     @OneToMany(mappedBy = "supId")

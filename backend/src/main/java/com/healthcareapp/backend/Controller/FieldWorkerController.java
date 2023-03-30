@@ -12,29 +12,28 @@ import java.util.Optional;
 @CrossOrigin
 public class FieldWorkerController {
     private FieldWorkerService fieldWorkerService;
-
     public FieldWorkerController(FieldWorkerService fieldWorkerService) {
         this.fieldWorkerService = fieldWorkerService;
     }
 
-    @PostMapping("/addFieldWorker/{supId}")
-    public ResponseEntity<FieldWorker> addFieldWorker(@RequestBody FieldWorker fieldWorker, @PathVariable("supId") int supId) {
-        FieldWorker fieldWorker1;
+
+    @PostMapping("/addFieldWorker/{supervisorId}")
+    public ResponseEntity<FieldWorker> addFieldWorker(@RequestBody FieldWorker fieldWorker, @PathVariable int supervisorId) {
 
         try {
-            fieldWorker1 = fieldWorkerService.addFieldWorker(fieldWorker.getName(), fieldWorker.getAddress(), fieldWorker.getPhoneNo(), supId);
+            fieldWorker = fieldWorkerService.addFieldWorker(fieldWorker, supervisorId);
         }catch (Exception e){
             return ResponseEntity.status(404).build();
         }
-        return ResponseEntity.of(Optional.of(fieldWorker1));
+        return ResponseEntity.of(Optional.of(fieldWorker));
     }
 
-    @GetMapping("/getFieldWorkers")
-    public ResponseEntity<List<FieldWorker>> getFieldWorkers(@RequestParam("supId") int supId){
+    @GetMapping("/getFieldWorkers/{supervisorId}")
+    public ResponseEntity<List<FieldWorker>> getFieldWorkers(@PathVariable int supervisorId){
         List<FieldWorker> fieldWorkerList;
 
         try{
-            fieldWorkerList = fieldWorkerService.getFieldWorkers(supId);
+            fieldWorkerList = fieldWorkerService.getFieldWorkers(supervisorId);
         }
         catch (Exception e){
             return ResponseEntity.status(404).build();
@@ -43,8 +42,8 @@ public class FieldWorkerController {
     }
 
 
-    @PutMapping ("/assignFollowUp")
-    public ResponseEntity<FieldWorker> assignFollowUp(@RequestParam("fieldWorkerId") int fieldWorkerId, @RequestParam("followUpId") int followUpId){
+    @PutMapping ("/assignFollowUp/{fieldWorkerId}/{followUpId}")
+    public ResponseEntity<FieldWorker> assignFollowUp(@PathVariable int fieldWorkerId, @PathVariable int followUpId){
         FieldWorker fieldWorker;
 
         try {

@@ -10,26 +10,27 @@ import org.springframework.stereotype.Component;
 public class FrontDeskService {
     private FrontDeskRepository frontDeskRepository;
     private HospitalRepository hospitalRepository;
-
+    
     public FrontDeskService(FrontDeskRepository frontDeskRepository, HospitalRepository hospitalRepository) {
         this.frontDeskRepository = frontDeskRepository;
         this.hospitalRepository = hospitalRepository;
     }
 
-    public FrontDesk addFrontDesk(String name, int hospId){
-        FrontDesk frontDesk = new FrontDesk();
+
+    public FrontDesk addFrontDesk(FrontDesk frontDesk, int hospitalId){
 
         Hospital hospital;
 
-        hospital = hospitalRepository.getHospitalsByHospId(hospId);
+        hospital = hospitalRepository.getHospitalsByHospId(hospitalId);
 
         if(hospital==null)
         {
             throw new RuntimeException();
         }
 
-        frontDesk.setName(name);
         frontDesk.setHospId(hospital);
+        frontDesk.setUserType("FrontDesk");
+
 
         try {
             frontDeskRepository.save(frontDesk);

@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Optional;
 
 @RestController
-@CrossOrigin
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class HospitalController {
     private HospitalService hospitalService;
 
@@ -23,7 +23,7 @@ public class HospitalController {
     public ResponseEntity<Hospital> addHospital(@RequestBody Hospital hospital){
         Hospital hospital1;
         try{
-            hospital1 = hospitalService.addHospital(hospital.getName(), hospital.getAddress());
+            hospital1 = hospitalService.addHospital(hospital);
         }
         catch (Exception e)
         {

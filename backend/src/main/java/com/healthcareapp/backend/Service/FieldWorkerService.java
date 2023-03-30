@@ -19,7 +19,7 @@ public class FieldWorkerService {
     private SupervisorRepository supervisorRepository;
     private FollowUpRepository followUpRepository;
     private PatientRepository patientRepository;
-
+    
     public FieldWorkerService(FieldWorkerRepository fieldWorkerRepository, SupervisorRepository supervisorRepository, FollowUpRepository followUpRepository, PatientRepository patientRepository) {
         this.fieldWorkerRepository = fieldWorkerRepository;
         this.supervisorRepository = supervisorRepository;
@@ -27,8 +27,8 @@ public class FieldWorkerService {
         this.patientRepository = patientRepository;
     }
 
-    public FieldWorker addFieldWorker(String name, String address, String phoneNum, int supId){
-        FieldWorker fieldWorker = new FieldWorker();
+
+    public FieldWorker addFieldWorker(FieldWorker fieldWorker, int supId){
 
         Supervisor supervisor;
 
@@ -39,11 +39,8 @@ public class FieldWorkerService {
             throw new RuntimeException();
         }
 
-        fieldWorker.setName(name);
-        fieldWorker.setAddress(address);
-        fieldWorker.setPhoneNo(phoneNum);
         fieldWorker.setSupId(supervisor);
-        fieldWorker.setPatientList(new ArrayList<>());
+        fieldWorker.setUserType("FieldWorker");
 
         try {
             fieldWorker = fieldWorkerRepository.save(fieldWorker);

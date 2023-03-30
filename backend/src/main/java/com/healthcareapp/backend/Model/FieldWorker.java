@@ -24,7 +24,6 @@ public class FieldWorker extends Authorization{
 
     @ManyToOne
 //    @JsonBackReference("FW-SUP")
-    @JsonIgnore
     private Supervisor supId;
 
     @OneToMany(mappedBy = "fieldWorkerId")

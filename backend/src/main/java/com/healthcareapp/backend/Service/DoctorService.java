@@ -35,14 +35,16 @@ public class DoctorService {
         return hospital;
     }
 
-    public Doctor addDoctor(Doctor doctor, int hospId){
-        Hospital hospital = hospitalRepository.getHospitalsByHospId(hospId);
 
+    public Doctor addDoctor(Doctor doctor, int hospitalId){
+
+        Hospital hospital = hospitalRepository.getHospitalsByHospId(hospitalId);
         if(hospital == null){
             throw new RuntimeException();
         }
 
         doctor.setHospId(hospital);
+        doctor.setUserType("Doctor");
 
         try{
             doctor = doctorRepository.save(doctor);

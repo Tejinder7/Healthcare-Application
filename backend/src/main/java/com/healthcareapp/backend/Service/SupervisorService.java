@@ -13,6 +13,7 @@ public class SupervisorService {
 
     public Supervisor addSupervisor(Supervisor supervisor){
         try{
+            supervisor.setUserType("Supervisor");
             supervisorRepository.save(supervisor);
             return supervisor;
         }
