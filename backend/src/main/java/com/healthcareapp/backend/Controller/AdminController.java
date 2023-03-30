@@ -11,6 +11,7 @@ import java.util.Optional;
 @CrossOrigin
 public class AdminController {
     private AdminService adminService;
+
     public AdminController(AdminService adminService) {
         this.adminService = adminService;
     }
