@@ -9,9 +9,9 @@ import java.util.List;
 
 public interface FollowUpRepository extends JpaRepository<FollowUp, Integer> {
 
-    public List<FollowUp> findByDateAndPatientId(String date, Patient patient);
+    public List<FollowUp> findByDateAndPatient(String date, Patient patient);
 
     public FollowUp findById(int id);
 
-    public List<FollowUp> findByHospId(Hospital hospital);
+    public List<FollowUp> findByHospital(Hospital hospital);
 }

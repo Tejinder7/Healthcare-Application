@@ -2,7 +2,6 @@ package com.healthcareapp.backend.Model;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -17,28 +16,29 @@ public class Hospital {
 
     private String address;
 
-    @OneToOne(mappedBy = "hospId")
+    @OneToOne(mappedBy = "hospital")
     @JsonIgnore
     private Admin admin;
 
     @ManyToOne
-    private Supervisor supId;
+    @JoinColumn(name= "supervisor_id", nullable = false)
+    private Supervisor supervisor;
 
-    @OneToMany(mappedBy = "hospId")
+    @OneToMany(mappedBy = "hospital")
     @JsonIgnore
     private List<FrontDesk> frontDeskList;
     
-    @OneToMany(mappedBy = "hospId")
+    @OneToMany(mappedBy = "hospital")
     @JsonIgnore
     private List<Doctor> doctorList;
     
 
-    @OneToMany(mappedBy = "hospId")
+    @OneToMany(mappedBy = "hospital")
 //    @JsonManagedReference(value = "Hospital-PendingQueue")
     @JsonIgnore
     private List<PendingQueue> pendingQueueList;
 
-    @OneToMany(mappedBy = "hospId")
+    @OneToMany(mappedBy = "hospital")
 //    @JsonManagedReference(value = "Hospital-FollowUp")
     @JsonIgnore
     private List<FollowUp> followUpList;
@@ -47,12 +47,12 @@ public class Hospital {
     public Hospital() {
     }
 
-    public Hospital(int hospId, String name, String address, Admin admin, Supervisor supId, List<FrontDesk> frontDeskList, List<Doctor> doctorList, List<PendingQueue> pendingQueueList, List<FollowUp> followUpList) {
+    public Hospital(int hospId, String name, String address, Admin admin, Supervisor supervisor, List<FrontDesk> frontDeskList, List<Doctor> doctorList, List<PendingQueue> pendingQueueList, List<FollowUp> followUpList) {
         this.hospId = hospId;
         this.name = name;
         this.address = address;
         this.admin = admin;
-        this.supId = supId;
+        this.supervisor = supervisor;
         this.frontDeskList = frontDeskList;
         this.doctorList = doctorList;
         this.pendingQueueList = pendingQueueList;
@@ -92,11 +92,11 @@ public class Hospital {
     }
 
     public Supervisor getSupId() {
-        return supId;
+        return supervisor;
     }
 
-    public void setSupId(Supervisor supId) {
-        this.supId = supId;
+    public void setSupId(Supervisor supervisor) {
+        this.supervisor = supervisor;
     }
 
     public List<FrontDesk> getFrontDeskList() {
@@ -138,7 +138,7 @@ public class Hospital {
                 ", name='" + name + '\'' +
                 ", address='" + address + '\'' +
                 ", admin=" + admin +
-                ", supId=" + supId +
+                ", supervisor=" + supervisor +
                 ", frontDeskList=" + frontDeskList +
                 ", doctorList=" + doctorList +
                 ", pendingQueueList=" + pendingQueueList +

@@ -8,6 +8,6 @@ import java.util.List;
 
 public interface PendingQueueRepository extends JpaRepository<PendingQueue, Integer> {
 
-    public List<PendingQueue> findPendingQueueByHospId(Hospital hospital);
+    public List<PendingQueue> findPendingQueueByHospital(Hospital hospital);
 
 }

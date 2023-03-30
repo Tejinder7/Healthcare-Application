@@ -8,15 +8,15 @@ public class Admin extends Authorization{
     private String name;
 
     @OneToOne
-    private Hospital hospId;
-
+    @JoinColumn(name= "hosp_id", nullable = false)
+    private Hospital hospital;
 
     public Admin() {
     }
 
-    public Admin(String name, Hospital hospId) {
+    public Admin(String name, Hospital hospital) {
         this.name = name;
-        this.hospId = hospId;
+        this.hospital = hospital;
     }
 
     public String getName() {
@@ -27,19 +27,19 @@ public class Admin extends Authorization{
         this.name = name;
     }
 
-    public Hospital getHospId() {
-        return hospId;
+    public Hospital getHospital() {
+        return hospital;
     }
 
-    public void setHospId(Hospital hospId) {
-        this.hospId = hospId;
+    public void setHospital(Hospital hospital) {
+        this.hospital = hospital;
     }
 
     @Override
     public String toString() {
         return "Admin{" +
                 "name='" + name + '\'' +
-                ", hospId=" + hospId +
+                ", hospital=" + hospital +
                 '}';
     }
 }

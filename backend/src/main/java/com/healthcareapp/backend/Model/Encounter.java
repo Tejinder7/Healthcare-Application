@@ -14,31 +14,34 @@ public class Encounter {
     private int encounterId;
 
     @ManyToOne
+    @JoinColumn(name= "doctor_id", nullable = false)
 //    @JsonBackReference(value = "Encounter-Doctor")
-    private Doctor doctorAuthId;
+    private Doctor doctor;
 
-    @OneToMany(mappedBy = "encounterId")
+    @OneToMany(mappedBy = "encounter")
 //    @JsonManagedReference(value = "Encounter-FollowUp")
     @JsonIgnore
     private List<FollowUp> followUpList;
 
     @OneToOne
+    @JoinColumn(name= "medicalhistory_id", nullable = false)
 //    @JsonManagedReference(value = "Encounter-MH")
-    private MedicalHistory medicalHistoryId;
+    private MedicalHistory medicalHistory;
 
     @ManyToOne
+    @JoinColumn(name= "patient_id", nullable = false)
 //    @JsonBackReference(value = "Encounter-Patient")
-    private Patient patientId;
+    private Patient patient;
 
     public Encounter() {
     }
 
-    public Encounter(int encounterId, Doctor doctorAuthId, List<FollowUp> followUpList, MedicalHistory medicalHistoryId, Patient patientId) {
+    public Encounter(int encounterId, Doctor doctor, List<FollowUp> followUpList, MedicalHistory medicalHistory, Patient patient) {
         this.encounterId = encounterId;
-        this.doctorAuthId = doctorAuthId;
+        this.doctor = doctor;
         this.followUpList = followUpList;
-        this.medicalHistoryId = medicalHistoryId;
-        this.patientId = patientId;
+        this.medicalHistory = medicalHistory;
+        this.patient = patient;
     }
 
     public int getEncounterId() {
@@ -49,12 +52,12 @@ public class Encounter {
         this.encounterId = encounterId;
     }
 
-    public Doctor getDoctorAuthId() {
-        return doctorAuthId;
+    public Doctor getDoctor() {
+        return doctor;
     }
 
-    public void setDoctorAuthId(Doctor doctorAuthId) {
-        this.doctorAuthId = doctorAuthId;
+    public void setDoctor(Doctor doctor) {
+        this.doctor = doctor;
     }
 
     public List<FollowUp> getFollowUpList() {
@@ -65,30 +68,30 @@ public class Encounter {
         this.followUpList = followUpList;
     }
 
-    public MedicalHistory getMedicalHistoryId() {
-        return medicalHistoryId;
+    public MedicalHistory getMedicalHistory() {
+        return medicalHistory;
     }
 
-    public void setMedicalHistoryId(MedicalHistory medicalHistoryId) {
-        this.medicalHistoryId = medicalHistoryId;
+    public void setMedicalHistory(MedicalHistory medicalHistory) {
+        this.medicalHistory = medicalHistory;
     }
 
-    public Patient getPatientId() {
-        return patientId;
+    public Patient getPatient() {
+        return patient;
     }
 
-    public void setPatientId(Patient patientId) {
-        this.patientId = patientId;
+    public void setPatient(Patient patient) {
+        this.patient = patient;
     }
 
     @Override
     public String toString() {
         return "Encounter{" +
                 "encounterId=" + encounterId +
-                ", doctorAuthId=" + doctorAuthId +
+                ", doctor=" + doctor +
                 ", followUpList=" + followUpList +
-                ", medicalHistoryId=" + medicalHistoryId +
-                ", patientId=" + patientId +
+                ", medicalHistory=" + medicalHistory +
+                ", patient=" + patient +
                 '}';
     }
 }

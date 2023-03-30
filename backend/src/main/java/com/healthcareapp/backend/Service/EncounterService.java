@@ -25,10 +25,10 @@ public class EncounterService {
         Encounter encounter = new Encounter();
 
         Patient patient = patientServices.getPatientById(patientId);
-        encounter.setPatientId(patient);
+        encounter.setPatient(patient);
 
         Doctor doctor = doctorServices.getDoctorByAuthId(authId);
-        encounter.setDoctorAuthId(doctor);
+        encounter.setDoctor(doctor);
 
         encounterRepository.save(encounter);
 
@@ -36,9 +36,9 @@ public class EncounterService {
     }
     public MedicalHistory saveEncounter(String prescription, String symptoms, int encounterId){
         Encounter encounter = getEncounterById(encounterId);
-        Patient patient = encounter.getPatientId();
+        Patient patient = encounter.getPatient();
         MedicalHistory medicalHistory = medicalHistoryService.addMedicalHistory(patient,encounter);
-        encounter.setMedicalHistoryId(medicalHistory);
+        encounter.setMedicalHistory(medicalHistory);
         encounterRepository.save(encounter);
 
         MedicalHistory updatedMedicalHistory = medicalHistoryService.updateMedicalHistory(prescription, symptoms, encounter);
