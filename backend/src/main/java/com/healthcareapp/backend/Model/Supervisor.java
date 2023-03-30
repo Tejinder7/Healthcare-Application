@@ -9,18 +9,13 @@ import java.util.List;
 @Entity
 @PrimaryKeyJoinColumn(name = "authId")
 public class Supervisor extends Authorization{
-
-    @Column(unique = true)
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private int supId;
-
     private String name;
 
     private String contact;
 
     private String address;
 
-    @OneToMany(mappedBy = "supId")
+    @OneToMany(mappedBy = "supAuthId")
 //    @JsonManagedReference("FW-SUP")
     @JsonIgnore
     private List<FieldWorker> fieldWorkerList;
@@ -32,21 +27,12 @@ public class Supervisor extends Authorization{
     public Supervisor() {
     }
 
-    public Supervisor(int supId, String name, String contact, String address, List<FieldWorker> fieldWorkerList, List<Hospital> hospitalList) {
-        this.supId = supId;
+    public Supervisor(String name, String contact, String address, List<FieldWorker> fieldWorkerList, List<Hospital> hospitalList) {
         this.name = name;
         this.contact = contact;
         this.address = address;
         this.fieldWorkerList = fieldWorkerList;
         this.hospitalList = hospitalList;
-    }
-
-    public int getSupId() {
-        return supId;
-    }
-
-    public void setSupId(int supId) {
-        this.supId = supId;
     }
 
     public String getName() {
@@ -92,8 +78,7 @@ public class Supervisor extends Authorization{
     @Override
     public String toString() {
         return "Supervisor{" +
-                "supId=" + supId +
-                ", name='" + name + '\'' +
+                "name='" + name + '\'' +
                 ", contact='" + contact + '\'' +
                 ", address='" + address + '\'' +
                 ", fieldWorkerList=" + fieldWorkerList +

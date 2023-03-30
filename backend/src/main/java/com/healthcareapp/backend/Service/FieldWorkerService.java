@@ -28,18 +28,18 @@ public class FieldWorkerService {
     }
 
 
-    public FieldWorker addFieldWorker(FieldWorker fieldWorker, int supId){
+    public FieldWorker addFieldWorker(FieldWorker fieldWorker, int authId){
 
         Supervisor supervisor;
 
-        supervisor = supervisorRepository.findSupervisorBySupId(supId);
+        supervisor = supervisorRepository.findSupervisorByAuthId(authId);
 
         if(supervisor==null)
         {
             throw new RuntimeException();
         }
 
-        fieldWorker.setSupId(supervisor);
+        fieldWorker.setSupAuthId(supervisor);
         fieldWorker.setUserType("FieldWorker");
 
         try {
@@ -52,15 +52,15 @@ public class FieldWorkerService {
 
 
 
-    public List<FieldWorker> getFieldWorkers(int supId){
-        Supervisor supervisor = supervisorRepository.findSupervisorBySupId(supId);
+    public List<FieldWorker> getFieldWorkers(int authId){
+        Supervisor supervisor = supervisorRepository.findSupervisorByAuthId(authId);
 
         if(supervisor==null)
         {
             throw new RuntimeException();
         }
 
-        List<FieldWorker> fieldWorkerList = fieldWorkerRepository.findBySupId(supervisor);
+        List<FieldWorker> fieldWorkerList = fieldWorkerRepository.findBySupAuthId(supervisor);
 
         if(fieldWorkerList.size()==0)
         {
@@ -70,11 +70,11 @@ public class FieldWorkerService {
             return fieldWorkerList;
     }
 
-    public FieldWorker assignFollowUp(int followUpId, int fieldWorkerId){
+    public FieldWorker assignFollowUp(int followUpId, int fieldWorkerAuthId){
 
         FollowUp followUp = followUpRepository.findById(followUpId);
 
-        FieldWorker fieldWorker = fieldWorkerRepository.findByFwId(fieldWorkerId);
+        FieldWorker fieldWorker = fieldWorkerRepository.findFieldWOrkerByAuthId(fieldWorkerAuthId);
 
         if(followUp==null || fieldWorker==null)
         {
@@ -100,7 +100,7 @@ public class FieldWorkerService {
             throw new RuntimeException();
         }
 
-        fieldWorker = fieldWorkerRepository.findByFwId(fieldWorkerId);
+        fieldWorker = fieldWorkerRepository.findFieldWOrkerByAuthId(fieldWorkerAuthId);
 
         return fieldWorker;
     }

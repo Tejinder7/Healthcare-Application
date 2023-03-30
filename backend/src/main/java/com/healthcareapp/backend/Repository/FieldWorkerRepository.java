@@ -9,8 +9,8 @@ import java.util.List;
 
 public interface FieldWorkerRepository extends JpaRepository<FieldWorker, Integer> {
 
-    public List<FieldWorker> findBySupId(Supervisor supervisor);
+    public List<FieldWorker> findBySupAuthId(Supervisor supervisor);
 
-    public FieldWorker findByFwId(int fwId);
+    public FieldWorker findFieldWOrkerByAuthId(int feildWorkerAuthId);
 
 }

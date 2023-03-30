@@ -9,11 +9,6 @@ import java.util.List;
 @Entity
 @PrimaryKeyJoinColumn(name = "authId")
 public class Doctor extends Authorization{
-
-    @Column(unique = true)
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private int docId;
-
     private String name;
 
     private String licId;
@@ -26,7 +21,7 @@ public class Doctor extends Authorization{
 //    @JsonBackReference("HOS-DOC")
     private Hospital hospId;
 
-    @OneToMany(mappedBy = "doctorId")
+    @OneToMany(mappedBy = "doctorAuthId")
 //    @JsonManagedReference(value = "Encounter-Doctor")
     @JsonIgnore
     private List<Encounter> encounterList;
@@ -34,8 +29,7 @@ public class Doctor extends Authorization{
     public Doctor() {
     }
 
-    public Doctor(int docId, String name, String licId, String phoneNum, String docSpecialization, Hospital hospId, List<Encounter> encounterList) {
-        this.docId = docId;
+    public Doctor(String name, String licId, String phoneNum, String docSpecialization, Hospital hospId, List<Encounter> encounterList) {
         this.name = name;
         this.licId = licId;
         this.phoneNum = phoneNum;
@@ -43,15 +37,6 @@ public class Doctor extends Authorization{
         this.hospId = hospId;
         this.encounterList = encounterList;
     }
-
-    public int getDocId() {
-        return docId;
-    }
-
-    public void setDocId(int docId) {
-        this.docId = docId;
-    }
-
     public String getName() {
         return name;
     }
@@ -103,8 +88,7 @@ public class Doctor extends Authorization{
     @Override
     public String toString() {
         return "Doctor{" +
-                "docId=" + docId +
-                ", name='" + name + '\'' +
+                "name='" + name + '\'' +
                 ", licId='" + licId + '\'' +
                 ", phoneNum='" + phoneNum + '\'' +
                 ", docSpecialization='" + docSpecialization + '\'' +
