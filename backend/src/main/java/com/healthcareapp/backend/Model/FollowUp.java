@@ -10,7 +10,7 @@ public class FollowUp {
     private int followUpId;
 
     @ManyToOne
-    @JoinColumn(name= "encounter_id", nullable = false)
+    @JoinColumn(name= "encounter_id")
 //    @JsonBackReference(value="Encounter-FollowUp")
     private Encounter encounter;
 
@@ -23,12 +23,12 @@ public class FollowUp {
     private String lastSyncDate;
 
     @ManyToOne
-    @JoinColumn(name= "hosp_id", nullable = false)
+    @JoinColumn(name= "hosp_id")
 //    @JsonBackReference(value="Hospital-FollowUp")
     private Hospital hospital;
 
     @ManyToOne
-    @JoinColumn(name= "patient_id", nullable = false)
+    @JoinColumn(name= "patient_id")
 //    @JsonBackReference("Patient-FollowUp")
     private Patient patient;
 

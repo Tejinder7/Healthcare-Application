@@ -47,8 +47,8 @@ public class PendingQueueService {
         return pendingQueue;
     }
 
-    public List<PendingQueue> getPendingQueueByDocId(int docId){
-        Hospital hospital = doctorService.getHospitalByDocId(docId);
+    public List<PendingQueue> getPendingQueueByDocId(int hospId){
+        Hospital hospital = hospitalService.getHospitalById(hospId);
 
         List<PendingQueue> pendingQueueList = pendingQueueRepository.findPendingQueueByHospital(hospital);
 

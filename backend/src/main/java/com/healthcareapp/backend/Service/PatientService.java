@@ -12,7 +12,12 @@ public class PatientService {
         this.patientRepository = patientRepository;
     }
     public Patient addPatient(Patient patient){
-        Patient patient1 = patientRepository.save(patient);
+        Patient patient1;
+        try{
+            patient1 = patientRepository.save(patient);
+        }catch (Exception e){
+            throw new RuntimeException();
+        }
         return patient1;
     }
     public Patient getPatientById(int Pid){

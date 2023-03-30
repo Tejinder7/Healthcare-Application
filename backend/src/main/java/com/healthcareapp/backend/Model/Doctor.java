@@ -17,7 +17,7 @@ public class Doctor extends Authorization{
     private String docSpecialization;
 
     @ManyToOne
-    @JoinColumn(name= "hosp_id", nullable = false)
+    @JoinColumn(name= "hosp_id")
 //    @JsonBackReference("HOS-DOC")
     private Hospital hospital;
 

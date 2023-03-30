@@ -18,10 +18,10 @@ public class FieldWorkerController {
 
 
     @PostMapping("/addFieldWorker/{supervisorId}")
-    public ResponseEntity<FieldWorker> addFieldWorker(@RequestBody FieldWorker fieldWorker, @PathVariable int supervisorAuthId) {
+    public ResponseEntity<FieldWorker> addFieldWorker(@RequestBody FieldWorker fieldWorker, @PathVariable int supervisorId) {
 
         try {
-            fieldWorker = fieldWorkerService.addFieldWorker(fieldWorker, supervisorAuthId);
+            fieldWorker = fieldWorkerService.addFieldWorker(fieldWorker, supervisorId);
         }catch (Exception e){
             return ResponseEntity.status(404).build();
         }
@@ -29,11 +29,11 @@ public class FieldWorkerController {
     }
 
     @GetMapping("/getFieldWorkers/{supervisorId}")
-    public ResponseEntity<List<FieldWorker>> getFieldWorkers(@PathVariable int supervisorAuthId){
+    public ResponseEntity<List<FieldWorker>> getFieldWorkers(@PathVariable int supervisorId){
         List<FieldWorker> fieldWorkerList;
 
         try{
-            fieldWorkerList = fieldWorkerService.getFieldWorkers(supervisorAuthId);
+            fieldWorkerList = fieldWorkerService.getFieldWorkers(supervisorId);
         }
         catch (Exception e){
             return ResponseEntity.status(404).build();

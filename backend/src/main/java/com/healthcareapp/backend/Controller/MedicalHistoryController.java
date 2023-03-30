@@ -1,8 +1,13 @@
 package com.healthcareapp.backend.Controller;
 
+import com.fasterxml.jackson.databind.ser.FilterProvider;
+import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
+import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
+import com.healthcareapp.backend.Exception.ResourceNotFoundException;
 import com.healthcareapp.backend.Model.MedicalHistory;
 import com.healthcareapp.backend.Service.MedicalHistoryService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,15 +26,21 @@ public class MedicalHistoryController {
     }
 
     @GetMapping("getMedicalHistory/{pid}")
-    public ResponseEntity<List<MedicalHistory>> getMedicalHistory(@PathVariable int pid){
+    public MappingJacksonValue getMedicalHistory(@PathVariable int pid){
         List<MedicalHistory> medicalHistoryList;
         try {
             medicalHistoryList = medicalHistoryService.getMedicalHistoryByPatientId(pid);
         }
         catch (Exception e){
-            return ResponseEntity.status(404).build();
+            throw new ResourceNotFoundException("No Medical history for patient :"+ pid+" found");
         }
-        return ResponseEntity.of(Optional.of(medicalHistoryList));
+        MappingJacksonValue mappingJacksonValue= new MappingJacksonValue(medicalHistoryList);
+        SimpleBeanPropertyFilter filter= SimpleBeanPropertyFilter.filterOutAllExcept("medicalHistoryId", "symptoms", "prescription");
+        FilterProvider filters= new SimpleFilterProvider().addFilter("MedicalHistoryFilter", filter);
+
+        mappingJacksonValue.setFilters(filters);
+
+        return mappingJacksonValue;
     }
 
 }

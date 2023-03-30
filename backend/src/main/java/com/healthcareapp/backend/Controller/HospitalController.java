@@ -1,5 +1,6 @@
 package com.healthcareapp.backend.Controller;
 
+import com.healthcareapp.backend.Exception.ResourceNotFoundException;
 import com.healthcareapp.backend.Model.Hospital;
 import com.healthcareapp.backend.Service.HospitalService;
 import org.springframework.http.ResponseEntity;
@@ -33,14 +34,14 @@ public class HospitalController {
     }
 
     @GetMapping("/hospitalsWithNoAdmins")
-    public ResponseEntity<List<Hospital>> getHospitalsWithNoAdmins(){
-        List<Hospital> hospitalList = new ArrayList<>();
+    public List<Hospital> getHospitalsWithNoAdmins(){
+        List<Hospital> hospitalList;
         try{
             hospitalList = hospitalService.getHospitalsWhereAdminNotAssigned();
         }catch (Exception e){
-            return ResponseEntity.status(404).build();
+            throw new ResourceNotFoundException("");
         }
 
-        return ResponseEntity.of(Optional.of(hospitalList));
+        return hospitalList;
     }
 }

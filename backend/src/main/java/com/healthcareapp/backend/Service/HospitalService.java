@@ -66,7 +66,7 @@ public class HospitalService {
         List<Admin> adminList = adminRepository.findAll();
         List<Hospital> hospitalAssignedList = new ArrayList<>();
 
-        adminList.forEach(admin -> {hospitalAssignedList.add(admin.getHospId());});
+        adminList.forEach(admin -> {hospitalAssignedList.add(admin.getHospital());});
 
         List<Hospital> hospitalNotAssignedList = new ArrayList<>(hospitalList);
         hospitalNotAssignedList.removeAll(hospitalAssignedList);

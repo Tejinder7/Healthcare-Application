@@ -14,7 +14,7 @@ public class Encounter {
     private int encounterId;
 
     @ManyToOne
-    @JoinColumn(name= "doctor_id", nullable = false)
+    @JoinColumn(name= "doctor_id")
 //    @JsonBackReference(value = "Encounter-Doctor")
     private Doctor doctor;
 
@@ -24,12 +24,12 @@ public class Encounter {
     private List<FollowUp> followUpList;
 
     @OneToOne
-    @JoinColumn(name= "medicalhistory_id", nullable = false)
+    @JoinColumn(name= "medicalhistory_id")
 //    @JsonManagedReference(value = "Encounter-MH")
     private MedicalHistory medicalHistory;
 
     @ManyToOne
-    @JoinColumn(name= "patient_id", nullable = false)
+    @JoinColumn(name= "patient_id")
 //    @JsonBackReference(value = "Encounter-Patient")
     private Patient patient;
 
