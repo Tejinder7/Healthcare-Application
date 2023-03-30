@@ -40,7 +40,7 @@ public class FieldWorkerService {
         }
 
         fieldWorker.setSupId(supervisor);
-        fieldWorker.setUserType("FieldWorker");
+        fieldWorker.setUserType("Field Worker");
 
         try {
             fieldWorker = fieldWorkerRepository.save(fieldWorker);
