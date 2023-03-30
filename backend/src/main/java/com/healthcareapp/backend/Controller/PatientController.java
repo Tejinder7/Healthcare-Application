@@ -15,14 +15,19 @@ import java.util.Optional;
 public class PatientController {
     private PatientService patientService;
 
+    public PatientController(PatientService patientService) {
+        this.patientService = patientService;
+    }
+
     @PostMapping("/addPatients")
     public ResponseEntity<Patient> addPatient(@RequestBody Patient patient){
+        Patient patient1 = new Patient();
         try {
-            Patient patient1 = this.patientService.addPatient(patient);
+            patient1 = this.patientService.addPatient(patient);
         }
         catch (Exception e){
             ResponseEntity.status(404).build();
         }
-        return ResponseEntity.of(Optional.of(patient));
+        return ResponseEntity.of(Optional.of(patient1));
     }
 }
