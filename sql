@@ -7,3 +7,6 @@ insert into doctor values (1, 'General', '12345', 'Tejinder', '1234567890', 1, 1
 NOTE : Patient and PendingQueue entered via postman through APIs (Patient can be entered directly by entering pendingQueue requires HOSPITAL and PATIENT data)
 
 -----------------------------------------------------------------------------------------------------------------------------------
+
+insert into authorization values (999, 'SuperAdmin', 'SuperAdmin', 'Super Admin');
+insert into super_admin values (999);

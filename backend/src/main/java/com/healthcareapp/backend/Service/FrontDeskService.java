@@ -29,7 +29,7 @@ public class FrontDeskService {
         }
 
         frontDesk.setHospId(hospital);
-        frontDesk.setUserType("FrontDesk");
+        frontDesk.setUserType("Front Desk");
 
 
         try {
