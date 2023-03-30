@@ -18,7 +18,7 @@ public class PendingQueueController {
     }
 
     @PostMapping("/addPendingQueue/{hosp_id}/{p_id}")
-    public ResponseEntity<PendingQueue> addPendingQueue(@PathVariable("hosp_id") int hosp_id, @PathVariable("p_id") int p_id){
+    public ResponseEntity<PendingQueue> addPendingQueue(@PathVariable int hosp_id, @PathVariable int p_id){
 
         PendingQueue pendingQueue;
         try {
@@ -31,7 +31,7 @@ public class PendingQueueController {
     }
 
     @GetMapping("/pendingQueue/{docId}")
-    public ResponseEntity<List<PendingQueue>> getPendingQueue(@PathVariable("docId") int docId){
+    public ResponseEntity<List<PendingQueue>> getPendingQueue(@PathVariable int docId){
 
         try{
             List<PendingQueue> pendingQueueList = pendingQueueService.getPendingQueueByDocId(docId);
