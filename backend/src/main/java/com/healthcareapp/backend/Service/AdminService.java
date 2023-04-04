@@ -33,4 +33,16 @@ public class AdminService {
             throw new RuntimeException();
         }
     }
+
+    public Admin updateAdmin(Admin admin){
+        Hospital hospital = hospitalService.getHospitalById(admin.getHospital().getHospId());
+        admin.setHospital(hospital);
+        try {
+            adminRepository.save(admin);
+            return admin;
+        }
+        catch (Exception e){
+            throw new RuntimeException();
+        }
+    }
 }

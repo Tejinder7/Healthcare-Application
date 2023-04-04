@@ -1,7 +1,9 @@
 package com.healthcareapp.backend.Controller;
 
 import com.healthcareapp.backend.Model.Admin;
+import com.healthcareapp.backend.Model.Hospital;
 import com.healthcareapp.backend.Service.AdminService;
+import com.healthcareapp.backend.Service.HospitalService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,6 +25,17 @@ public class AdminController {
             admin1 = adminService.addAdmin(admin, hospId);
         }
         catch (Exception e){
+            return ResponseEntity.status(500).build();
+        }
+        return ResponseEntity.of(Optional.of(admin1));
+    }
+
+    @PutMapping("/updateAdmin")
+    public ResponseEntity<Admin> updateAdmin(@RequestBody Admin admin){
+        Admin admin1;
+        try{
+            admin1 = adminService.updateAdmin(admin);
+        }catch (Exception e){
             return ResponseEntity.status(500).build();
         }
         return ResponseEntity.of(Optional.of(admin1));
