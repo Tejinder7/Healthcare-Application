@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@CrossOrigin
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class FieldWorkerController {
     private FieldWorkerService fieldWorkerService;
     public FieldWorkerController(FieldWorkerService fieldWorkerService) {

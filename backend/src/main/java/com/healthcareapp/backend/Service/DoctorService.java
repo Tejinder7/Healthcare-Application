@@ -6,6 +6,8 @@ import com.healthcareapp.backend.Repository.DoctorRepository;
 import com.healthcareapp.backend.Repository.HospitalRepository;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 public class DoctorService {
     private DoctorRepository doctorRepository;
@@ -53,5 +55,15 @@ public class DoctorService {
             throw new RuntimeException();
         }
         return doctor;
+    }
+
+    public List<Doctor> getAllDoctorsByHospital(Hospital hospital){
+        List<Doctor> doctorList;
+        try{
+            doctorList = doctorRepository.findDoctorByHospital(hospital);
+        }catch (Exception e){
+            throw new RuntimeException();
+        }
+        return doctorList;
     }
 }
