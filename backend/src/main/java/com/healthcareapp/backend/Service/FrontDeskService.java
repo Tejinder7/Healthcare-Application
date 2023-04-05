@@ -52,4 +52,18 @@ public class FrontDeskService {
         }
         return frontDeskList;
     }
+
+    public FrontDesk updateFrontDesk(FrontDesk frontDesk){
+        FrontDesk frontDesk1 = frontDeskRepository.findFrontDeskByAuthId(frontDesk.getAuthId());
+        frontDesk1.setName(frontDesk.getName());
+        frontDesk1.setUserId(frontDesk.getUserId());
+        frontDesk1.setPassword(frontDesk.getPassword());
+        try {
+            frontDeskRepository.save(frontDesk1);
+            return frontDesk1;
+        }
+        catch (Exception e){
+            throw new RuntimeException();
+        }
+    }
 }

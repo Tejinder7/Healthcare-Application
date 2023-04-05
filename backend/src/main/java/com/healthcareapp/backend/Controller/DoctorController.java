@@ -5,7 +5,6 @@ import com.healthcareapp.backend.Service.DoctorService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.print.Doc;
 import java.util.Optional;
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
@@ -23,6 +22,17 @@ public class DoctorController {
             doctor1 = doctorService.addDoctor(doctor, hospitalId);
         }catch (Exception e){
             return ResponseEntity.status(404).build();
+        }
+        return ResponseEntity.of(Optional.of(doctor1));
+    }
+
+    @PutMapping("/updateDoctor")
+    public ResponseEntity<Doctor> updateDoctor(@RequestBody Doctor doctor){
+        Doctor doctor1;
+        try{
+            doctor1 = doctorService.updateDoctor(doctor);
+        }catch (Exception e){
+            return ResponseEntity.status(500).build();
         }
         return ResponseEntity.of(Optional.of(doctor1));
     }

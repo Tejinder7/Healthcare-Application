@@ -10,4 +10,6 @@ public interface FrontDeskRepository extends JpaRepository<FrontDesk, Integer> {
 
     public List<FrontDesk> getFrontDeskByHospital(Hospital hospital);
 
+    public FrontDesk findFrontDeskByAuthId(int id);
+
 }

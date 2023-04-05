@@ -1,11 +1,13 @@
 package com.healthcareapp.backend.Service;
 
+import com.healthcareapp.backend.Model.Admin;
 import com.healthcareapp.backend.Model.Doctor;
 import com.healthcareapp.backend.Model.Hospital;
 import com.healthcareapp.backend.Repository.DoctorRepository;
 import com.healthcareapp.backend.Repository.HospitalRepository;
 import org.springframework.stereotype.Component;
 
+import javax.print.Doc;
 import java.util.List;
 
 @Component
@@ -65,5 +67,22 @@ public class DoctorService {
             throw new RuntimeException();
         }
         return doctorList;
+    }
+
+    public Doctor updateDoctor(Doctor doctor){
+        Doctor doctor1 = doctorRepository.findDoctorByAuthId(doctor.getAuthId());
+        doctor1.setDocSpecialization(doctor.getDocSpecialization());
+        doctor1.setName(doctor.getName());
+        doctor1.setLicId(doctor.getLicId());
+        doctor1.setPhoneNum(doctor.getPhoneNum());
+        doctor1.setUserId(doctor.getUserId());
+        doctor1.setPassword(doctor.getPassword());
+        try {
+            doctorRepository.save(doctor1);
+            return doctor1;
+        }
+        catch (Exception e){
+            throw new RuntimeException();
+        }
     }
 }
