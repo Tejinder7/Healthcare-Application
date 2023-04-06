@@ -1,17 +1,26 @@
 package com.healthcareapp.backend.Model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+
+import java.util.Optional;
 
 @Entity
 public class FollowUp {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(unique = true)
     private int followUpId;
 
     @ManyToOne
+    @JoinColumn(name= "encounter_id")
 //    @JsonBackReference(value="Encounter-FollowUp")
-    private Encounter encounterId;
+    private Encounter encounter;
 
     private String date;
 
@@ -22,26 +31,28 @@ public class FollowUp {
     private String lastSyncDate;
 
     @ManyToOne
+    @JoinColumn(name= "hosp_id")
 //    @JsonBackReference(value="Hospital-FollowUp")
-    private Hospital hospId;
+    private Hospital hospital;
 
     @ManyToOne
+    @JoinColumn(name= "patient_id")
 //    @JsonBackReference("Patient-FollowUp")
-    private Patient patientId;
+    private Patient patient;
 
 
     public FollowUp() {
     }
 
-    public FollowUp(int followUpId, Encounter encounterId, String date, String remarks, boolean flag, String lastSyncDate, Hospital hospId, Patient patientId) {
+    public FollowUp(int followUpId, Encounter encounter, String date, String remarks, boolean flag, String lastSyncDate, Hospital hospital, Patient patient) {
         this.followUpId = followUpId;
-        this.encounterId = encounterId;
+        this.encounter = encounter;
         this.date = date;
         this.remarks = remarks;
         this.flag = flag;
         this.lastSyncDate = lastSyncDate;
-        this.hospId = hospId;
-        this.patientId = patientId;
+        this.hospital = hospital;
+        this.patient = patient;
     }
 
     public int getFollowUpId() {
@@ -52,12 +63,28 @@ public class FollowUp {
         this.followUpId = followUpId;
     }
 
-    public Encounter getEncounterId() {
-        return encounterId;
+    public Encounter getEncounter() {
+        return encounter;
     }
 
-    public void setEncounterId(Encounter encounterId) {
-        this.encounterId = encounterId;
+    public void setEncounter(Encounter encounter) {
+        this.encounter = encounter;
+    }
+
+    public Hospital getHospital() {
+        return hospital;
+    }
+
+    public void setHospital(Hospital hospital) {
+        this.hospital = hospital;
+    }
+
+    public Patient getPatient() {
+        return patient;
+    }
+
+    public void setPatient(Patient patient) {
+        this.patient = patient;
     }
 
     public String getDate() {
@@ -92,33 +119,17 @@ public class FollowUp {
         this.lastSyncDate = lastSyncDate;
     }
 
-    public Hospital getHospId() {
-        return hospId;
-    }
-
-    public void setHospId(Hospital hospId) {
-        this.hospId = hospId;
-    }
-
-    public Patient getPatientId() {
-        return patientId;
-    }
-
-    public void setPatientId(Patient patientId) {
-        this.patientId = patientId;
-    }
-
     @Override
     public String toString() {
         return "FollowUp{" +
                 "followUpId=" + followUpId +
-                ", encounterId=" + encounterId +
+                ", encounter=" + encounter +
                 ", date='" + date + '\'' +
                 ", remarks='" + remarks + '\'' +
                 ", flag=" + flag +
                 ", lastSyncDate='" + lastSyncDate + '\'' +
-                ", hospId=" + hospId +
-                ", patientId=" + patientId +
+                ", hospital=" + hospital +
+                ", patient=" + patient +
                 '}';
     }
 }

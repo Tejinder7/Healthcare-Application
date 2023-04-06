@@ -1,40 +1,52 @@
 package com.healthcareapp.backend.Model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+//@Data
+//@Builder
+//@AllArgsConstructor
+//@NoArgsConstructor
 @Entity
 public class PendingQueue {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int penId;
+    private int pendingQueueId;
 
     private String dateTime;
 
+    private Boolean flag;
 
     @OneToOne
+    @JoinColumn(name= "patient_id", unique = true)
 //    @JsonBackReference(value = "Patient-PendingQueue")
-    private Patient patientId;
+    private Patient patient;
 
     @ManyToOne
+    @JoinColumn(name= "hosp_id")
 //    @JsonBackReference(value = "Hospital-PendingQueue")
-    private Hospital hospId;
+    private Hospital hospital;
 
     public PendingQueue() {
     }
 
-    public PendingQueue(int penId, String dateTime, Patient patientId, Hospital hospId) {
-        this.penId = penId;
+    public PendingQueue(int pendingQueueId, String dateTime, Patient patient, Hospital hospital, Boolean flag) {
+        this.pendingQueueId = pendingQueueId;
         this.dateTime = dateTime;
-        this.patientId = patientId;
-        this.hospId = hospId;
+        this.patient = patient;
+        this.hospital = hospital;
+        this.flag = flag;
     }
 
-    public int getPenId() {
-        return penId;
+    public int getPendingQueueId() {
+        return pendingQueueId;
     }
 
-    public void setPenId(int penId) {
-        this.penId = penId;
+    public void setPendingQueueId(int pendingQueueId) {
+        this.pendingQueueId = pendingQueueId;
     }
 
     public String getDateTime() {
@@ -45,29 +57,38 @@ public class PendingQueue {
         this.dateTime = dateTime;
     }
 
-    public Patient getPatientId() {
-        return patientId;
+    public Patient getPatient() {
+        return patient;
     }
 
-    public void setPatientId(Patient patientId) {
-        this.patientId = patientId;
+    public void setPatient(Patient patient) {
+        this.patient = patient;
     }
 
-    public Hospital getHospId() {
-        return hospId;
+    public Hospital getHospital() {
+        return hospital;
     }
 
-    public void setHospId(Hospital hospId) {
-        this.hospId = hospId;
+    public void setHospital(Hospital hospital) {
+        this.hospital = hospital;
+    }
+
+    public Boolean getFlag() {
+        return flag;
+    }
+
+    public void setFlag(Boolean flag) {
+        this.flag = flag;
     }
 
     @Override
     public String toString() {
         return "PendingQueue{" +
-                "penId=" + penId +
+                "pendingQueueId=" + pendingQueueId +
                 ", dateTime='" + dateTime + '\'' +
-                ", patientId=" + patientId +
-                ", hospId=" + hospId +
+                ", patient=" + patient +
+                ", hospital=" + hospital +
+                ", flag=" + flag +
                 '}';
     }
 }

@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@CrossOrigin
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class FollowUpController {
     private FollowUpService followUpService;
 
@@ -17,14 +17,14 @@ public class FollowUpController {
         this.followUpService = followUpService;
     }
 
-    @GetMapping("/getTodayFollowUps")
-    public ResponseEntity<List<FollowUp>> getTodayFollowUp(@RequestParam("date") String date, @RequestParam("fwId") int fwId){
+    @GetMapping("/getTodayFollowUps/{date}/{fieldWorkerId}")
+    public ResponseEntity<List<FollowUp>> getTodayFollowUp(@PathVariable String date, @PathVariable int fieldWorkerId){
         List<FollowUp> followUpList;
 
         try {
-            followUpList = followUpService.getCurrentDateFollowUps(date, fwId);
+            followUpList = followUpService.getCurrentDateFollowUps(date, fieldWorkerId);
         }catch (Exception e){
-            return ResponseEntity.status(404).build();
+            return ResponseEntity.status(500).build();
         }
 
         return ResponseEntity.ok(followUpList);
@@ -42,11 +42,11 @@ public class FollowUpController {
         return ResponseEntity.of(Optional.of(followUp));
     }
 
-    @GetMapping("/getFollowUps")
-    public ResponseEntity<List<FollowUp>> getFollowUps(@RequestParam("supId") int supId){
+    @GetMapping("/getFollowUps/{supervisorId}")
+    public ResponseEntity<List<FollowUp>> getFollowUps(@PathVariable int supervisorId){
         List<FollowUp> followUpList;
         try{
-            followUpList = followUpService.getAllFollowUp(supId);
+            followUpList = followUpService.getAllFollowUp(supervisorId);
         }catch (Exception e){
             return ResponseEntity.status(404).build();
         }
@@ -57,6 +57,12 @@ public class FollowUpController {
     @PostMapping("/addFollowUps/{en_id}")
     public ResponseEntity<List<FollowUp>> addFollowUps(@RequestBody List<String> dateList, @PathVariable int en_id){
         List<FollowUp> followUpList = followUpService.addFollowUps(dateList, en_id);
+        return ResponseEntity.of(Optional.of(followUpList));
+    }
+
+    @GetMapping("/getFollowUpsForFieldWorker/{fieldWorkerId}")
+    public ResponseEntity<List<FollowUp>> getFollowUpsForFieldWorker(@PathVariable int fieldWorkerId){
+        List<FollowUp> followUpList = followUpService.getFollowUpsByFieldWorker(fieldWorkerId);
         return ResponseEntity.of(Optional.of(followUpList));
     }
 }

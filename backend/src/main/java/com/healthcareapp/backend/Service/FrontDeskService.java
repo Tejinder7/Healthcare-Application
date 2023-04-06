@@ -1,10 +1,15 @@
 package com.healthcareapp.backend.Service;
 
+import com.healthcareapp.backend.Exception.ResourceNotFoundException;
+import com.healthcareapp.backend.Model.Doctor;
 import com.healthcareapp.backend.Model.FrontDesk;
 import com.healthcareapp.backend.Model.Hospital;
 import com.healthcareapp.backend.Repository.FrontDeskRepository;
 import com.healthcareapp.backend.Repository.HospitalRepository;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.Optional;
 
 @Component
 public class FrontDeskService {
@@ -17,24 +22,17 @@ public class FrontDeskService {
     }
 
 
-    public FrontDesk addFrontDesk(String name, int hospId, String userId, String password){
+    public FrontDesk addFrontDesk(FrontDesk frontDesk, int hospitalId){
 
-        FrontDesk frontDesk = new FrontDesk();
-
-        Hospital hospital;
-
-        hospital = hospitalRepository.getHospitalsByHospId(hospId);
+        Optional<Hospital> hospital = hospitalRepository.findById(hospitalId);
 
         if(hospital==null)
         {
-            throw new RuntimeException();
+            throw new ResourceNotFoundException("No Hospital found for Hospital id: "+ hospitalId);
         }
 
-        frontDesk.setName(name);
-        frontDesk.setHospId(hosp);
-        frontDesk.setUserId(userId);
-        frontDesk.setPassword(password);
-        frontDesk.setUserType("FrontDesk");
+        frontDesk.setHospital(hospital.get());
+        frontDesk.setUserType("Front Desk");
 
 
         try {
@@ -43,5 +41,24 @@ public class FrontDeskService {
             throw new RuntimeException();
         }
         return frontDesk;
+    }
+
+    public List<FrontDesk> getAllFrontDeskByHospital(Hospital hospital){
+        List<FrontDesk> frontDeskList= frontDeskRepository.findByHospital(hospital);
+        return frontDeskList;
+    }
+
+    public FrontDesk updateFrontDesk(FrontDesk frontDesk){
+        FrontDesk frontDesk1 = frontDeskRepository.findFrontDeskByAuthId(frontDesk.getAuthId());
+        frontDesk1.setName(frontDesk.getName());
+        frontDesk1.setUserId(frontDesk.getUserId());
+        frontDesk1.setPassword(frontDesk.getPassword());
+        try {
+            frontDeskRepository.save(frontDesk1);
+            return frontDesk1;
+        }
+        catch (Exception e){
+            throw new RuntimeException();
+        }
     }
 }

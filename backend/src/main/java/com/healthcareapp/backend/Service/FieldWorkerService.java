@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Component
 public class FieldWorkerService {
@@ -28,26 +29,18 @@ public class FieldWorkerService {
     }
 
 
-    public FieldWorker addFieldWorker(String name, String address, String phoneNum, int supId, String userId, String password){
-
-        FieldWorker fieldWorker = new FieldWorker();
+    public FieldWorker addFieldWorker(FieldWorker fieldWorker, int authId){
 
         Supervisor supervisor;
 
-        supervisor = supervisorRepository.findSupervisorBySupId(supId);
+        supervisor = supervisorRepository.findSupervisorByAuthId(authId);
 
         if(supervisor==null)
         {
             throw new RuntimeException();
         }
 
-        fieldWorker.setName(name);
-        fieldWorker.setAddress(address);
-        fieldWorker.setPhoneNo(phoneNum);
-        fieldWorker.setSupId(supervisor);
-        fieldWorker.setPatientList(new ArrayList<>());
-        fieldWorker.setUserId(userId);
-        fieldWorker.setPassword(password);
+        fieldWorker.setSupervisor(supervisor);
         fieldWorker.setUserType("FieldWorker");
 
         try {
@@ -60,15 +53,15 @@ public class FieldWorkerService {
 
 
 
-    public List<FieldWorker> getFieldWorkers(int supId){
-        Supervisor supervisor = supervisorRepository.findSupervisorBySupId(supId);
+    public List<FieldWorker> getFieldWorkers(int supervisorId){
+        Supervisor supervisor = supervisorRepository.findSupervisorByAuthId(supervisorId);
 
         if(supervisor==null)
         {
             throw new RuntimeException();
         }
 
-        List<FieldWorker> fieldWorkerList = fieldWorkerRepository.findBySupId(supervisor);
+        List<FieldWorker> fieldWorkerList = fieldWorkerRepository.findFieldWorkerBySupervisor(supervisor);
 
         if(fieldWorkerList.size()==0)
         {
@@ -78,18 +71,18 @@ public class FieldWorkerService {
             return fieldWorkerList;
     }
 
-    public FieldWorker assignFollowUp(int followUpId, int fieldWorkerId){
+    public FieldWorker assignFollowUp(int followUpId, int fieldWorkerAuthId){
 
         FollowUp followUp = followUpRepository.findById(followUpId);
 
-        FieldWorker fieldWorker = fieldWorkerRepository.findByFwId(fieldWorkerId);
+        FieldWorker fieldWorker = fieldWorkerRepository.findFieldWorkerByAuthId(fieldWorkerAuthId);
 
         if(followUp==null || fieldWorker==null)
         {
             throw new RuntimeException();
         }
 
-        Patient patient = followUp.getPatientId();
+        Patient patient = followUp.getPatient();
 
 //        List<Patient> list = fieldWorker.getPatientList();
 //
@@ -99,7 +92,7 @@ public class FieldWorkerService {
 
         patient = patientRepository.findPatientByPatientId(patient.getPatientId());
 
-        patient.setFieldWorkerId(fieldWorker);
+        patient.setFieldWorker(fieldWorker);
 
         try{
             patient = patientRepository.save(patient);
@@ -108,8 +101,13 @@ public class FieldWorkerService {
             throw new RuntimeException();
         }
 
-        fieldWorker = fieldWorkerRepository.findByFwId(fieldWorkerId);
+        fieldWorker = fieldWorkerRepository.findFieldWorkerByAuthId(fieldWorkerAuthId);
 
+        return fieldWorker;
+    }
+
+    public FieldWorker getFieldWorkerById(int fieldWorkerId){
+        FieldWorker fieldWorker = fieldWorkerRepository.findFieldWorkerByAuthId(fieldWorkerId);
         return fieldWorker;
     }
 }

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Component
 public class FollowUpService {
@@ -15,18 +16,22 @@ public class FollowUpService {
     private FieldWorkerRepository fieldWorkerRepository;
     private SupervisorRepository supervisorRepository;
     private EncounterService encounterService;
+    private FieldWorkerService fieldWorkerService;
+    private PatientService patientService;
 
-    public FollowUpService(FollowUpRepository followUpRepository, FieldWorkerRepository fieldWorkerRepository, SupervisorRepository supervisorRepository, EncounterService encounterService) {
+    public FollowUpService(FollowUpRepository followUpRepository, FieldWorkerRepository fieldWorkerRepository, SupervisorRepository supervisorRepository, EncounterService encounterService, FieldWorkerService fieldWorkerService, PatientService patientService) {
         this.followUpRepository = followUpRepository;
         this.fieldWorkerRepository = fieldWorkerRepository;
         this.supervisorRepository = supervisorRepository;
         this.encounterService = encounterService;
+        this.fieldWorkerService = fieldWorkerService;
+        this.patientService = patientService;
     }
 
-    public List<FollowUp> getCurrentDateFollowUps(String date, int fwId){
+    public List<FollowUp> getCurrentDateFollowUps(String date, int fieldWorkerAuthId){
         FieldWorker fieldWorker;
 
-        fieldWorker = fieldWorkerRepository.findByFwId(fwId);
+        fieldWorker = fieldWorkerRepository.findFieldWorkerByAuthId(fieldWorkerAuthId);
 
         if(fieldWorker==null)
         {
@@ -37,7 +42,7 @@ public class FollowUpService {
 
         List<FollowUp> followUpList = new ArrayList<>();
 
-        patientList.forEach(patient -> {followUpList.addAll(followUpRepository.findByDateAndPatientId(date, patient));});
+        patientList.forEach(patient -> {followUpList.addAll(followUpRepository.findByDateAndPatient(date, patient));});
 
         return followUpList;
     }
@@ -67,8 +72,8 @@ public class FollowUpService {
         return validFollowUp;
     }
 
-    public List<FollowUp> getAllFollowUp(int supId){
-        Supervisor supervisor = supervisorRepository.findSupervisorBySupId(supId);
+    public List<FollowUp> getAllFollowUp(int authId){
+        Supervisor supervisor = supervisorRepository.findSupervisorByAuthId(authId);
 
         if(supervisor==null)
         {
@@ -81,25 +86,25 @@ public class FollowUpService {
 
         //System.out.printf(hospitalList.toString());
 
-        hospitalList.forEach(hospital -> {followUpList.addAll(followUpRepository.findByHospId(hospital));});
+        hospitalList.forEach(hospital -> {followUpList.addAll(followUpRepository.findByHospitalAndFlagIsFalse(hospital));});
 
         return followUpList;
     }
 
     public List<FollowUp> addFollowUps(List<String> dateList, int en_id){
         Encounter encounter = encounterService.getEncounterById(en_id);
-        Patient patient = encounter.getPatientId();
-        Doctor doctor = encounter.getDoctorId();
-        Hospital hospital = doctor.getHospId();
+        Patient patient = encounter.getPatient();
+        Doctor doctor = encounter.getDoctor();
+        Hospital hospital = doctor.getHospital();
         List<FollowUp> followUpList = new ArrayList<>();
         try {
             for (int i = 0; i < dateList.size(); i++) {
                 FollowUp followUp = new FollowUp();
-                followUp.setEncounterId(encounter);
+                followUp.setEncounter(encounter);
                 followUp.setDate(dateList.get(i));
                 followUp.setFlag(false);
-                followUp.setPatientId(patient);
-                followUp.setHospId(hospital);
+                followUp.setPatient(patient);
+                followUp.setHospital(hospital);
                 followUpRepository.save(followUp);
 
                 followUpList.add(followUp);
@@ -107,6 +112,15 @@ public class FollowUpService {
         }catch (Exception e){
             throw new RuntimeException();
         }
+        return followUpList;
+    }
+
+    public List<FollowUp> getFollowUpsByFieldWorker(int fieldWorkerId){
+
+        FieldWorker fieldWorker = fieldWorkerService.getFieldWorkerById(fieldWorkerId);
+        Patient patient = patientService.getPatientByFieldWorker(fieldWorker);
+        List<FollowUp> followUpList = followUpRepository.findByPatient(patient);
+
         return followUpList;
     }
 }

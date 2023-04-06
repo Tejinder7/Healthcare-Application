@@ -1,32 +1,29 @@
 package com.healthcareapp.backend.Model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @Entity
 @PrimaryKeyJoinColumn(name = "authId")
 public class Doctor extends Authorization{
-
-    @Column(unique = true)
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private int docId;
-
     private String name;
 
+    @Column(unique = true)
     private String licId;
 
-    private String phoneNum;
+    private String contact;
 
     private String docSpecialization;
 
     @ManyToOne
+    @JoinColumn(name= "hosp_id")
 //    @JsonBackReference("HOS-DOC")
-    private Hospital hospId;
+    private Hospital hospital;
 
-    @OneToMany(mappedBy = "doctorId")
+    @OneToMany(mappedBy = "doctor")
 //    @JsonManagedReference(value = "Encounter-Doctor")
     @JsonIgnore
     private List<Encounter> encounterList;
@@ -34,22 +31,13 @@ public class Doctor extends Authorization{
     public Doctor() {
     }
 
-    public Doctor(int docId, String name, String licId, String phoneNum, String docSpecialization, Hospital hospId, List<Encounter> encounterList) {
-        this.docId = docId;
+    public Doctor(String name, String licId, String contact, String docSpecialization, Hospital hospital, List<Encounter> encounterList) {
         this.name = name;
         this.licId = licId;
-        this.phoneNum = phoneNum;
+        this.contact = contact;
         this.docSpecialization = docSpecialization;
-        this.hospId = hospId;
+        this.hospital = hospital;
         this.encounterList = encounterList;
-    }
-
-    public int getDocId() {
-        return docId;
-    }
-
-    public void setDocId(int docId) {
-        this.docId = docId;
     }
 
     public String getName() {
@@ -68,12 +56,12 @@ public class Doctor extends Authorization{
         this.licId = licId;
     }
 
-    public String getPhoneNum() {
-        return phoneNum;
+    public String getContact() {
+        return contact;
     }
 
-    public void setPhoneNum(String phoneNum) {
-        this.phoneNum = phoneNum;
+    public void setContact(String phoneNum) {
+        this.contact = phoneNum;
     }
 
     public String getDocSpecialization() {
@@ -84,12 +72,12 @@ public class Doctor extends Authorization{
         this.docSpecialization = docSpecialization;
     }
 
-    public Hospital getHospId() {
-        return hospId;
+    public Hospital getHospital() {
+        return hospital;
     }
 
-    public void setHospId(Hospital hospId) {
-        this.hospId = hospId;
+    public void setHospital(Hospital hospital) {
+        this.hospital = hospital;
     }
 
     public List<Encounter> getEncounterList() {
@@ -103,12 +91,11 @@ public class Doctor extends Authorization{
     @Override
     public String toString() {
         return "Doctor{" +
-                "docId=" + docId +
-                ", name='" + name + '\'' +
+                "name='" + name + '\'' +
                 ", licId='" + licId + '\'' +
-                ", phoneNum='" + phoneNum + '\'' +
+                ", phoneNum='" + contact + '\'' +
                 ", docSpecialization='" + docSpecialization + '\'' +
-                ", hospId=" + hospId +
+                ", hospital=" + hospital +
                 ", encounterList=" + encounterList +
                 '}';
     }

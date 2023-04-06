@@ -1,9 +1,6 @@
 package com.healthcareapp.backend.Model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -11,44 +8,30 @@ import java.util.List;
 @Entity
 @PrimaryKeyJoinColumn(name = "authId")
 public class FieldWorker extends Authorization{
-
-    @Column(unique = true)
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private int fwId;
-
     private String name;
 
     private String address;
 
-    private String phoneNo;
+    private String contact;
 
     @ManyToOne
+    @JoinColumn(name= "supervisor_id")
 //    @JsonBackReference("FW-SUP")
-    @JsonIgnore
-    private Supervisor supId;
+    private Supervisor supervisor;
 
-    @OneToMany(mappedBy = "fieldWorkerId")
+    @OneToMany(mappedBy = "fieldWorker")
     @JsonIgnore
     private List<Patient> patientList;
 
     public FieldWorker() {
     }
 
-    public FieldWorker(int fwId, String name, String address, String phoneNo, Supervisor supId, List<Patient> patientList) {
-        this.fwId = fwId;
+    public FieldWorker(String name, String address, String contact, Supervisor supervisor, List<Patient> patientList) {
         this.name = name;
         this.address = address;
-        this.phoneNo = phoneNo;
-        this.supId = supId;
+        this.contact = contact;
+        this.supervisor = supervisor;
         this.patientList = patientList;
-    }
-
-    public int getFwId() {
-        return fwId;
-    }
-
-    public void setFwId(int fwId) {
-        this.fwId = fwId;
     }
 
     public String getName() {
@@ -67,20 +50,20 @@ public class FieldWorker extends Authorization{
         this.address = address;
     }
 
-    public String getPhoneNo() {
-        return phoneNo;
+    public String getContact() {
+        return contact;
     }
 
-    public void setPhoneNo(String phoneNo) {
-        this.phoneNo = phoneNo;
+    public void setContact(String phoneNo) {
+        this.contact = phoneNo;
     }
 
-    public Supervisor getSupId() {
-        return supId;
+    public Supervisor getSupervisor() {
+        return supervisor;
     }
 
-    public void setSupId(Supervisor supId) {
-        this.supId = supId;
+    public void setSupervisor(Supervisor supervisor) {
+        this.supervisor = supervisor;
     }
 
     public List<Patient> getPatientList() {
@@ -94,11 +77,10 @@ public class FieldWorker extends Authorization{
     @Override
     public String toString() {
         return "FieldWorker{" +
-                "fwId=" + fwId +
-                ", name='" + name + '\'' +
+                "name='" + name + '\'' +
                 ", address='" + address + '\'' +
-                ", phoneNo='" + phoneNo + '\'' +
-                ", supId=" + supId +
+                ", phoneNo='" + contact + '\'' +
+                ", supervisor=" + supervisor +
                 ", patientList=" + patientList +
                 '}';
     }

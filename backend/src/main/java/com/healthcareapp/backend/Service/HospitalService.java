@@ -1,23 +1,30 @@
 package com.healthcareapp.backend.Service;
 
 
+import com.healthcareapp.backend.Exception.ResourceNotFoundException;
+import com.healthcareapp.backend.Model.Admin;
 import com.healthcareapp.backend.Model.Supervisor;
+import com.healthcareapp.backend.Repository.AdminRepository;
 import com.healthcareapp.backend.Repository.HospitalRepository;
 import com.healthcareapp.backend.Model.Hospital;
 import com.healthcareapp.backend.Repository.SupervisorRepository;
+import jakarta.persistence.criteria.CriteriaBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Component
 public class HospitalService {
     private HospitalRepository hospitalRepository;
 
- 
-    private HospitalRepository hospitalDao;
     private SupervisorRepository supervisorRepository;
+
+    @Autowired
+    private AdminRepository adminRepository;
 
 
     public HospitalService(HospitalRepository hospitalRepository, SupervisorRepository supervisorRepository) {
@@ -26,23 +33,25 @@ public class HospitalService {
     }
 
     public Hospital getHospitalById(int id){
-        Hospital hospital = hospitalRepository.getHospitalsByHospId(id);
+        Optional<Hospital> hospital = hospitalRepository.findById(id);
+
         if(hospital == null){
-            throw new RuntimeException();
+            throw new ResourceNotFoundException("No Hospital found for Hospital id: "+ id);
         }
-        return hospital;
+        return hospital.get();
     }
 
-    public Hospital addHospital(String name, String address){
+    public Hospital addHospital(Hospital hospital){
 
-        Hospital hospital = new Hospital();
+        Supervisor supervisor = supervisorRepository.findByAddress(hospital.getAddress());
 
+        if(supervisor == null){
+            throw new RuntimeException();
+        }
 
-        Supervisor supervisor = supervisorRepository.findByAddress(address);
-
-        hosp.setAddress(address);
-        hosp.setName(name);
-        hosp.setSupId(supervisor);
+        hospital.setAddress(hospital.getAddress());
+        hospital.setName(hospital.getName());
+        hospital.setSupId(supervisor);
 
 
         try {
@@ -55,4 +64,16 @@ public class HospitalService {
         return hospital;
     }
 
+    public List<Hospital> getHospitalsWhereAdminNotAssigned(){
+        List<Hospital> hospitalList = hospitalRepository.findAll();
+        List<Admin> adminList = adminRepository.findAll();
+        List<Hospital> hospitalAssignedList = new ArrayList<>();
+
+        adminList.forEach(admin -> {hospitalAssignedList.add(admin.getHospital());});
+
+        List<Hospital> hospitalNotAssignedList = new ArrayList<>(hospitalList);
+        hospitalNotAssignedList.removeAll(hospitalAssignedList);
+
+        return hospitalNotAssignedList;
+    }
 }

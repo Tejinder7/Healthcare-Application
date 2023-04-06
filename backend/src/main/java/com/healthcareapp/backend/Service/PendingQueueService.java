@@ -28,10 +28,10 @@ public class PendingQueueService {
         PendingQueue pendingQueue = new PendingQueue();
 
         Patient patient = patientService.getPatientById(pid);
-        pendingQueue.setPatientId(patient);
+        pendingQueue.setPatient(patient);
 
         Hospital hospital = hospitalService.getHospitalById(hospId);
-        pendingQueue.setHospId(hospital);
+        pendingQueue.setHospital(hospital);
 
         try {
             String date = java.time.LocalDate.now().toString();
@@ -47,16 +47,22 @@ public class PendingQueueService {
         return pendingQueue;
     }
 
-    public List<PendingQueue> getPendingQueueByDocId(int docId){
-        Hospital hospital = doctorService.getHospitalByDocId(docId);
+    public List<PendingQueue> getPendingQueueByDocId(int hospId){
+        Hospital hospital = hospitalService.getHospitalById(hospId);
 
-        List<PendingQueue> pendingQueueList = pendingQueueRepository.findPendingQueueByHospId(hospital);
+        List<PendingQueue> pendingQueueList = pendingQueueRepository.findPendingQueueByHospital(hospital);
 
         if(pendingQueueList.size() == 0){
             throw new RuntimeException();
         }
 
         return pendingQueueList;
+    }
+
+    public void deletePendingQueue(Patient patient){
+        PendingQueue pendingQueue = pendingQueueRepository.findPendingQueueByPatient(patient);
+        int pendingQueueId = pendingQueue.getPendingQueueId();
+        pendingQueueRepository.deleteById(pendingQueueId);
     }
 
 }

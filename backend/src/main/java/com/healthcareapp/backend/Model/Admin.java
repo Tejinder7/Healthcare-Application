@@ -1,36 +1,30 @@
 package com.healthcareapp.backend.Model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+//@Data
+//@AllArgsConstructor
+//@NoArgsConstructor
+//@Builder
 @Entity
 @PrimaryKeyJoinColumn(name = "authId")
 public class Admin extends Authorization{
-
-    @Column(unique = true)
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private int adminId;
-
     private String name;
 
     @OneToOne
-    private Hospital hospId;
-
+    @JoinColumn(name= "hosp_id", unique = true)
+    private Hospital hospital;
 
     public Admin() {
     }
 
-    public Admin(int adminId, String name, Hospital hospId) {
-        this.adminId = adminId;
+    public Admin(String name, Hospital hospital) {
         this.name = name;
-        this.hospId = hospId;
-    }
-
-    public int getAdminId() {
-        return adminId;
-    }
-
-    public void setAdminId(int adminId) {
-        this.adminId = adminId;
+        this.hospital = hospital;
     }
 
     public String getName() {
@@ -41,20 +35,19 @@ public class Admin extends Authorization{
         this.name = name;
     }
 
-    public Hospital getHospId() {
-        return hospId;
+    public Hospital getHospital() {
+        return hospital;
     }
 
-    public void setHospId(Hospital hospId) {
-        this.hospId = hospId;
+    public void setHospital(Hospital hospital) {
+        this.hospital = hospital;
     }
 
     @Override
     public String toString() {
         return "Admin{" +
-                "adminId=" + adminId +
-                ", name='" + name + '\'' +
-                ", hospId=" + hospId +
+                "name='" + name + '\'' +
+                ", hospital=" + hospital +
                 '}';
     }
 }

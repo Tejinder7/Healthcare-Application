@@ -1,51 +1,49 @@
 package com.healthcareapp.backend.Model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.PrimaryKeyJoinColumn;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
+//@Data
+//@AllArgsConstructor
+//@NoArgsConstructor
+//@Builder
 @Entity
 @PrimaryKeyJoinColumn(name = "authId")
 public class Supervisor extends Authorization{
-
-    @Column(unique = true)
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private int supId;
-
     private String name;
 
     private String contact;
 
+    @Column(unique = true)
     private String address;
 
-    @OneToMany(mappedBy = "supId")
+    @OneToMany(mappedBy = "supervisor")
 //    @JsonManagedReference("FW-SUP")
+    @JsonIgnore
     private List<FieldWorker> fieldWorkerList;
 
-    @OneToMany(mappedBy = "supId")
+    @OneToMany(mappedBy = "supervisor")
     @JsonIgnore
     private List<Hospital> hospitalList;
 
     public Supervisor() {
     }
 
-    public Supervisor(int supId, String name, String contact, String address, List<FieldWorker> fieldWorkerList, List<Hospital> hospitalList) {
-        this.supId = supId;
+    public Supervisor(String name, String contact, String address, List<FieldWorker> fieldWorkerList, List<Hospital> hospitalList) {
         this.name = name;
         this.contact = contact;
         this.address = address;
         this.fieldWorkerList = fieldWorkerList;
         this.hospitalList = hospitalList;
-    }
-
-    public int getSupId() {
-        return supId;
-    }
-
-    public void setSupId(int supId) {
-        this.supId = supId;
     }
 
     public String getName() {
@@ -91,8 +89,7 @@ public class Supervisor extends Authorization{
     @Override
     public String toString() {
         return "Supervisor{" +
-                "supId=" + supId +
-                ", name='" + name + '\'' +
+                "name='" + name + '\'' +
                 ", contact='" + contact + '\'' +
                 ", address='" + address + '\'' +
                 ", fieldWorkerList=" + fieldWorkerList +

@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@CrossOrigin
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class PendingQueueController {
     private PendingQueueService pendingQueueService;
 
@@ -18,7 +18,7 @@ public class PendingQueueController {
     }
 
     @PostMapping("/addPendingQueue/{hosp_id}/{p_id}")
-    public ResponseEntity<PendingQueue> addPendingQueue(@PathVariable("hosp_id") int hosp_id, @PathVariable("p_id") int p_id){
+    public ResponseEntity<PendingQueue> addPendingQueue(@PathVariable int hosp_id, @PathVariable int p_id){
 
         PendingQueue pendingQueue;
         try {
@@ -30,11 +30,11 @@ public class PendingQueueController {
         return ResponseEntity.of(Optional.of(pendingQueue));
     }
 
-    @GetMapping("/pendingQueue/{docId}")
-    public ResponseEntity<List<PendingQueue>> getPendingQueue(@PathVariable("docId") int docId){
+    @GetMapping("/pendingQueue/{hospId}")
+    public ResponseEntity<List<PendingQueue>> getPendingQueue(@PathVariable int hospId){
 
         try{
-            List<PendingQueue> pendingQueueList = pendingQueueService.getPendingQueueByDocId(docId);
+            List<PendingQueue> pendingQueueList = pendingQueueService.getPendingQueueByDocId(hospId);
             return ResponseEntity.of(Optional.of(pendingQueueList));
         }
         catch (Exception e){

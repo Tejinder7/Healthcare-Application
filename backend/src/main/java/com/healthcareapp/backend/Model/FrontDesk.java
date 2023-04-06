@@ -1,37 +1,26 @@
 package com.healthcareapp.backend.Model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.PrimaryKeyJoinColumn;
 
 @Entity
 @PrimaryKeyJoinColumn(name = "authId")
 public class FrontDesk extends Authorization{
-
-    @Column(unique = true)
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private int fDeskId;
-
     private String name;
 
     @ManyToOne
+    @JoinColumn(name= "hosp_id")
 //    @JsonBackReference("HOS-FD")
-    private Hospital hospId;
+    private Hospital hospital;
 
     public FrontDesk() {
     }
 
-    public FrontDesk(int fDeskId, String name, Hospital hospId) {
-        this.fDeskId = fDeskId;
+    public FrontDesk(String name, Hospital hospital) {
         this.name = name;
-        this.hospId = hospId;
-    }
-
-    public int getfDeskId() {
-        return fDeskId;
-    }
-
-    public void setfDeskId(int fDeskId) {
-        this.fDeskId = fDeskId;
+        this.hospital = hospital;
     }
 
     public String getName() {
@@ -42,20 +31,19 @@ public class FrontDesk extends Authorization{
         this.name = name;
     }
 
-    public Hospital getHospId() {
-        return hospId;
+    public Hospital getHospital() {
+        return hospital;
     }
 
-    public void setHospId(Hospital hospId) {
-        this.hospId = hospId;
+    public void setHospital(Hospital hospital) {
+        this.hospital = hospital;
     }
 
     @Override
     public String toString() {
         return "FrontDesk{" +
-                "fDeskId=" + fDeskId +
-                ", name='" + name + '\'' +
-                ", hospId=" + hospId +
+                "name='" + name + '\'' +
+                ", hospital=" + hospital +
                 '}';
     }
 }

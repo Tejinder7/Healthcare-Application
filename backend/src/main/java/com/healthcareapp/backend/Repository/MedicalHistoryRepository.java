@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface MedicalHistoryRepository extends JpaRepository<MedicalHistory, Integer> {
 
-    public List<MedicalHistory> findMedicalHistoriesByPatientId(Patient patient);
-    public MedicalHistory findMedicalHistoryByEncounterId(Encounter encounter);
+    public List<MedicalHistory> findMedicalHistoryByPatient(Patient patient);
+    public MedicalHistory findMedicalHistoryByEncounter(Encounter encounter);
 
 }

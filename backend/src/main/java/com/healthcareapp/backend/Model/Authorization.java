@@ -6,9 +6,11 @@ import jakarta.persistence.*;
 @Inheritance(strategy = InheritanceType.JOINED)
 public class Authorization {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue
+    @Column(unique = true)
     private int authId;
 
+    @Column(unique = true)
     private String userId;
 
     private String password;
