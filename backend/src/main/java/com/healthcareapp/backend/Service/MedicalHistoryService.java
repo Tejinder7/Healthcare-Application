@@ -19,7 +19,7 @@ public class MedicalHistoryService {
     }
     public List<MedicalHistory> getMedicalHistoryByPatientId(int patientId){
         Patient patient = patientService.getPatientById(patientId);
-        List<MedicalHistory> medicalHistoryList = medicalHistoryRepository.findMedicalHistoriesByPatientId(patient);
+        List<MedicalHistory> medicalHistoryList = medicalHistoryRepository.findMedicalHistoryByPatient(patient);
         if(medicalHistoryList.size() == 0){
             throw new RuntimeException();
         }
@@ -27,13 +27,13 @@ public class MedicalHistoryService {
     }
     public MedicalHistory addMedicalHistory(Patient patient, Encounter encounter){
         MedicalHistory medicalHistory = new MedicalHistory();
-        medicalHistory.setPatientId(patient);
-        medicalHistory.setEncounterId(encounter);
+        medicalHistory.setPatient(patient);
+        medicalHistory.setEncounter(encounter);
         medicalHistoryRepository.save(medicalHistory);
         return medicalHistory;
     }
     public MedicalHistory getMedicalHistoryByEncounter(Encounter encounterId){
-        MedicalHistory medicalHistory = medicalHistoryRepository.findMedicalHistoryByEncounterId(encounterId);
+        MedicalHistory medicalHistory = medicalHistoryRepository.findMedicalHistoryByEncounter(encounterId);
         if(medicalHistory == null){
             throw new RuntimeException();
         }

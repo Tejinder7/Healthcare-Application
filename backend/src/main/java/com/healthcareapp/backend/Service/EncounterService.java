@@ -1,5 +1,6 @@
 package com.healthcareapp.backend.Service;
 
+import com.healthcareapp.backend.Exception.ResourceNotFoundException;
 import com.healthcareapp.backend.Model.Doctor;
 import com.healthcareapp.backend.Model.Encounter;
 import com.healthcareapp.backend.Model.MedicalHistory;
@@ -12,23 +13,30 @@ public class EncounterService {
     private MedicalHistoryService medicalHistoryService;
     private DoctorService doctorServices;
     private PatientService patientServices;
+
+    private PendingQueueService pendingQueueService;
     private EncounterRepository encounterRepository;
 
-    public EncounterService(MedicalHistoryService medicalHistoryService, DoctorService doctorServices, PatientService patientServices, EncounterRepository encounterRepository) {
+    public EncounterService(MedicalHistoryService medicalHistoryService, DoctorService doctorServices, PatientService patientServices, EncounterRepository encounterRepository, PendingQueueService pendingQueueService) {
         this.medicalHistoryService = medicalHistoryService;
         this.doctorServices = doctorServices;
         this.patientServices = patientServices;
         this.encounterRepository = encounterRepository;
+        this.pendingQueueService = pendingQueueService;
     }
 
     public Encounter addEncounter(int patientId, int authId){
         Encounter encounter = new Encounter();
 
         Patient patient = patientServices.getPatientById(patientId);
-        encounter.setPatientId(patient);
+        encounter.setPatient(patient);
 
         Doctor doctor = doctorServices.getDoctorByAuthId(authId);
-        encounter.setDoctorAuthId(doctor);
+        encounter.setDoctor(doctor);
+
+        pendingQueueService.deletePendingQueue(patient);
+
+        encounter.setFlag(false);
 
         encounterRepository.save(encounter);
 
@@ -36,9 +44,10 @@ public class EncounterService {
     }
     public MedicalHistory saveEncounter(String prescription, String symptoms, int encounterId){
         Encounter encounter = getEncounterById(encounterId);
-        Patient patient = encounter.getPatientId();
+        Patient patient = encounter.getPatient();
         MedicalHistory medicalHistory = medicalHistoryService.addMedicalHistory(patient,encounter);
-        encounter.setMedicalHistoryId(medicalHistory);
+        encounter.setMedicalHistory(medicalHistory);
+        encounter.setFlag(true);
         encounterRepository.save(encounter);
 
         MedicalHistory updatedMedicalHistory = medicalHistoryService.updateMedicalHistory(prescription, symptoms, encounter);

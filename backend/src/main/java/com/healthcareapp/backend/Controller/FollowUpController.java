@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@CrossOrigin
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class FollowUpController {
     private FollowUpService followUpService;
 
@@ -24,7 +24,7 @@ public class FollowUpController {
         try {
             followUpList = followUpService.getCurrentDateFollowUps(date, fieldWorkerId);
         }catch (Exception e){
-            return ResponseEntity.status(404).build();
+            return ResponseEntity.status(500).build();
         }
 
         return ResponseEntity.ok(followUpList);

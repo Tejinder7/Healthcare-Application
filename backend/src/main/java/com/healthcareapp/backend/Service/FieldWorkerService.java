@@ -39,7 +39,7 @@ public class FieldWorkerService {
             throw new RuntimeException();
         }
 
-        fieldWorker.setSupAuthId(supervisor);
+        fieldWorker.setSupervisor(supervisor);
         fieldWorker.setUserType("FieldWorker");
 
         try {
@@ -60,7 +60,7 @@ public class FieldWorkerService {
             throw new RuntimeException();
         }
 
-        List<FieldWorker> fieldWorkerList = fieldWorkerRepository.findBySupAuthId(supervisor);
+        List<FieldWorker> fieldWorkerList = fieldWorkerRepository.findFieldWorkerBySupervisor(supervisor);
 
         if(fieldWorkerList.size()==0)
         {
@@ -74,14 +74,14 @@ public class FieldWorkerService {
 
         FollowUp followUp = followUpRepository.findById(followUpId);
 
-        FieldWorker fieldWorker = fieldWorkerRepository.findFieldWOrkerByAuthId(fieldWorkerAuthId);
+        FieldWorker fieldWorker = fieldWorkerRepository.findFieldWorkerByAuthId(fieldWorkerAuthId);
 
         if(followUp==null || fieldWorker==null)
         {
             throw new RuntimeException();
         }
 
-        Patient patient = followUp.getPatientId();
+        Patient patient = followUp.getPatient();
 
 //        List<Patient> list = fieldWorker.getPatientList();
 //
@@ -91,7 +91,7 @@ public class FieldWorkerService {
 
         patient = patientRepository.findPatientByPatientId(patient.getPatientId());
 
-        patient.setFieldWorkerId(fieldWorker);
+        patient.setFieldWorker(fieldWorker);
 
         try{
             patient = patientRepository.save(patient);
@@ -100,7 +100,7 @@ public class FieldWorkerService {
             throw new RuntimeException();
         }
 
-        fieldWorker = fieldWorkerRepository.findFieldWOrkerByAuthId(fieldWorkerAuthId);
+        fieldWorker = fieldWorkerRepository.findFieldWorkerByAuthId(fieldWorkerAuthId);
 
         return fieldWorker;
     }

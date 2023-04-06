@@ -1,10 +1,15 @@
 package com.healthcareapp.backend.Service;
 
+import com.healthcareapp.backend.Model.Admin;
 import com.healthcareapp.backend.Model.Doctor;
 import com.healthcareapp.backend.Model.Hospital;
 import com.healthcareapp.backend.Repository.DoctorRepository;
 import com.healthcareapp.backend.Repository.HospitalRepository;
 import org.springframework.stereotype.Component;
+
+import javax.print.Doc;
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 public class DoctorService {
@@ -27,7 +32,7 @@ public class DoctorService {
 
     public Hospital getHospitalByDocId(int authId){
         Doctor doctor = getDoctorByAuthId(authId);
-        Hospital hospital = doctor.getHospId();
+        Hospital hospital = doctor.getHospital();
 
         if(hospital == null){
             throw new RuntimeException();
@@ -43,7 +48,7 @@ public class DoctorService {
             throw new RuntimeException();
         }
 
-        doctor.setHospId(hospital);
+        doctor.setHospital(hospital);
         doctor.setUserType("Doctor");
 
         try{
@@ -53,5 +58,32 @@ public class DoctorService {
             throw new RuntimeException();
         }
         return doctor;
+    }
+
+    public List<Doctor> getAllDoctorsByHospital(Hospital hospital){
+        List<Doctor> doctorList = new ArrayList<>();
+        try{
+            doctorList = doctorRepository.findDoctorByHospital(hospital);
+        }catch (Exception e){
+            throw new RuntimeException();
+        }
+        return doctorList;
+    }
+
+    public Doctor updateDoctor(Doctor doctor){
+        Doctor doctor1 = doctorRepository.findDoctorByAuthId(doctor.getAuthId());
+        doctor1.setDocSpecialization(doctor.getDocSpecialization());
+        doctor1.setName(doctor.getName());
+        doctor1.setLicId(doctor.getLicId());
+        doctor1.setContact(doctor.getContact());
+        doctor1.setUserId(doctor.getUserId());
+        doctor1.setPassword(doctor.getPassword());
+        try {
+            doctorRepository.save(doctor1);
+            return doctor1;
+        }
+        catch (Exception e){
+            throw new RuntimeException();
+        }
     }
 }

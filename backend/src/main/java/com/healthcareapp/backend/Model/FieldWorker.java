@@ -1,9 +1,6 @@
 package com.healthcareapp.backend.Model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -15,24 +12,25 @@ public class FieldWorker extends Authorization{
 
     private String address;
 
-    private String phoneNo;
+    private String contact;
 
     @ManyToOne
+    @JoinColumn(name= "supervisor_id")
 //    @JsonBackReference("FW-SUP")
-    private Supervisor supAuthId;
+    private Supervisor supervisor;
 
-    @OneToMany(mappedBy = "fieldWorkerId")
+    @OneToMany(mappedBy = "fieldWorker")
     @JsonIgnore
     private List<Patient> patientList;
 
     public FieldWorker() {
     }
 
-    public FieldWorker(String name, String address, String phoneNo, Supervisor supAuthId, List<Patient> patientList) {
+    public FieldWorker(String name, String address, String contact, Supervisor supervisor, List<Patient> patientList) {
         this.name = name;
         this.address = address;
-        this.phoneNo = phoneNo;
-        this.supAuthId = supAuthId;
+        this.contact = contact;
+        this.supervisor = supervisor;
         this.patientList = patientList;
     }
 
@@ -52,20 +50,20 @@ public class FieldWorker extends Authorization{
         this.address = address;
     }
 
-    public String getPhoneNo() {
-        return phoneNo;
+    public String getContact() {
+        return contact;
     }
 
-    public void setPhoneNo(String phoneNo) {
-        this.phoneNo = phoneNo;
+    public void setContact(String phoneNo) {
+        this.contact = phoneNo;
     }
 
-    public Supervisor getSupAuthId() {
-        return supAuthId;
+    public Supervisor getSupervisor() {
+        return supervisor;
     }
 
-    public void setSupAuthId(Supervisor supAuthId) {
-        this.supAuthId = supAuthId;
+    public void setSupervisor(Supervisor supervisor) {
+        this.supervisor = supervisor;
     }
 
     public List<Patient> getPatientList() {
@@ -81,8 +79,8 @@ public class FieldWorker extends Authorization{
         return "FieldWorker{" +
                 "name='" + name + '\'' +
                 ", address='" + address + '\'' +
-                ", phoneNo='" + phoneNo + '\'' +
-                ", supAuthId=" + supAuthId +
+                ", phoneNo='" + contact + '\'' +
+                ", supervisor=" + supervisor +
                 ", patientList=" + patientList +
                 '}';
     }
