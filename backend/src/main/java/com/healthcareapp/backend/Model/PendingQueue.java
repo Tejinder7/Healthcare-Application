@@ -1,7 +1,15 @@
 package com.healthcareapp.backend.Model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+//@Data
+//@Builder
+//@AllArgsConstructor
+//@NoArgsConstructor
 @Entity
 public class PendingQueue {
     @Id
@@ -10,9 +18,10 @@ public class PendingQueue {
 
     private String dateTime;
 
+    private Boolean flag;
 
     @OneToOne
-    @JoinColumn(name= "patient_id")
+    @JoinColumn(name= "patient_id", unique = true)
 //    @JsonBackReference(value = "Patient-PendingQueue")
     private Patient patient;
 
@@ -24,11 +33,12 @@ public class PendingQueue {
     public PendingQueue() {
     }
 
-    public PendingQueue(int pendingQueueId, String dateTime, Patient patient, Hospital hospital) {
+    public PendingQueue(int pendingQueueId, String dateTime, Patient patient, Hospital hospital, Boolean flag) {
         this.pendingQueueId = pendingQueueId;
         this.dateTime = dateTime;
         this.patient = patient;
         this.hospital = hospital;
+        this.flag = flag;
     }
 
     public int getPendingQueueId() {
@@ -63,6 +73,14 @@ public class PendingQueue {
         this.hospital = hospital;
     }
 
+    public Boolean getFlag() {
+        return flag;
+    }
+
+    public void setFlag(Boolean flag) {
+        this.flag = flag;
+    }
+
     @Override
     public String toString() {
         return "PendingQueue{" +
@@ -70,6 +88,7 @@ public class PendingQueue {
                 ", dateTime='" + dateTime + '\'' +
                 ", patient=" + patient +
                 ", hospital=" + hospital +
+                ", flag=" + flag +
                 '}';
     }
 }

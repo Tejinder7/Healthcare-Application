@@ -1,6 +1,11 @@
 package com.healthcareapp.backend.Model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 
 import java.util.Optional;
 
@@ -9,6 +14,7 @@ public class FollowUp {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(unique = true)
     private int followUpId;
 
     @ManyToOne
