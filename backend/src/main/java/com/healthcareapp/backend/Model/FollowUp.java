@@ -7,6 +7,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 
+import java.util.Optional;
+
 @Entity
 public class FollowUp {
 

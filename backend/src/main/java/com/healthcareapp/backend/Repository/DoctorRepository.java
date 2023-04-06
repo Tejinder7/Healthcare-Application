@@ -10,6 +10,6 @@ public interface DoctorRepository extends JpaRepository<Doctor, Integer> {
 
     public Doctor findDoctorByAuthId(int authId);
 
-    public List<Doctor> findDoctorByHospital(Hospital hospital);
+    public List<Doctor> findByHospital(Hospital hospital);
 
 }

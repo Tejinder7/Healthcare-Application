@@ -1,5 +1,6 @@
 package com.healthcareapp.backend.Service;
 
+import com.healthcareapp.backend.Exception.ResourceNotFoundException;
 import com.healthcareapp.backend.Model.Doctor;
 import com.healthcareapp.backend.Model.FrontDesk;
 import com.healthcareapp.backend.Model.Hospital;
@@ -8,6 +9,7 @@ import com.healthcareapp.backend.Repository.HospitalRepository;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
 
 @Component
 public class FrontDeskService {
@@ -22,16 +24,14 @@ public class FrontDeskService {
 
     public FrontDesk addFrontDesk(FrontDesk frontDesk, int hospitalId){
 
-        Hospital hospital;
-
-        hospital = hospitalRepository.getHospitalsByHospId(hospitalId);
+        Optional<Hospital> hospital = hospitalRepository.findById(hospitalId);
 
         if(hospital==null)
         {
-            throw new RuntimeException();
+            throw new ResourceNotFoundException("No Hospital found for Hospital id: "+ hospitalId);
         }
 
-        frontDesk.setHospId(hospital);
+        frontDesk.setHospital(hospital.get());
         frontDesk.setUserType("Front Desk");
 
 
@@ -44,12 +44,7 @@ public class FrontDeskService {
     }
 
     public List<FrontDesk> getAllFrontDeskByHospital(Hospital hospital){
-        List<FrontDesk> frontDeskList;
-        try{
-            frontDeskList = frontDeskRepository.getFrontDeskByHospital(hospital);
-        }catch (Exception e){
-            throw new RuntimeException();
-        }
+        List<FrontDesk> frontDeskList= frontDeskRepository.findByHospital(hospital);
         return frontDeskList;
     }
 

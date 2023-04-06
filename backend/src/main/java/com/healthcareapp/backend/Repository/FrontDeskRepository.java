@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface FrontDeskRepository extends JpaRepository<FrontDesk, Integer> {
 
-    public List<FrontDesk> getFrontDeskByHospital(Hospital hospital);
+    public List<FrontDesk> findByHospital(Hospital hospital);
 
     public FrontDesk findFrontDeskByAuthId(int id);
 

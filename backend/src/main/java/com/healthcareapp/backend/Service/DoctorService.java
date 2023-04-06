@@ -1,6 +1,6 @@
 package com.healthcareapp.backend.Service;
 
-import com.healthcareapp.backend.Model.Admin;
+import com.healthcareapp.backend.Exception.ResourceNotFoundException;
 import com.healthcareapp.backend.Model.Doctor;
 import com.healthcareapp.backend.Model.Hospital;
 import com.healthcareapp.backend.Repository.DoctorRepository;
@@ -9,7 +9,9 @@ import org.springframework.stereotype.Component;
 
 import javax.print.Doc;
 import java.util.ArrayList;
+
 import java.util.List;
+import java.util.Optional;
 
 @Component
 public class DoctorService {
@@ -43,12 +45,12 @@ public class DoctorService {
 
     public Doctor addDoctor(Doctor doctor, int hospitalId){
 
-        Hospital hospital = hospitalRepository.getHospitalsByHospId(hospitalId);
+        Optional<Hospital> hospital = hospitalRepository.findById(hospitalId);
         if(hospital == null){
-            throw new RuntimeException();
+            throw new ResourceNotFoundException("No Hospital found for Hospital Id: "+ hospitalId);
         }
 
-        doctor.setHospital(hospital);
+        doctor.setHospital(hospital.get());
         doctor.setUserType("Doctor");
 
         try{
@@ -61,12 +63,9 @@ public class DoctorService {
     }
 
     public List<Doctor> getAllDoctorsByHospital(Hospital hospital){
-        List<Doctor> doctorList = new ArrayList<>();
-        try{
-            doctorList = doctorRepository.findDoctorByHospital(hospital);
-        }catch (Exception e){
-            throw new RuntimeException();
-        }
+
+        List<Doctor> doctorList= doctorRepository.findByHospital(hospital);
+
         return doctorList;
     }
 

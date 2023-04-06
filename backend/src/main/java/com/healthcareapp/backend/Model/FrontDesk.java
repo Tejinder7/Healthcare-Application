@@ -31,11 +31,11 @@ public class FrontDesk extends Authorization{
         this.name = name;
     }
 
-    public Hospital getHospId() {
+    public Hospital getHospital() {
         return hospital;
     }
 
-    public void setHospId(Hospital hospital) {
+    public void setHospital(Hospital hospital) {
         this.hospital = hospital;
     }
 
