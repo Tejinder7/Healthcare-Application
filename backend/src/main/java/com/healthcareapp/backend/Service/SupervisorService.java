@@ -11,6 +11,7 @@ import com.healthcareapp.backend.Repository.SupervisorRepository;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 @Component
@@ -56,7 +57,7 @@ public class SupervisorService {
 
         hospitalList.forEach(hospital -> {followUpList.addAll(hospital.getFollowUpList());});
 
-        List<Patient> patientList = new ArrayList<>();
+        HashSet<Patient> patientList = new HashSet<>();
 
         followUpList.forEach(followUp -> {patientList.add(followUp.getPatient());});
 
