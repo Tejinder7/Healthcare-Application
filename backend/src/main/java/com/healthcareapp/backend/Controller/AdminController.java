@@ -21,34 +21,40 @@ public class AdminController {
 
     @PostMapping("/addAdmin/{hospId}")
     public ResponseEntity<Admin> addAdmin(@RequestBody Admin admin, @PathVariable int hospId){
-        Admin admin1;
+        Admin savedAdmin;
         try{
-            admin1 = adminService.addAdmin(admin, hospId);
+            savedAdmin = adminService.addAdmin(admin, hospId);
         }
-        catch (Exception e){
-            return ResponseEntity.status(500).build();
+        catch (Exception exception){
+            throw exception;
         }
-        return ResponseEntity.of(Optional.of(admin1));
+
+        return ResponseEntity.of(Optional.of(savedAdmin));
     }
 
     @PutMapping("/updateAdmin")
     public ResponseEntity<Admin> updateAdmin(@RequestBody Admin admin){
-        Admin admin1;
+        Admin savedAdmin;
+
         try{
-            admin1 = adminService.updateAdmin(admin);
-        }catch (Exception e){
+            savedAdmin = adminService.updateAdmin(admin);
+        }
+        catch (Exception e){
             return ResponseEntity.status(500).build();
         }
-        return ResponseEntity.of(Optional.of(admin1));
+
+        return ResponseEntity.of(Optional.of(savedAdmin));
     }
 
     @GetMapping("/getAllHospitalUsers/{hospitalId}")
-    public List<Object> getAllHospitalUser(@PathVariable int hospitalId){
+    public List<Object> getAllHospitalUsers(@PathVariable int hospitalId){
+        List<Object> userList;
         try {
-            List<Object> userList = adminService.getAllHospitalUsers(hospitalId);
-            return userList;
-        }catch (Exception e){
-            throw new RuntimeException();
+            userList = adminService.getAllHospitalUsers(hospitalId);
         }
+        catch (Exception exception){
+            throw exception;
+        }
+        return userList;
     }
 }

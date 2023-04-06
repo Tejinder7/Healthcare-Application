@@ -1,5 +1,6 @@
 package com.healthcareapp.backend.Service;
 
+import com.healthcareapp.backend.Exception.ResourceNotFoundException;
 import com.healthcareapp.backend.Model.*;
 import com.healthcareapp.backend.Repository.AdminRepository;
 import org.springframework.stereotype.Component;
@@ -24,49 +25,56 @@ public class AdminService {
     }
 
     public Admin addAdmin(Admin admin, int hospId){
-//        if(adminRepository.findAdminByAuthId(admin.getAuthId())!= null){
-//            //Admin already exists
-//            throw new RuntimeException();
-//        }
+        Hospital hospital;
+        try{
+            hospital= hospitalService.getHospitalById(hospId);
+        }
+        catch (RuntimeException exception){
+            throw exception;
+        }
 
-        Hospital hospital= hospitalService.getHospitalById(hospId);
         admin.setHospital(hospital);
         admin.setUserType("Admin");
 
+        Admin savedAdmin;
+
         try{
-            adminRepository.save(admin);
-            return admin;
+            savedAdmin= adminRepository.save(admin);
         }
-        catch (Exception e){
-            throw new RuntimeException();
+        catch (Exception exception){
+            throw exception;
         }
+
+        return savedAdmin;
     }
 
     public Admin updateAdmin(Admin admin){
-        Hospital hospital = hospitalService.getHospitalById(admin.getHospital().getHospId());
-        admin.setHospital(hospital);
+        Admin updatedAdmin;
         try {
-            adminRepository.save(admin);
-            return admin;
+            updatedAdmin= adminRepository.save(admin);
         }
-        catch (Exception e){
-            throw new RuntimeException();
+        catch (Exception exception){
+            throw exception;
         }
+        return updatedAdmin;
     }
 
     public List<Object> getAllHospitalUsers(int hospitalId){
         List<Doctor> doctorList;
         List<FrontDesk> frontDeskList;
-        Hospital hospital = hospitalService.getHospitalById(hospitalId);
+        Hospital hospital;
 
-        try {
-            doctorList = doctorService.getAllDoctorsByHospital(hospital);
-            frontDeskList = frontDeskService.getAllFrontDeskByHospital(hospital);
-        }catch (Exception e){
-            throw new RuntimeException();
+        try{
+            hospital = hospitalService.getHospitalById(hospitalId);
         }
+        catch (ResourceNotFoundException exception){
+            throw exception;
+        }
+        doctorList = doctorService.getAllDoctorsByHospital(hospital);
+        frontDeskList = frontDeskService.getAllFrontDeskByHospital(hospital);
 
         List<Object> userList = new ArrayList<>();
+
         userList.addAll(doctorList);
         userList.addAll(frontDeskList);
 

@@ -28,8 +28,8 @@ public class EncounterController {
         try{
             encounter1 = encounterService.addEncounter(pid, docId);
         }
-        catch(Exception e){
-            return ResponseEntity.status(404).build();
+        catch(Exception exception){
+            throw exception;
         }
 
         return ResponseEntity.of(Optional.of(encounter1));
@@ -48,8 +48,8 @@ public class EncounterController {
             mappingJacksonValue.setFilters(filters);
 
             return mappingJacksonValue;
-        }catch (Exception e){
-            throw new ResourceNotFoundException("Not found");
+        }catch (Exception exception){
+            throw exception;
         }
     }
 

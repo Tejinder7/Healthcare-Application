@@ -2,6 +2,8 @@ package com.healthcareapp.backend.Model;
 
 import jakarta.persistence.*;
 
+import java.util.Optional;
+
 @Entity
 public class FollowUp {
 

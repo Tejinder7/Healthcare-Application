@@ -20,8 +20,8 @@ public class DoctorController {
 
         try{
             doctor1 = doctorService.addDoctor(doctor, hospitalId);
-        }catch (Exception e){
-            return ResponseEntity.status(404).build();
+        }catch (Exception exception){
+            throw exception;
         }
         return ResponseEntity.of(Optional.of(doctor1));
     }
@@ -31,8 +31,8 @@ public class DoctorController {
         Doctor doctor1;
         try{
             doctor1 = doctorService.updateDoctor(doctor);
-        }catch (Exception e){
-            return ResponseEntity.status(500).build();
+        }catch (Exception exception){
+            throw exception;
         }
         return ResponseEntity.of(Optional.of(doctor1));
     }

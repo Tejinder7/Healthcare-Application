@@ -1,5 +1,6 @@
 package com.healthcareapp.backend.Controller;
 
+import com.healthcareapp.backend.Exception.ResourceNotFoundException;
 import com.healthcareapp.backend.Model.FieldWorker;
 import com.healthcareapp.backend.Service.FieldWorkerService;
 import org.springframework.http.ResponseEntity;
@@ -22,8 +23,8 @@ public class FieldWorkerController {
 
         try {
             fieldWorker = fieldWorkerService.addFieldWorker(fieldWorker, supervisorId);
-        }catch (Exception e){
-            return ResponseEntity.status(404).build();
+        }catch (Exception exception){
+            throw exception;
         }
         return ResponseEntity.of(Optional.of(fieldWorker));
     }
@@ -35,8 +36,8 @@ public class FieldWorkerController {
         try{
             fieldWorkerList = fieldWorkerService.getFieldWorkers(supervisorId);
         }
-        catch (Exception e){
-            return ResponseEntity.status(404).build();
+        catch (Exception exception){
+            throw new ResourceNotFoundException("No Field Workers under the SupervisorId: "+ supervisorId);
         }
         return ResponseEntity.ok(fieldWorkerList);
     }
