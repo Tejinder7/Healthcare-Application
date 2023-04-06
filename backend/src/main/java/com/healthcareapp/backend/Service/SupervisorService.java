@@ -43,7 +43,7 @@ public class SupervisorService {
     }
 
     public List<Patient> unAssignedPatients(int supId){
-        Supervisor supervisor = supervisorRepository.findSupervisorBySupId(supId);
+        Supervisor supervisor = supervisorRepository.findSupervisorByAuthId(supId);
 
         if(supervisor==null)
         {
@@ -58,9 +58,13 @@ public class SupervisorService {
 
         List<Patient> patientList = new ArrayList<>();
 
-        followUpList.forEach(followUp -> {if(followUp.getPatientId()==null) patientList.add(followUp.getPatientId());});
+        followUpList.forEach(followUp -> {patientList.add(followUp.getPatient());});
 
-        return patientList;
+        List<Patient> unAssignedPatients = new ArrayList<>();
+        
+        patientList.forEach(patient -> {if(patient.getFieldWorker()==null) unAssignedPatients.add(patient);});
+        
+        return unAssignedPatients;
     }
 }
 
