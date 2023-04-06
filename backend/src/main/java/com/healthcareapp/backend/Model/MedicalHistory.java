@@ -1,9 +1,11 @@
 package com.healthcareapp.backend.Model;
 
+import com.fasterxml.jackson.annotation.JsonFilter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 @Entity
+//@JsonFilter("MedicalHistoryFilter")
 public class MedicalHistory {
 
     @Id
@@ -11,7 +13,7 @@ public class MedicalHistory {
     private int medicalHistoryId;
 
     @ManyToOne
-    @JoinColumn(name= "patient_id", nullable = false)
+    @JoinColumn(name= "patient_id")
 //    @JsonBackReference(value = "Patient-MedicalHistory")
     private Patient patient;
 

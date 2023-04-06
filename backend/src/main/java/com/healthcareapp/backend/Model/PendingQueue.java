@@ -12,12 +12,12 @@ public class PendingQueue {
 
 
     @OneToOne
-    @JoinColumn(name= "patient_id", nullable = false)
+    @JoinColumn(name= "patient_id")
 //    @JsonBackReference(value = "Patient-PendingQueue")
     private Patient patient;
 
     @ManyToOne
-    @JoinColumn(name= "hosp_id", nullable = false)
+    @JoinColumn(name= "hosp_id")
 //    @JsonBackReference(value = "Hospital-PendingQueue")
     private Hospital hospital;
 

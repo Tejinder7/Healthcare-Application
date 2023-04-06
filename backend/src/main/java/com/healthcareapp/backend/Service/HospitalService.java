@@ -1,23 +1,28 @@
 package com.healthcareapp.backend.Service;
 
 
+import com.healthcareapp.backend.Model.Admin;
 import com.healthcareapp.backend.Model.Supervisor;
+import com.healthcareapp.backend.Repository.AdminRepository;
 import com.healthcareapp.backend.Repository.HospitalRepository;
 import com.healthcareapp.backend.Model.Hospital;
 import com.healthcareapp.backend.Repository.SupervisorRepository;
+import jakarta.persistence.criteria.CriteriaBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
 public class HospitalService {
     private HospitalRepository hospitalRepository;
 
- 
-    private HospitalRepository hospitalDao;
     private SupervisorRepository supervisorRepository;
+
+    @Autowired
+    private AdminRepository adminRepository;
 
 
     public HospitalService(HospitalRepository hospitalRepository, SupervisorRepository supervisorRepository) {
@@ -56,4 +61,16 @@ public class HospitalService {
         return hospital;
     }
 
+    public List<Hospital> getHospitalsWhereAdminNotAssigned(){
+        List<Hospital> hospitalList = hospitalRepository.findAll();
+        List<Admin> adminList = adminRepository.findAll();
+        List<Hospital> hospitalAssignedList = new ArrayList<>();
+
+        adminList.forEach(admin -> {hospitalAssignedList.add(admin.getHospital());});
+
+        List<Hospital> hospitalNotAssignedList = new ArrayList<>(hospitalList);
+        hospitalNotAssignedList.removeAll(hospitalAssignedList);
+
+        return hospitalNotAssignedList;
+    }
 }

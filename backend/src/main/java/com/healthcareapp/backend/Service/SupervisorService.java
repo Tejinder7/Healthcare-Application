@@ -1,5 +1,6 @@
 package com.healthcareapp.backend.Service;
 
+import com.healthcareapp.backend.Model.Admin;
 import com.healthcareapp.backend.Model.Supervisor;
 import com.healthcareapp.backend.Repository.SupervisorRepository;
 import org.springframework.stereotype.Component;
@@ -14,6 +15,16 @@ public class SupervisorService {
     public Supervisor addSupervisor(Supervisor supervisor){
         try{
             supervisor.setUserType("Supervisor");
+            supervisorRepository.save(supervisor);
+            return supervisor;
+        }
+        catch (Exception e){
+            throw new RuntimeException();
+        }
+    }
+
+    public Supervisor updateSupervisor(Supervisor supervisor){
+        try {
             supervisorRepository.save(supervisor);
             return supervisor;
         }

@@ -8,7 +8,7 @@ public class Admin extends Authorization{
     private String name;
 
     @OneToOne
-    @JoinColumn(name= "hosp_id", nullable = false)
+    @JoinColumn(name= "hosp_id", unique = true)
     private Hospital hospital;
 
     public Admin() {

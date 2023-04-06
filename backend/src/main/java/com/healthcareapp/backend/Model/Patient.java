@@ -30,7 +30,7 @@ public class Patient {
     private List<MedicalHistory> medicalHistoryList;
 
     @ManyToOne
-    @JoinColumn(name= "field_worker_id", nullable = false)
+    @JoinColumn(name= "field_worker_id")
 //    @JsonBackReference(value = "FieldWorker-Patient")
     private FieldWorker fieldWorker;
 

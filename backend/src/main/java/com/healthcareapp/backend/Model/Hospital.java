@@ -18,10 +18,11 @@ public class Hospital {
 
     @OneToOne(mappedBy = "hospital")
     @JsonIgnore
+    @JoinColumn(unique = true)
     private Admin admin;
 
     @ManyToOne
-    @JoinColumn(name= "supervisor_id", nullable = false)
+    @JoinColumn(name= "supervisor_id")
     private Supervisor supervisor;
 
     @OneToMany(mappedBy = "hospital")

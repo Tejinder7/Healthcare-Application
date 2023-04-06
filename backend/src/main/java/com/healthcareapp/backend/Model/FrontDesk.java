@@ -11,7 +11,7 @@ public class FrontDesk extends Authorization{
     private String name;
 
     @ManyToOne
-    @JoinColumn(name= "hosp_id", nullable = false)
+    @JoinColumn(name= "hosp_id")
 //    @JsonBackReference("HOS-FD")
     private Hospital hospital;
 

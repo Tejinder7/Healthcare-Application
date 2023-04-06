@@ -15,7 +15,7 @@ public class FieldWorker extends Authorization{
     private String phoneNo;
 
     @ManyToOne
-    @JoinColumn(name= "supervisor_id", nullable = false)
+    @JoinColumn(name= "supervisor_id")
 //    @JsonBackReference("FW-SUP")
     private Supervisor supervisor;
 
