@@ -56,4 +56,7 @@ public class FieldWorkerController {
         return ResponseEntity.of(Optional.of(fieldWorker));
     }
 
+
+//    @GetMapping("/")
+
 }
