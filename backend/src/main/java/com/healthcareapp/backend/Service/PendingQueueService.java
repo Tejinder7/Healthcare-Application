@@ -59,4 +59,10 @@ public class PendingQueueService {
         return pendingQueueList;
     }
 
+    public void deletePendingQueue(Patient patient){
+        PendingQueue pendingQueue = pendingQueueRepository.findPendingQueueByPatient(patient);
+        int pendingQueueId = pendingQueue.getPendingQueueId();
+        pendingQueueRepository.deleteById(pendingQueueId);
+    }
+
 }

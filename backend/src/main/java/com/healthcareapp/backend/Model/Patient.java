@@ -5,9 +5,17 @@ import com.fasterxml.jackson.annotation.*;
 
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
+//@Data
+//@Builder
+//@AllArgsConstructor
+//@NoArgsConstructor
 @Entity
 public class Patient {
     @Id
@@ -37,6 +45,7 @@ public class Patient {
     @OneToOne(mappedBy = "patient")
 //    @JsonManagedReference(value = "Patient-PendingQueue")
     @JsonIgnore
+    @JoinColumn()
     private PendingQueue pendingQueue;
 
     @OneToMany(mappedBy = "patient")

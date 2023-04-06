@@ -12,7 +12,7 @@ public class FieldWorker extends Authorization{
 
     private String address;
 
-    private String phoneNo;
+    private String contact;
 
     @ManyToOne
     @JoinColumn(name= "supervisor_id")
@@ -26,10 +26,10 @@ public class FieldWorker extends Authorization{
     public FieldWorker() {
     }
 
-    public FieldWorker(String name, String address, String phoneNo, Supervisor supervisor, List<Patient> patientList) {
+    public FieldWorker(String name, String address, String contact, Supervisor supervisor, List<Patient> patientList) {
         this.name = name;
         this.address = address;
-        this.phoneNo = phoneNo;
+        this.contact = contact;
         this.supervisor = supervisor;
         this.patientList = patientList;
     }
@@ -50,12 +50,12 @@ public class FieldWorker extends Authorization{
         this.address = address;
     }
 
-    public String getPhoneNo() {
-        return phoneNo;
+    public String getContact() {
+        return contact;
     }
 
-    public void setPhoneNo(String phoneNo) {
-        this.phoneNo = phoneNo;
+    public void setContact(String phoneNo) {
+        this.contact = phoneNo;
     }
 
     public Supervisor getSupervisor() {
@@ -79,7 +79,7 @@ public class FieldWorker extends Authorization{
         return "FieldWorker{" +
                 "name='" + name + '\'' +
                 ", address='" + address + '\'' +
-                ", phoneNo='" + phoneNo + '\'' +
+                ", phoneNo='" + contact + '\'' +
                 ", supervisor=" + supervisor +
                 ", patientList=" + patientList +
                 '}';

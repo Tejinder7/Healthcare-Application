@@ -8,6 +8,7 @@ import com.healthcareapp.backend.Repository.HospitalRepository;
 import org.springframework.stereotype.Component;
 
 import javax.print.Doc;
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -60,7 +61,7 @@ public class DoctorService {
     }
 
     public List<Doctor> getAllDoctorsByHospital(Hospital hospital){
-        List<Doctor> doctorList;
+        List<Doctor> doctorList = new ArrayList<>();
         try{
             doctorList = doctorRepository.findDoctorByHospital(hospital);
         }catch (Exception e){
@@ -74,7 +75,7 @@ public class DoctorService {
         doctor1.setDocSpecialization(doctor.getDocSpecialization());
         doctor1.setName(doctor.getName());
         doctor1.setLicId(doctor.getLicId());
-        doctor1.setPhoneNum(doctor.getPhoneNum());
+        doctor1.setContact(doctor.getContact());
         doctor1.setUserId(doctor.getUserId());
         doctor1.setPassword(doctor.getPassword());
         try {

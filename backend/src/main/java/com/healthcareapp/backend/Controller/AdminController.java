@@ -1,9 +1,7 @@
 package com.healthcareapp.backend.Controller;
 
 import com.healthcareapp.backend.Model.Admin;
-import com.healthcareapp.backend.Model.Hospital;
 import com.healthcareapp.backend.Service.AdminService;
-import com.healthcareapp.backend.Service.HospitalService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

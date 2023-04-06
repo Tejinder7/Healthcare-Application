@@ -10,9 +10,10 @@ import java.util.List;
 public class Doctor extends Authorization{
     private String name;
 
+    @Column(unique = true)
     private String licId;
 
-    private String phoneNum;
+    private String contact;
 
     private String docSpecialization;
 
@@ -29,10 +30,10 @@ public class Doctor extends Authorization{
     public Doctor() {
     }
 
-    public Doctor(String name, String licId, String phoneNum, String docSpecialization, Hospital hospital, List<Encounter> encounterList) {
+    public Doctor(String name, String licId, String contact, String docSpecialization, Hospital hospital, List<Encounter> encounterList) {
         this.name = name;
         this.licId = licId;
-        this.phoneNum = phoneNum;
+        this.contact = contact;
         this.docSpecialization = docSpecialization;
         this.hospital = hospital;
         this.encounterList = encounterList;
@@ -54,12 +55,12 @@ public class Doctor extends Authorization{
         this.licId = licId;
     }
 
-    public String getPhoneNum() {
-        return phoneNum;
+    public String getContact() {
+        return contact;
     }
 
-    public void setPhoneNum(String phoneNum) {
-        this.phoneNum = phoneNum;
+    public void setContact(String phoneNum) {
+        this.contact = phoneNum;
     }
 
     public String getDocSpecialization() {
@@ -91,7 +92,7 @@ public class Doctor extends Authorization{
         return "Doctor{" +
                 "name='" + name + '\'' +
                 ", licId='" + licId + '\'' +
-                ", phoneNum='" + phoneNum + '\'' +
+                ", phoneNum='" + contact + '\'' +
                 ", docSpecialization='" + docSpecialization + '\'' +
                 ", hospital=" + hospital +
                 ", encounterList=" + encounterList +

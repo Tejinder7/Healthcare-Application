@@ -3,7 +3,15 @@ package com.healthcareapp.backend.Model;
 import com.fasterxml.jackson.annotation.JsonFilter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+//@Data
+//@Builder
+//@AllArgsConstructor
+//@NoArgsConstructor
 @Entity
 //@JsonFilter("MedicalHistoryFilter")
 public class MedicalHistory {
@@ -24,6 +32,7 @@ public class MedicalHistory {
     @OneToOne(mappedBy = "medicalHistory")
 //    @JsonBackReference(value = "Encounter-MH")
     @JsonIgnore
+    @JoinColumn(unique = true)
     private Encounter encounter;
 
     public MedicalHistory() {
