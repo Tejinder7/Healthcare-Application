@@ -16,12 +16,16 @@ public class FollowUpService {
     private FieldWorkerRepository fieldWorkerRepository;
     private SupervisorRepository supervisorRepository;
     private EncounterService encounterService;
+    private FieldWorkerService fieldWorkerService;
+    private PatientService patientService;
 
-    public FollowUpService(FollowUpRepository followUpRepository, FieldWorkerRepository fieldWorkerRepository, SupervisorRepository supervisorRepository, EncounterService encounterService) {
+    public FollowUpService(FollowUpRepository followUpRepository, FieldWorkerRepository fieldWorkerRepository, SupervisorRepository supervisorRepository, EncounterService encounterService, FieldWorkerService fieldWorkerService, PatientService patientService) {
         this.followUpRepository = followUpRepository;
         this.fieldWorkerRepository = fieldWorkerRepository;
         this.supervisorRepository = supervisorRepository;
         this.encounterService = encounterService;
+        this.fieldWorkerService = fieldWorkerService;
+        this.patientService = patientService;
     }
 
     public List<FollowUp> getCurrentDateFollowUps(String date, int fieldWorkerAuthId){
@@ -82,7 +86,7 @@ public class FollowUpService {
 
         //System.out.printf(hospitalList.toString());
 
-        hospitalList.forEach(hospital -> {followUpList.addAll(followUpRepository.findByHospital(hospital));});
+        hospitalList.forEach(hospital -> {followUpList.addAll(followUpRepository.findByHospitalAndFlagIsFalse(hospital));});
 
         return followUpList;
     }
@@ -108,6 +112,15 @@ public class FollowUpService {
         }catch (Exception e){
             throw new RuntimeException();
         }
+        return followUpList;
+    }
+
+    public List<FollowUp> getFollowUpsByFieldWorker(int fieldWorkerId){
+
+        FieldWorker fieldWorker = fieldWorkerService.getFieldWorkerById(fieldWorkerId);
+        Patient patient = patientService.getPatientByFieldWorker(fieldWorker);
+        List<FollowUp> followUpList = followUpRepository.findByPatient(patient);
+
         return followUpList;
     }
 }

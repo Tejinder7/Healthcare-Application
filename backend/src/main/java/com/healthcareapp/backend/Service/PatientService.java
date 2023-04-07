@@ -1,6 +1,8 @@
 package com.healthcareapp.backend.Service;
 
+
 import com.healthcareapp.backend.Exception.ResourceNotFoundException;
+import com.healthcareapp.backend.Model.FieldWorker;
 import com.healthcareapp.backend.Model.Patient;
 import com.healthcareapp.backend.Repository.PatientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,5 +51,10 @@ public class PatientService {
             throw new RuntimeException();
         }
         return patientsWithGivenNameList;
+    }
+
+    public Patient getPatientByFieldWorker(FieldWorker fieldWorker){
+        Patient patient = patientRepository.findPatientByFieldWorker(fieldWorker);
+        return patient;
     }
 }

@@ -59,4 +59,10 @@ public class FollowUpController {
         List<FollowUp> followUpList = followUpService.addFollowUps(dateList, en_id);
         return ResponseEntity.of(Optional.of(followUpList));
     }
+
+    @GetMapping("/getFollowUpsForFieldWorker/{fieldWorkerId}")
+    public ResponseEntity<List<FollowUp>> getFollowUpsForFieldWorker(@PathVariable int fieldWorkerId){
+        List<FollowUp> followUpList = followUpService.getFollowUpsByFieldWorker(fieldWorkerId);
+        return ResponseEntity.of(Optional.of(followUpList));
+    }
 }
