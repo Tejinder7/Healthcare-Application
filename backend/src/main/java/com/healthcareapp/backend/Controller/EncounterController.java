@@ -24,15 +24,15 @@ public class EncounterController {
 
     @PostMapping("addEncounters/{pid}/{docId}")
     public ResponseEntity<Encounter> addEncounter(@PathVariable int pid, @PathVariable int docId){
-        Encounter encounter1;
+        Encounter savedEncounter;
         try{
-            encounter1 = encounterService.addEncounter(pid, docId);
+            savedEncounter = encounterService.addEncounter(pid, docId);
         }
-        catch(Exception exception){
+        catch(RuntimeException exception){
             throw exception;
         }
 
-        return ResponseEntity.of(Optional.of(encounter1));
+        return ResponseEntity.of(Optional.of(savedEncounter));
     }
 
     @PostMapping("saveEncounter/{eid}")

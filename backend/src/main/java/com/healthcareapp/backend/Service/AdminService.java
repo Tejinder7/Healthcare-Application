@@ -24,8 +24,9 @@ public class AdminService {
         this.frontDeskService = frontDeskService;
     }
 
-    public Admin addAdmin(Admin admin, int hospId){
+    public Admin addAdmin(Admin admin, int hospId) throws RuntimeException{
         Hospital hospital;
+
         try{
             hospital= hospitalService.getHospitalById(hospId);
         }
@@ -38,24 +39,16 @@ public class AdminService {
 
         Admin savedAdmin;
 
-        try{
-            savedAdmin= adminRepository.save(admin);
-        }
-        catch (Exception exception){
-            throw exception;
-        }
+        savedAdmin= adminRepository.save(admin);
 
         return savedAdmin;
     }
 
-    public Admin updateAdmin(Admin admin){
+    public Admin updateAdmin(Admin admin) throws RuntimeException{
         Admin updatedAdmin;
-        try {
-            updatedAdmin= adminRepository.save(admin);
-        }
-        catch (Exception exception){
-            throw exception;
-        }
+
+        updatedAdmin= adminRepository.save(admin);
+
         return updatedAdmin;
     }
 

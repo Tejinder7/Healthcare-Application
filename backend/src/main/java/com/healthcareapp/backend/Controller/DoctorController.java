@@ -16,24 +16,27 @@ public class DoctorController {
 
     @PostMapping("/addDoctor/{hospitalId}")
     public ResponseEntity<Doctor> addDoctor(@RequestBody Doctor doctor, @PathVariable int hospitalId){
-        Doctor doctor1;
+        Doctor savedDoctor;
 
         try{
-            doctor1 = doctorService.addDoctor(doctor, hospitalId);
-        }catch (Exception exception){
+            savedDoctor = doctorService.addDoctor(doctor, hospitalId);
+        }
+        catch (RuntimeException exception){
             throw exception;
         }
-        return ResponseEntity.of(Optional.of(doctor1));
+        return ResponseEntity.of(Optional.of(savedDoctor));
     }
 
     @PutMapping("/updateDoctor")
     public ResponseEntity<Doctor> updateDoctor(@RequestBody Doctor doctor){
-        Doctor doctor1;
+        Doctor updatedDoctor;
+
         try{
-            doctor1 = doctorService.updateDoctor(doctor);
-        }catch (Exception exception){
+            updatedDoctor = doctorService.updateDoctor(doctor);
+        }catch (RuntimeException exception){
             throw exception;
         }
-        return ResponseEntity.of(Optional.of(doctor1));
+
+        return ResponseEntity.of(Optional.of(updatedDoctor));
     }
 }
