@@ -31,8 +31,8 @@ public class MedicalHistoryController {
         try {
             medicalHistoryList = medicalHistoryService.getMedicalHistoryByPatientId(pid);
         }
-        catch (Exception e){
-            throw new ResourceNotFoundException("No Medical history for patient :"+ pid+" found");
+        catch (RuntimeException exception){
+            throw exception;
         }
         MappingJacksonValue mappingJacksonValue= new MappingJacksonValue(medicalHistoryList);
         SimpleBeanPropertyFilter filter= SimpleBeanPropertyFilter.filterOutAllExcept("medicalHistoryId", "symptoms", "prescription");
