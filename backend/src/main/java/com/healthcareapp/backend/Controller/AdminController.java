@@ -2,6 +2,7 @@ package com.healthcareapp.backend.Controller;
 
 import com.healthcareapp.backend.Model.Admin;
 import com.healthcareapp.backend.Service.AdminService;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,16 +33,16 @@ public class AdminController {
 
     @PutMapping("/updateAdmin")
     public ResponseEntity<Admin> updateAdmin(@RequestBody Admin admin){
-        Admin savedAdmin;
+        Admin updatedAdmin;
 
         try{
-            savedAdmin = adminService.updateAdmin(admin);
+            updatedAdmin = adminService.updateAdmin(admin);
         }
-        catch (Exception e){
-            return ResponseEntity.status(500).build();
+        catch (RuntimeException exception){
+            throw exception;
         }
 
-        return ResponseEntity.of(Optional.of(savedAdmin));
+        return ResponseEntity.of(Optional.of(updatedAdmin));
     }
 
     @GetMapping("/getAllHospitalUsers/{hospitalId}")
