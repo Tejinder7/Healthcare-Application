@@ -1,7 +1,10 @@
 package com.healthcareapp.backend.Service;
 
 import com.healthcareapp.backend.Exception.ResourceNotFoundException;
-import com.healthcareapp.backend.Model.*;
+import com.healthcareapp.backend.Model.Admin;
+import com.healthcareapp.backend.Model.Doctor;
+import com.healthcareapp.backend.Model.FrontDesk;
+import com.healthcareapp.backend.Model.Hospital;
 import com.healthcareapp.backend.Repository.AdminRepository;
 import org.springframework.stereotype.Component;
 
@@ -72,5 +75,11 @@ public class AdminService {
         userList.addAll(frontDeskList);
 
         return userList;
+    }
+
+    public List<Admin> getListOfAdmins(){
+        List<Admin> adminList= adminRepository.findAll();
+
+        return adminList;
     }
 }
