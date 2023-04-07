@@ -25,11 +25,13 @@ public class DoctorService {
     }
 
     public Doctor getDoctorByAuthId(int authId){
-        Doctor doctor = doctorRepository.findDoctorByAuthId(authId);
-        if(doctor == null){
-            throw new RuntimeException();
+        Optional<Doctor> doctor = doctorRepository.findById(authId);
+
+        if(doctor.isEmpty()){
+            throw new ResourceNotFoundException("No doctor with id: "+ authId+ " found");
         }
-        return doctor;
+
+        return doctor.get();
     }
 
     public Hospital getHospitalByDocId(int authId){

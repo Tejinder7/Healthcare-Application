@@ -6,11 +6,12 @@ import com.healthcareapp.backend.Model.PendingQueue;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface PendingQueueRepository extends JpaRepository<PendingQueue, Integer> {
 
     public List<PendingQueue> findPendingQueueByHospital(Hospital hospital);
 
-    public PendingQueue findPendingQueueByPatient(Patient patient);
+    public Optional<PendingQueue> findByPatient(Patient patient);
 
 }

@@ -1,5 +1,6 @@
 package com.healthcareapp.backend.Service;
 
+import com.healthcareapp.backend.Exception.ResourceNotFoundException;
 import com.healthcareapp.backend.Model.Hospital;
 import com.healthcareapp.backend.Model.Patient;
 import com.healthcareapp.backend.Model.PendingQueue;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Component;
 
 import java.time.DateTimeException;
 import java.util.List;
+import java.util.Optional;
 
 @Component
 public class PendingQueueService {
@@ -60,8 +62,12 @@ public class PendingQueueService {
     }
 
     public void deletePendingQueue(Patient patient){
-        PendingQueue pendingQueue = pendingQueueRepository.findPendingQueueByPatient(patient);
-        int pendingQueueId = pendingQueue.getPendingQueueId();
+        Optional<PendingQueue> pendingQueue = pendingQueueRepository.findByPatient(patient);
+
+        if(pendingQueue.isEmpty()){
+            throw new ResourceNotFoundException("No entry for patient with id: "+ patient.getPatientId()+ " in pending queue");
+        }
+        int pendingQueueId = pendingQueue.get().getPendingQueueId();
         pendingQueueRepository.deleteById(pendingQueueId);
     }
 
