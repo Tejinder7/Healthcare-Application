@@ -25,7 +25,7 @@ public class EncounterService {
         this.pendingQueueService = pendingQueueService;
     }
 
-    public Encounter addEncounter(int patientId, int authId){
+    public Encounter addEncounter(int patientId, int authId) throws RuntimeException{
         Encounter encounter = new Encounter();
 
         Patient patient= patientServices.getPatientById(patientId);

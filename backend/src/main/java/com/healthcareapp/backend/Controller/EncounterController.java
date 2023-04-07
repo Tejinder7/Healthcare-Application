@@ -29,7 +29,7 @@ public class EncounterController {
             savedEncounter = encounterService.addEncounter(pid, docId);
         }
         catch(RuntimeException exception){
-            throw exception;
+            throw new RuntimeException(exception);
         }
 
         return ResponseEntity.of(Optional.of(savedEncounter));
