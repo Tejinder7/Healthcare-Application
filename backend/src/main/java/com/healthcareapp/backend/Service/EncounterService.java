@@ -49,7 +49,7 @@ public class EncounterService {
         Encounter encounter = getEncounterById(encounterId);
 
         Patient patient = encounter.getPatient();
-        MedicalHistory medicalHistory = medicalHistoryService.addMedicalHistory(patient,encounter, prescription, symptoms);
+        MedicalHistory medicalHistory = medicalHistoryService.addMedicalHistory(patient, encounter, prescription, symptoms);
 
         encounter.setMedicalHistory(medicalHistory);
         encounter.setFlag(true);

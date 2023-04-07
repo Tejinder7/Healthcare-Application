@@ -3,7 +3,6 @@ package com.healthcareapp.backend.Controller;
 import com.fasterxml.jackson.databind.ser.FilterProvider;
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
-import com.healthcareapp.backend.Exception.ResourceNotFoundException;
 import com.healthcareapp.backend.Model.Encounter;
 import com.healthcareapp.backend.Model.MedicalHistory;
 import com.healthcareapp.backend.Service.EncounterService;

@@ -2,7 +2,6 @@ package com.healthcareapp.backend.Controller;
 
 import com.healthcareapp.backend.Model.Admin;
 import com.healthcareapp.backend.Service.AdminService;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
