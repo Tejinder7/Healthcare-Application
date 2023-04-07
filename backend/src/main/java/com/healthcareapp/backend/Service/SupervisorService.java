@@ -1,11 +1,9 @@
 package com.healthcareapp.backend.Service;
 
+import com.healthcareapp.backend.Exception.ResourceNotFoundException;
 import com.healthcareapp.backend.Model.FollowUp;
 import com.healthcareapp.backend.Model.Hospital;
 import com.healthcareapp.backend.Model.Patient;
-
-import com.healthcareapp.backend.Model.Admin;
-
 import com.healthcareapp.backend.Model.Supervisor;
 import com.healthcareapp.backend.Repository.SupervisorRepository;
 import org.springframework.stereotype.Component;
@@ -13,6 +11,7 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 
 @Component
 public class SupervisorService {
@@ -66,6 +65,16 @@ public class SupervisorService {
         patientList.forEach(patient -> {if(patient.getFieldWorker()==null) unAssignedPatients.add(patient);});
         
         return unAssignedPatients;
+    }
+
+    public Supervisor getSupervisorByAddress(String Address){
+        Optional<Supervisor> supervisor = supervisorRepository.findByAddress(Address);
+
+        if(supervisor.isEmpty()){
+            throw new ResourceNotFoundException("No supervisor for the address: "+ Address+ " found");
+        }
+
+        return supervisor.get();
     }
 }
 
