@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Component
 public class FieldWorkerService {
@@ -52,8 +53,8 @@ public class FieldWorkerService {
 
 
 
-    public List<FieldWorker> getFieldWorkers(int authId){
-        Supervisor supervisor = supervisorRepository.findSupervisorByAuthId(authId);
+    public List<FieldWorker> getFieldWorkers(int supervisorId){
+        Supervisor supervisor = supervisorRepository.findSupervisorByAuthId(supervisorId);
 
         if(supervisor==null)
         {
@@ -102,6 +103,11 @@ public class FieldWorkerService {
 
         fieldWorker = fieldWorkerRepository.findFieldWorkerByAuthId(fieldWorkerAuthId);
 
+        return fieldWorker;
+    }
+
+    public FieldWorker getFieldWorkerById(int fieldWorkerId){
+        FieldWorker fieldWorker = fieldWorkerRepository.findFieldWorkerByAuthId(fieldWorkerId);
         return fieldWorker;
     }
 }

@@ -52,4 +52,6 @@ public class PatientController {
             return ResponseEntity.status(500).build();
         }
     }
+
+
 }
