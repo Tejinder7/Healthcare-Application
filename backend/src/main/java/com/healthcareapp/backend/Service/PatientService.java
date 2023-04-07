@@ -1,5 +1,6 @@
 package com.healthcareapp.backend.Service;
 
+import com.healthcareapp.backend.Exception.ResourceNotFoundException;
 import com.healthcareapp.backend.Model.Patient;
 import com.healthcareapp.backend.Repository.PatientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +8,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Component
 public class PatientService {
@@ -26,11 +28,12 @@ public class PatientService {
         return patient1;
     }
     public Patient getPatientById(int Pid){
-        Patient patient = patientRepository.findPatientByPatientId(Pid);
-        if(patient == null){
-            throw new RuntimeException();
+        Optional<Patient> patient = patientRepository.findById(Pid);
+        if(patient.isEmpty()){
+            throw new ResourceNotFoundException("No patient with id: "+ Pid+ " found");
         }
-        return patient;
+
+        return patient.get();
     }
 
     public List<Patient> getPatientsByName(String name){

@@ -28,7 +28,8 @@ public class EncounterService {
     public Encounter addEncounter(int patientId, int authId){
         Encounter encounter = new Encounter();
 
-        Patient patient = patientServices.getPatientById(patientId);
+        Patient patient= patientServices.getPatientById(patientId);
+
         encounter.setPatient(patient);
 
         Doctor doctor = doctorServices.getDoctorByAuthId(authId);

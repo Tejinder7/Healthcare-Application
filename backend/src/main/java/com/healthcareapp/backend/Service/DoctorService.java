@@ -43,7 +43,7 @@ public class DoctorService {
     }
 
 
-    public Doctor addDoctor(Doctor doctor, int hospitalId){
+    public Doctor addDoctor(Doctor doctor, int hospitalId) throws RuntimeException{
 
         Optional<Hospital> hospital = hospitalRepository.findById(hospitalId);
         if(hospital == null){
@@ -53,13 +53,8 @@ public class DoctorService {
         doctor.setHospital(hospital.get());
         doctor.setUserType("Doctor");
 
-        try{
-            doctor = doctorRepository.save(doctor);
-        }
-        catch (Exception e){
-            throw new RuntimeException();
-        }
-        return doctor;
+        Doctor savedDoctor= doctorRepository.save(doctor);
+        return savedDoctor;
     }
 
     public List<Doctor> getAllDoctorsByHospital(Hospital hospital){
@@ -69,20 +64,21 @@ public class DoctorService {
         return doctorList;
     }
 
-    public Doctor updateDoctor(Doctor doctor){
-        Doctor doctor1 = doctorRepository.findDoctorByAuthId(doctor.getAuthId());
-        doctor1.setDocSpecialization(doctor.getDocSpecialization());
-        doctor1.setName(doctor.getName());
-        doctor1.setLicId(doctor.getLicId());
-        doctor1.setContact(doctor.getContact());
-        doctor1.setUserId(doctor.getUserId());
-        doctor1.setPassword(doctor.getPassword());
-        try {
-            doctorRepository.save(doctor1);
-            return doctor1;
+    public Doctor updateDoctor(Doctor doctor) throws RuntimeException{
+        Optional<Doctor> updatedDoctor = doctorRepository.findById(doctor.getAuthId());
+
+        if(updatedDoctor.isEmpty()){
+            throw new ResourceNotFoundException("No Doctor with id: "+ doctor.getAuthId()+ " found");
         }
-        catch (Exception e){
-            throw new RuntimeException();
-        }
+
+        updatedDoctor.get().setDocSpecialization(doctor.getDocSpecialization());
+        updatedDoctor.get().setName(doctor.getName());
+        updatedDoctor.get().setLicId(doctor.getLicId());
+        updatedDoctor.get().setContact(doctor.getContact());
+        updatedDoctor.get().setUserId(doctor.getUserId());
+        updatedDoctor.get().setPassword(doctor.getPassword());
+
+        doctorRepository.save(updatedDoctor.get());
+        return updatedDoctor.get();
     }
 }
