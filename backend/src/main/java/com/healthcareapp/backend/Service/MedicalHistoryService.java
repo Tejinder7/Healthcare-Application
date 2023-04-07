@@ -25,27 +25,20 @@ public class MedicalHistoryService {
         }
         return medicalHistoryList;
     }
-    public MedicalHistory addMedicalHistory(Patient patient, Encounter encounter){
+    public MedicalHistory addMedicalHistory(Patient patient, Encounter encounter, String prescription, String symptoms) throws RuntimeException{
         MedicalHistory medicalHistory = new MedicalHistory();
+
         medicalHistory.setPatient(patient);
         medicalHistory.setEncounter(encounter);
+        medicalHistory.setPrescription(prescription);
+        medicalHistory.setSymptoms(symptoms);
+
         medicalHistoryRepository.save(medicalHistory);
         return medicalHistory;
     }
     public MedicalHistory getMedicalHistoryByEncounter(Encounter encounterId){
         MedicalHistory medicalHistory = medicalHistoryRepository.findMedicalHistoryByEncounter(encounterId);
         if(medicalHistory == null){
-            throw new RuntimeException();
-        }
-        return medicalHistory;
-    }
-    public MedicalHistory updateMedicalHistory(String prescription, String symptoms, Encounter encounterId){
-        MedicalHistory medicalHistory = getMedicalHistoryByEncounter(encounterId);
-        try {
-            medicalHistory.setPrescription(prescription);
-            medicalHistory.setSymptoms(symptoms);
-            medicalHistoryRepository.save(medicalHistory);
-        }catch (Exception e){
             throw new RuntimeException();
         }
         return medicalHistory;

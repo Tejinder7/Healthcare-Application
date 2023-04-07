@@ -14,32 +14,21 @@ import java.util.Optional;
 @Component
 public class FrontDeskService {
     private FrontDeskRepository frontDeskRepository;
-    private HospitalRepository hospitalRepository;
-    
-    public FrontDeskService(FrontDeskRepository frontDeskRepository, HospitalRepository hospitalRepository) {
+    private HospitalService hospitalService;
+
+    public FrontDeskService(FrontDeskRepository frontDeskRepository, HospitalService hospitalService) {
         this.frontDeskRepository = frontDeskRepository;
-        this.hospitalRepository = hospitalRepository;
+        this.hospitalService = hospitalService;
     }
 
+    public FrontDesk addFrontDesk(FrontDesk frontDesk, int hospitalId) throws RuntimeException{
 
-    public FrontDesk addFrontDesk(FrontDesk frontDesk, int hospitalId){
+        Hospital hospital = hospitalService.getHospitalById(hospitalId);
 
-        Optional<Hospital> hospital = hospitalRepository.findById(hospitalId);
-
-        if(hospital==null)
-        {
-            throw new ResourceNotFoundException("No Hospital found for Hospital id: "+ hospitalId);
-        }
-
-        frontDesk.setHospital(hospital.get());
+        frontDesk.setHospital(hospital);
         frontDesk.setUserType("Front Desk");
 
-
-        try {
-            frontDeskRepository.save(frontDesk);
-        }catch (Exception e){
-            throw new RuntimeException();
-        }
+        frontDeskRepository.save(frontDesk);
         return frontDesk;
     }
 
@@ -48,17 +37,19 @@ public class FrontDeskService {
         return frontDeskList;
     }
 
-    public FrontDesk updateFrontDesk(FrontDesk frontDesk){
-        FrontDesk frontDesk1 = frontDeskRepository.findFrontDeskByAuthId(frontDesk.getAuthId());
-        frontDesk1.setName(frontDesk.getName());
-        frontDesk1.setUserId(frontDesk.getUserId());
-        frontDesk1.setPassword(frontDesk.getPassword());
-        try {
-            frontDeskRepository.save(frontDesk1);
-            return frontDesk1;
+    public FrontDesk updateFrontDesk(FrontDesk frontDesk) throws RuntimeException{
+        Optional<FrontDesk> updatedFrontDesk = frontDeskRepository.findById(frontDesk.getAuthId());
+
+        if(updatedFrontDesk.isEmpty()){
+            throw new ResourceNotFoundException("No Front Desk with id: "+ frontDesk.getAuthId()+ " found");
         }
-        catch (Exception e){
-            throw new RuntimeException();
-        }
+
+        updatedFrontDesk.get().setName(frontDesk.getName());
+        updatedFrontDesk.get().setUserId(frontDesk.getUserId());
+        updatedFrontDesk.get().setPassword(frontDesk.getPassword());
+
+        frontDeskRepository.save(updatedFrontDesk.get());
+
+        return updatedFrontDesk.get();
     }
 }

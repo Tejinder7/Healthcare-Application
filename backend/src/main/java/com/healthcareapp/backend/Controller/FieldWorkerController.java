@@ -17,7 +17,6 @@ public class FieldWorkerController {
         this.fieldWorkerService = fieldWorkerService;
     }
 
-
     @PostMapping("/addFieldWorker/{supervisorId}")
     public ResponseEntity<FieldWorker> addFieldWorker(@RequestBody FieldWorker fieldWorker, @PathVariable int supervisorId) {
 
