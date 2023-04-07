@@ -7,9 +7,6 @@ import com.healthcareapp.backend.Repository.DoctorRepository;
 import com.healthcareapp.backend.Repository.HospitalRepository;
 import org.springframework.stereotype.Component;
 
-import javax.print.Doc;
-import java.util.ArrayList;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -25,11 +22,13 @@ public class DoctorService {
     }
 
     public Doctor getDoctorByAuthId(int authId){
-        Doctor doctor = doctorRepository.findDoctorByAuthId(authId);
-        if(doctor == null){
-            throw new RuntimeException();
+        Optional<Doctor> doctor = doctorRepository.findById(authId);
+
+        if(doctor.isEmpty()){
+            throw new ResourceNotFoundException("No doctor with id: "+ authId+ " found");
         }
-        return doctor;
+
+        return doctor.get();
     }
 
     public Hospital getHospitalByDocId(int authId){

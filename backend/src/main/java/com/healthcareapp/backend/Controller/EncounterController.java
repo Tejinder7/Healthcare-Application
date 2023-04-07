@@ -3,7 +3,6 @@ package com.healthcareapp.backend.Controller;
 import com.fasterxml.jackson.databind.ser.FilterProvider;
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
-import com.healthcareapp.backend.Exception.ResourceNotFoundException;
 import com.healthcareapp.backend.Model.Encounter;
 import com.healthcareapp.backend.Model.MedicalHistory;
 import com.healthcareapp.backend.Service.EncounterService;
@@ -25,10 +24,11 @@ public class EncounterController {
     @PostMapping("addEncounters/{pid}/{docId}")
     public ResponseEntity<Encounter> addEncounter(@PathVariable int pid, @PathVariable int docId){
         Encounter savedEncounter;
+
         try{
             savedEncounter = encounterService.addEncounter(pid, docId);
         }
-        catch(RuntimeException exception){
+        catch (RuntimeException exception) {
             throw exception;
         }
 
@@ -36,19 +36,19 @@ public class EncounterController {
     }
 
     @PostMapping("saveEncounter/{eid}")
-    public MappingJacksonValue saveEncounter(@RequestBody MedicalHistory medicalHistory, @PathVariable int eid){
-        MedicalHistory medicalHistory1;
+    public MappingJacksonValue saveEncounter(@RequestBody MedicalHistory medicalHistory, @PathVariable int encounterId){
+        MedicalHistory createdMedicalHistory;
         try {
-            medicalHistory1 = encounterService.saveEncounter(medicalHistory.getPrescription(), medicalHistory.getSymptoms(), eid);
-//            return ResponseEntity.of(Optional.of(true));
-            MappingJacksonValue mappingJacksonValue= new MappingJacksonValue(medicalHistory1);
+            createdMedicalHistory = encounterService.saveEncounter(medicalHistory.getPrescription(), medicalHistory.getSymptoms(), encounterId);
+
+            MappingJacksonValue mappingJacksonValue= new MappingJacksonValue(createdMedicalHistory);
             SimpleBeanPropertyFilter filter= SimpleBeanPropertyFilter.filterOutAllExcept("medicalHistoryId", "patient", "symptoms", "prescription");
             FilterProvider filters= new SimpleFilterProvider().addFilter("MedicalHistoryFilter", filter);
 
             mappingJacksonValue.setFilters(filters);
 
             return mappingJacksonValue;
-        }catch (Exception exception){
+        }catch (RuntimeException exception){
             throw exception;
         }
     }

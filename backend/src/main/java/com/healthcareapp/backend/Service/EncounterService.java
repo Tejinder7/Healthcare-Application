@@ -8,6 +8,8 @@ import com.healthcareapp.backend.Model.Patient;
 import com.healthcareapp.backend.Repository.EncounterRepository;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
+
 @Component
 public class EncounterService {
     private MedicalHistoryService medicalHistoryService;
@@ -25,14 +27,14 @@ public class EncounterService {
         this.pendingQueueService = pendingQueueService;
     }
 
-    public Encounter addEncounter(int patientId, int authId){
+    public Encounter addEncounter(int patientId, int authId) throws RuntimeException{
         Encounter encounter = new Encounter();
 
         Patient patient= patientServices.getPatientById(patientId);
 
-        encounter.setPatient(patient);
-
         Doctor doctor = doctorServices.getDoctorByAuthId(authId);
+
+        encounter.setPatient(patient);
         encounter.setDoctor(doctor);
 
         pendingQueueService.deletePendingQueue(patient);
@@ -43,23 +45,27 @@ public class EncounterService {
 
         return encounter;
     }
-    public MedicalHistory saveEncounter(String prescription, String symptoms, int encounterId){
+    public MedicalHistory saveEncounter(String prescription, String symptoms, int encounterId) throws RuntimeException{
         Encounter encounter = getEncounterById(encounterId);
+
         Patient patient = encounter.getPatient();
-        MedicalHistory medicalHistory = medicalHistoryService.addMedicalHistory(patient,encounter);
+        MedicalHistory medicalHistory = medicalHistoryService.addMedicalHistory(patient, encounter, prescription, symptoms);
+
         encounter.setMedicalHistory(medicalHistory);
         encounter.setFlag(true);
+
         encounterRepository.save(encounter);
 
-        MedicalHistory updatedMedicalHistory = medicalHistoryService.updateMedicalHistory(prescription, symptoms, encounter);
-        return updatedMedicalHistory;
+        return medicalHistory;
     }
 
     public Encounter getEncounterById(int encounterId){
-        Encounter encounter = encounterRepository.getEncounterByEncounterId(encounterId);
-        if(encounter == null){
-            throw new RuntimeException();
+        Optional<Encounter> encounter = encounterRepository.findById(encounterId);
+
+        if(encounter.isEmpty()){
+            throw new ResourceNotFoundException("No encounter with id: "+ encounterId+ " found");
         }
-        return encounter;
+
+        return encounter.get();
     }
 }
