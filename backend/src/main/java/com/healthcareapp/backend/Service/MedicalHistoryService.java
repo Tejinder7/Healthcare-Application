@@ -17,12 +17,10 @@ public class MedicalHistoryService {
         this.medicalHistoryRepository = medicalHistoryRepository;
         this.patientService = patientService;
     }
-    public List<MedicalHistory> getMedicalHistoryByPatientId(int patientId){
+    public List<MedicalHistory> getMedicalHistoryByPatientId(int patientId) throws RuntimeException{
         Patient patient = patientService.getPatientById(patientId);
-        List<MedicalHistory> medicalHistoryList = medicalHistoryRepository.findMedicalHistoryByPatient(patient);
-        if(medicalHistoryList.size() == 0){
-            throw new RuntimeException();
-        }
+        List<MedicalHistory> medicalHistoryList = medicalHistoryRepository.findByPatient(patient);
+
         return medicalHistoryList;
     }
     public MedicalHistory addMedicalHistory(Patient patient, Encounter encounter, String prescription, String symptoms) throws RuntimeException{
