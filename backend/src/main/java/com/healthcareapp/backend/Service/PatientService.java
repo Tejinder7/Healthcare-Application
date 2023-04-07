@@ -57,4 +57,9 @@ public class PatientService {
         Patient patient = patientRepository.findPatientByFieldWorker(fieldWorker);
         return patient;
     }
+
+    public Patient updatePatient(Patient patient){
+        patientRepository.save(patient);
+        return patient;
+    }
 }

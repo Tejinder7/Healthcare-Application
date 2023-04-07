@@ -42,17 +42,28 @@ public class FieldWorkerController {
     }
 
 
-    @PutMapping ("/assignFollowUp/{fieldWorkerId}/{followUpId}")
-    public ResponseEntity<FieldWorker> assignFollowUp(@PathVariable int fieldWorkerId, @PathVariable int followUpId){
+    @PutMapping ("/assignFollowUp/{fieldWorkerId}/{patientId}")
+    public ResponseEntity<FieldWorker> assignFollowUp(@PathVariable int fieldWorkerId, @PathVariable int patientId){
         FieldWorker fieldWorker;
 
         try {
-            fieldWorker = fieldWorkerService.assignFollowUp(followUpId, fieldWorkerId);
+            fieldWorker = fieldWorkerService.assignFollowUp(patientId, fieldWorkerId);
         }catch (Exception e){
             return ResponseEntity.status(404).build();
         }
 
         return ResponseEntity.of(Optional.of(fieldWorker));
+    }
+
+    @GetMapping("/getFieldWorkerDetail/{fieldWorkerId}")
+    public ResponseEntity<FieldWorker> getFieldWorkerDetail(@PathVariable int fieldWorkerId){
+        FieldWorker fieldWorker;
+        try{
+            fieldWorker = fieldWorkerService.getFieldWorkerById(fieldWorkerId);
+            return ResponseEntity.of(Optional.of(fieldWorker));
+        }catch (Exception e){
+            return ResponseEntity.status(404).build();
+        }
     }
 
 

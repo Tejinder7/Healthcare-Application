@@ -34,10 +34,9 @@ public class SupervisorController {
         return ResponseEntity.of(Optional.of(supervisor1));
     }
 
-    @PostMapping("/unassignedPatients/{supId}")
+    @GetMapping("/unassignedPatients/{supId}")
     public ResponseEntity<List<Patient>> unassignedPatients(@PathVariable int supId){
         List<Patient> patientList = new ArrayList<>();
-
         try{
             patientList = supervisorService.unAssignedPatients(supId);
         }catch (Exception e){

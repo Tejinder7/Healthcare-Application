@@ -20,12 +20,15 @@ public class FieldWorkerService {
     private SupervisorRepository supervisorRepository;
     private FollowUpRepository followUpRepository;
     private PatientRepository patientRepository;
+
+    private PatientService patientService;
     
-    public FieldWorkerService(FieldWorkerRepository fieldWorkerRepository, SupervisorRepository supervisorRepository, FollowUpRepository followUpRepository, PatientRepository patientRepository) {
+    public FieldWorkerService(FieldWorkerRepository fieldWorkerRepository, SupervisorRepository supervisorRepository, FollowUpRepository followUpRepository, PatientRepository patientRepository, PatientService patientService) {
         this.fieldWorkerRepository = fieldWorkerRepository;
         this.supervisorRepository = supervisorRepository;
         this.followUpRepository = followUpRepository;
         this.patientRepository = patientRepository;
+        this.patientService = patientService;
     }
 
 
@@ -71,18 +74,20 @@ public class FieldWorkerService {
             return fieldWorkerList;
     }
 
-    public FieldWorker assignFollowUp(int followUpId, int fieldWorkerAuthId){
+    public FieldWorker assignFollowUp(int patientId, int fieldWorkerAuthId){
 
-        FollowUp followUp = followUpRepository.findById(followUpId);
+        Patient patient = patientService.getPatientById(patientId);
+
+//        List<FollowUp> followUpList = followUpRepository.findByPatient(patient);
 
         FieldWorker fieldWorker = fieldWorkerRepository.findFieldWorkerByAuthId(fieldWorkerAuthId);
 
-        if(followUp==null || fieldWorker==null)
+        if(patient==null || fieldWorker==null)
         {
             throw new RuntimeException();
         }
 
-        Patient patient = followUp.getPatient();
+//        Patient patient = followUp.getPatient();
 
 //        List<Patient> list = fieldWorker.getPatientList();
 //
@@ -90,12 +95,12 @@ public class FieldWorkerService {
 //
 //        fieldWorker.setPatientList(list);
 
-        patient = patientRepository.findPatientByPatientId(patient.getPatientId());
+//        patient = patientRepository.findPatientByPatientId(patient.getPatientId());
 
         patient.setFieldWorker(fieldWorker);
 
         try{
-            patient = patientRepository.save(patient);
+            patientService.updatePatient(patient);
             //fieldWorker = fieldWorkerDao.save(fieldWorker);
         }catch (Exception e){
             throw new RuntimeException();
