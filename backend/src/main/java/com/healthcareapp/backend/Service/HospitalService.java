@@ -27,7 +27,7 @@ public class HospitalService {
     public Hospital getHospitalById(int id){
         Optional<Hospital> hospital = hospitalRepository.findById(id);
 
-        if(hospital == null){
+        if(hospital.isEmpty()){
             throw new ResourceNotFoundException("No Hospital found for Hospital id: "+ id);
         }
         return hospital.get();

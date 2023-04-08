@@ -67,7 +67,7 @@ public class PendingQueueService {
         return pendingQueueList;
     }
 
-    public void deletePendingQueue(Patient patient){
+    public void deletePendingQueue(Patient patient) throws RuntimeException{
         Optional<PendingQueue> pendingQueue = pendingQueueRepository.findByPatient(patient);
 
         if(pendingQueue.isEmpty()){

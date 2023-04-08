@@ -36,21 +36,21 @@ public class EncounterController {
     }
 
     @PostMapping("saveEncounter/{eid}")
-    public MappingJacksonValue saveEncounter(@RequestBody MedicalHistory medicalHistory, @PathVariable int encounterId){
+    public MappingJacksonValue completeEncounter(@RequestBody MedicalHistory medicalHistory, @PathVariable int encounterId){
         MedicalHistory createdMedicalHistory;
         try {
             createdMedicalHistory = encounterService.saveEncounter(medicalHistory.getPrescription(), medicalHistory.getSymptoms(), encounterId);
-
-            MappingJacksonValue mappingJacksonValue= new MappingJacksonValue(createdMedicalHistory);
-            SimpleBeanPropertyFilter filter= SimpleBeanPropertyFilter.filterOutAllExcept("medicalHistoryId", "patient", "symptoms", "prescription");
-            FilterProvider filters= new SimpleFilterProvider().addFilter("MedicalHistoryFilter", filter);
-
-            mappingJacksonValue.setFilters(filters);
-
-            return mappingJacksonValue;
         }catch (RuntimeException exception){
             throw exception;
         }
+
+        MappingJacksonValue mappingJacksonValue= new MappingJacksonValue(createdMedicalHistory);
+        SimpleBeanPropertyFilter filter= SimpleBeanPropertyFilter.filterOutAllExcept("medicalHistoryId", "patient", "symptoms", "prescription");
+        FilterProvider filters= new SimpleFilterProvider().addFilter("MedicalHistoryFilter", filter);
+
+        mappingJacksonValue.setFilters(filters);
+
+        return mappingJacksonValue;
     }
 
 }
