@@ -32,11 +32,6 @@ public class Patient {
 
     private String contact;
 
-    @OneToMany(mappedBy = "patient")
-//    @JsonManagedReference(value = "Patient-MedicalHistory")
-    @JsonIgnore
-    private List<MedicalHistory> medicalHistoryList;
-
     @ManyToOne
     @JoinColumn(name= "field_worker_id")
 //    @JsonBackReference(value = "FieldWorker-Patient")
@@ -61,14 +56,13 @@ public class Patient {
     public Patient() {
     }
 
-    public Patient(int patientId, String name, String address, int age, String sex, String contact, List<MedicalHistory> medicalHistoryList, FieldWorker fieldWorker, PendingQueue pendingQueue, List<Encounter> encounterList, List<FollowUp> followUpList) {
+    public Patient(int patientId, String name, String address, int age, String sex, String contact, FieldWorker fieldWorker, PendingQueue pendingQueue, List<Encounter> encounterList, List<FollowUp> followUpList) {
         this.patientId = patientId;
         this.name = name;
         this.address = address;
         this.age = age;
         this.sex = sex;
         this.contact = contact;
-        this.medicalHistoryList = medicalHistoryList;
         this.fieldWorker = fieldWorker;
         this.pendingQueue = pendingQueue;
         this.encounterList = encounterList;
@@ -123,14 +117,6 @@ public class Patient {
         this.contact = contact;
     }
 
-    public List<MedicalHistory> getMedicalHistoryList() {
-        return medicalHistoryList;
-    }
-
-    public void setMedicalHistoryList(List<MedicalHistory> medicalHistoryList) {
-        this.medicalHistoryList = medicalHistoryList;
-    }
-
     public List<Encounter> getEncounterList() {
         return encounterList;
     }
@@ -172,7 +158,6 @@ public class Patient {
                 ", age=" + age +
                 ", sex='" + sex + '\'' +
                 ", contact='" + contact + '\'' +
-                ", medicalHistoryList=" + medicalHistoryList +
                 ", fieldWorker=" + fieldWorker +
                 ", pendingQueue=" + pendingQueue +
                 ", encounterList=" + encounterList +
