@@ -34,16 +34,14 @@ public class FieldWorkerService {
 
     public FieldWorker addFieldWorker(FieldWorker fieldWorker, String userId){
 
-        Supervisor supervisor;
+        Optional<Supervisor> supervisor = supervisorRepository.findSupervisorByUserId(userId);
 
-        supervisor = supervisorRepository.findSupervisorByUserId(userId);
-
-        if(supervisor==null)
+        if(supervisor.isEmpty())
         {
             throw new RuntimeException();
         }
 
-        fieldWorker.setSupervisor(supervisor);
+        fieldWorker.setSupervisor(supervisor.get());
         fieldWorker.setUserType("FieldWorker");
 
         try {
@@ -57,14 +55,14 @@ public class FieldWorkerService {
 
 
     public List<FieldWorker> getFieldWorkers(String userId){
-        Supervisor supervisor = supervisorRepository.findSupervisorByUserId(userId);
+        Optional<Supervisor> supervisor = supervisorRepository.findSupervisorByUserId(userId);
 
         if(supervisor==null)
         {
             throw new RuntimeException();
         }
 
-        List<FieldWorker> fieldWorkerList = fieldWorkerRepository.findFieldWorkerBySupervisor(supervisor);
+        List<FieldWorker> fieldWorkerList = fieldWorkerRepository.findFieldWorkerBySupervisor(supervisor.get());
 
         if(fieldWorkerList.size()==0)
         {

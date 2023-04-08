@@ -6,12 +6,13 @@ import com.healthcareapp.backend.Model.Patient;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface FollowUpRepository extends JpaRepository<FollowUp, Integer> {
 
     public List<FollowUp> findByDateAndPatient(String date, Patient patient);
 
-    public FollowUp findById(int id);
+    public Optional<FollowUp> findById(int id);
 
     public List<FollowUp> findByHospitalAndFlagIsFalse(Hospital hospital);
 

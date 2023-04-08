@@ -31,22 +31,22 @@ public class FollowUpController {
     }
 
 
-    @PutMapping("/updateFollowUp")
-    public ResponseEntity<FollowUp> updateFollowUp(@RequestBody FollowUp followUp){
+    @PutMapping("/updateFollowUpByFieldWorker")
+    public ResponseEntity<FollowUp> updateFollowUpByFieldWorker(@RequestBody FollowUp followUp){
         try{
-            followUpService.updateFollowUp(followUp);
+            followUpService.updateFollowUpByFieldWorker(followUp);
         }
-        catch (Exception e){
-            return ResponseEntity.status(404).build();
+        catch (Exception exception){
+            throw exception;
         }
         return ResponseEntity.of(Optional.of(followUp));
     }
 
-    @GetMapping("/getFollowUps/{supervisorId}")
-    public ResponseEntity<List<FollowUp>> getFollowUps(@PathVariable int supervisorId){
+    @GetMapping("/getFollowUps/{userId}")
+    public ResponseEntity<List<FollowUp>> getFollowUps(@PathVariable String userId){
         List<FollowUp> followUpList;
         try{
-            followUpList = followUpService.getAllFollowUp(supervisorId);
+            followUpList = followUpService.getAllFollowUp(userId);
         }catch (Exception e){
             return ResponseEntity.status(404).build();
         }

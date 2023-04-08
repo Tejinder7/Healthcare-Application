@@ -31,17 +31,17 @@ public class SupervisorService {
 
 
     public List<Patient> unAssignedPatients(String userId){
-        Supervisor supervisor = supervisorRepository.findSupervisorByUserId(userId);
+        Optional<Supervisor> supervisor = supervisorRepository.findSupervisorByUserId(userId);
 
         if(supervisor.isEmpty())
         {
-            throw new ResourceNotFoundException("No Supervisor with id: "+ supervisorId);
+            throw new ResourceNotFoundException("No Supervisor with id: "+ userId);
         }
 
         List<Hospital> hospitalList = supervisor.get().getHospitalList();
 
         if(hospitalList.isEmpty()){
-            throw new ResourceNotFoundException("No hospitals registered under supervisor with id: "+ supervisorId);
+            throw new ResourceNotFoundException("No hospitals registered under supervisor with id: "+ userId);
         }
 
         List<FollowUp> followUpList = new ArrayList<>();
