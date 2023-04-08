@@ -30,12 +30,7 @@ public class AdminService {
     public Admin addAdmin(Admin admin, int hospId) throws RuntimeException{
         Hospital hospital;
 
-        try{
-            hospital= hospitalService.getHospitalById(hospId);
-        }
-        catch (RuntimeException exception){
-            throw exception;
-        }
+        hospital= hospitalService.getHospitalById(hospId);
 
         admin.setHospital(hospital);
         admin.setUserType("Admin");
@@ -55,17 +50,13 @@ public class AdminService {
         return updatedAdmin;
     }
 
-    public List<Object> getAllHospitalUsers(int hospitalId){
+    public List<Object> getAllHospitalUsers(int hospitalId) throws RuntimeException{
         List<Doctor> doctorList;
         List<FrontDesk> frontDeskList;
         Hospital hospital;
 
-        try{
-            hospital = hospitalService.getHospitalById(hospitalId);
-        }
-        catch (ResourceNotFoundException exception){
-            throw exception;
-        }
+        hospital = hospitalService.getHospitalById(hospitalId);
+
         doctorList = doctorService.getAllDoctorsByHospital(hospital);
         frontDeskList = frontDeskService.getAllFrontDeskByHospital(hospital);
 
@@ -73,6 +64,10 @@ public class AdminService {
 
         userList.addAll(doctorList);
         userList.addAll(frontDeskList);
+
+        if(userList.isEmpty()){
+            throw new ResourceNotFoundException("No Doctor or Front Desk registered under hospital with id: "+ hospitalId);
+        }
 
         return userList;
     }

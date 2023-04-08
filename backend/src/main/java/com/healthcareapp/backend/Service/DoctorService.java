@@ -15,43 +15,28 @@ import java.util.Optional;
 @Component
 public class DoctorService {
     private DoctorRepository doctorRepository;
+    private HospitalService hospitalService;
 
-    private HospitalRepository hospitalRepository;
-
-    public DoctorService(DoctorRepository doctorRepository, HospitalRepository hospitalRepository) {
+    public DoctorService(DoctorRepository doctorRepository, HospitalService hospitalService) {
         this.doctorRepository = doctorRepository;
-        this.hospitalRepository = hospitalRepository;
+        this.hospitalService = hospitalService;
     }
 
-    public Doctor getDoctorByAuthId(int authId){
-        Optional<Doctor> doctor = doctorRepository.findById(authId);
+    public Doctor getDoctorById(int doctorId){
+        Optional<Doctor> doctor = doctorRepository.findById(doctorId);
 
         if(doctor.isEmpty()){
-            throw new ResourceNotFoundException("No doctor with id: "+ authId+ " found");
+            throw new ResourceNotFoundException("No doctor with id: "+ doctorId+ " found");
         }
 
         return doctor.get();
     }
 
-    public Hospital getHospitalByDocId(int authId){
-        Doctor doctor = getDoctorByAuthId(authId);
-        Hospital hospital = doctor.getHospital();
-
-        if(hospital == null){
-            throw new RuntimeException();
-        }
-        return hospital;
-    }
-
-
     public Doctor addDoctor(Doctor doctor, int hospitalId) throws RuntimeException{
 
-        Optional<Hospital> hospital = hospitalRepository.findById(hospitalId);
-        if(hospital == null){
-            throw new ResourceNotFoundException("No Hospital found for Hospital Id: "+ hospitalId);
-        }
+        Hospital hospital = hospitalService.getHospitalById(hospitalId);
 
-        doctor.setHospital(hospital.get());
+        doctor.setHospital(hospital);
         doctor.setUserType("Doctor");
 
         Doctor savedDoctor= doctorRepository.save(doctor);

@@ -29,12 +29,12 @@ public class EncounterService {
         this.pendingQueueService = pendingQueueService;
     }
 
-    public Encounter addEncounter(int patientId, int authId) throws RuntimeException{
+    public Encounter addEncounter(int patientId, int doctorId) throws RuntimeException{
         Encounter encounter = new Encounter();
 
         Patient patient= patientServices.getPatientById(patientId);
 
-        Doctor doctor = doctorServices.getDoctorByAuthId(authId);
+        Doctor doctor = doctorServices.getDoctorById(doctorId);
 
         encounter.setPatient(patient);
         encounter.setDoctor(doctor);
