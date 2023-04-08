@@ -3,30 +3,26 @@ package com.healthcareapp.backend.Service;
 import com.healthcareapp.backend.Exception.ResourceNotFoundException;
 import com.healthcareapp.backend.Model.Doctor;
 import com.healthcareapp.backend.Model.Encounter;
-import com.healthcareapp.backend.Model.MedicalHistory;
 import com.healthcareapp.backend.Model.Patient;
 import com.healthcareapp.backend.Repository.EncounterRepository;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @Component
 public class EncounterService {
-    private MedicalHistoryService medicalHistoryService;
     private DoctorService doctorServices;
     private PatientService patientServices;
 
     private PendingQueueService pendingQueueService;
     private EncounterRepository encounterRepository;
 
-    public EncounterService(MedicalHistoryService medicalHistoryService, DoctorService doctorServices, PatientService patientServices, EncounterRepository encounterRepository, PendingQueueService pendingQueueService) {
-        this.medicalHistoryService = medicalHistoryService;
+    public EncounterService(DoctorService doctorServices, PatientService patientServices, PendingQueueService pendingQueueService, EncounterRepository encounterRepository) {
         this.doctorServices = doctorServices;
         this.patientServices = patientServices;
-        this.encounterRepository = encounterRepository;
         this.pendingQueueService = pendingQueueService;
+        this.encounterRepository = encounterRepository;
     }
 
     public Encounter addEncounter(int patientId, int doctorId) throws RuntimeException{
@@ -34,7 +30,7 @@ public class EncounterService {
 
         Patient patient= patientServices.getPatientById(patientId);
 
-        Doctor doctor = doctorServices.getDoctorById(doctorId);
+        Doctor doctor = doctorServices.getDoctorByAuthId(doctorId);
 
         encounter.setPatient(patient);
         encounter.setDoctor(doctor);
@@ -47,18 +43,17 @@ public class EncounterService {
 
         return encounter;
     }
-    public MedicalHistory saveEncounter(String prescription, String symptoms, int encounterId) throws RuntimeException{
-        Encounter encounter = getEncounterById(encounterId);
 
-        Patient patient = encounter.getPatient();
-        MedicalHistory medicalHistory = medicalHistoryService.addMedicalHistory(patient, encounter, prescription, symptoms);
+    public Encounter updateEncounter(Encounter encounter) throws RuntimeException{
+        Optional<Encounter> updatedEncounter= encounterRepository.findById(encounter.getEncounterId());
 
-        encounter.setMedicalHistory(medicalHistory);
-        encounter.setFlag(true);
+        if(updatedEncounter.isEmpty()){
+            throw new ResourceNotFoundException("No encounter with id: "+ encounter.getEncounterId()+" found");
+        }
 
         encounterRepository.save(encounter);
 
-        return medicalHistory;
+        return encounter;
     }
 
     public Encounter getEncounterById(int encounterId){
@@ -77,6 +72,18 @@ public class EncounterService {
 
         if(encounterList.isEmpty()){
             throw new ResourceNotFoundException("No encounters for the DoctorId: "+ doctor.getAuthId()+ " found");
+        }
+
+        return encounterList;
+    }
+
+    public List<Encounter> getEncountersByPatientId(int patientId) throws RuntimeException{
+        Patient patient= patientServices.getPatientById(patientId);
+
+        List<Encounter> encounterList= encounterRepository.findByPatient(patient);
+
+        if(encounterList.isEmpty()){
+            throw new ResourceNotFoundException("No Medical History corresponding to the patient with id: "+ patientId+ " found");
         }
 
         return encounterList;

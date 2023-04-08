@@ -31,10 +31,9 @@ public class Encounter {
     @JsonIgnore
     private List<FollowUp> followUpList;
 
-    @OneToOne
-    @JoinColumn(name= "medicalhistory_id", unique = true)
-//    @JsonManagedReference(value = "Encounter-MH")
-    private MedicalHistory medicalHistory;
+    private String prescription;
+
+    private String symptoms;
 
     @ManyToOne
     @JoinColumn(name= "patient_id")
@@ -44,13 +43,14 @@ public class Encounter {
     public Encounter() {
     }
 
-    public Encounter(int encounterId, Doctor doctor, List<FollowUp> followUpList, MedicalHistory medicalHistory, Patient patient, Boolean flag) {
+    public Encounter(int encounterId, Boolean flag, Doctor doctor, List<FollowUp> followUpList, String prescription, String symptoms, Patient patient) {
         this.encounterId = encounterId;
+        this.flag = flag;
         this.doctor = doctor;
         this.followUpList = followUpList;
-        this.medicalHistory = medicalHistory;
+        this.prescription = prescription;
+        this.symptoms = symptoms;
         this.patient = patient;
-        this.flag = flag;
     }
 
     public int getEncounterId() {
@@ -77,12 +77,20 @@ public class Encounter {
         this.followUpList = followUpList;
     }
 
-    public MedicalHistory getMedicalHistory() {
-        return medicalHistory;
+    public String getPrescription() {
+        return prescription;
     }
 
-    public void setMedicalHistory(MedicalHistory medicalHistory) {
-        this.medicalHistory = medicalHistory;
+    public void setPrescription(String prescription) {
+        this.prescription = prescription;
+    }
+
+    public String getSymptoms() {
+        return symptoms;
+    }
+
+    public void setSymptoms(String symptoms) {
+        this.symptoms = symptoms;
     }
 
     public Patient getPatient() {
@@ -105,11 +113,12 @@ public class Encounter {
     public String toString() {
         return "Encounter{" +
                 "encounterId=" + encounterId +
+                ", flag=" + flag +
                 ", doctor=" + doctor +
                 ", followUpList=" + followUpList +
-                ", medicalHistory=" + medicalHistory +
+                ", prescription='" + prescription + '\'' +
+                ", symptoms='" + symptoms + '\'' +
                 ", patient=" + patient +
-                ", flag=" + flag +
                 '}';
     }
 }
