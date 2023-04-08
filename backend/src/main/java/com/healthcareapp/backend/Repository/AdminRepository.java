@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface AdminRepository extends JpaRepository<Admin, Integer> {
     public Admin findAdminByAuthId(int authId);
+
+    public Admin findAdminByUserId(String userId);
 }

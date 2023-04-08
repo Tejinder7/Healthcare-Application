@@ -1,10 +1,8 @@
 package com.healthcareapp.backend.Service;
 
 import com.healthcareapp.backend.Exception.ResourceNotFoundException;
-import com.healthcareapp.backend.Model.Doctor;
-import com.healthcareapp.backend.Model.Encounter;
-import com.healthcareapp.backend.Model.FollowUp;
-import com.healthcareapp.backend.Model.Hospital;
+import com.healthcareapp.backend.Model.*;
+import com.healthcareapp.backend.Repository.AdminRepository;
 import com.healthcareapp.backend.Repository.DoctorRepository;
 import com.healthcareapp.backend.Repository.HospitalRepository;
 import org.springframework.stereotype.Component;
@@ -18,9 +16,12 @@ public class DoctorService {
 
     private HospitalRepository hospitalRepository;
 
-    public DoctorService(DoctorRepository doctorRepository, HospitalRepository hospitalRepository) {
+    private AdminRepository adminRepository;
+
+    public DoctorService(DoctorRepository doctorRepository, HospitalRepository hospitalRepository, AdminRepository adminRepository) {
         this.doctorRepository = doctorRepository;
         this.hospitalRepository = hospitalRepository;
+        this.adminRepository = adminRepository;
     }
 
     public Doctor getDoctorByAuthId(int authId){
@@ -44,11 +45,12 @@ public class DoctorService {
     }
 
 
-    public Doctor addDoctor(Doctor doctor, int hospitalId) throws RuntimeException{
+    public Doctor addDoctor(Doctor doctor, String userId) throws RuntimeException{
 
-        Optional<Hospital> hospital = hospitalRepository.findById(hospitalId);
+        Admin admin =  adminRepository.findAdminByUserId(userId);
+        Optional<Hospital> hospital = hospitalRepository.findById(admin.getHospital().getHospId());
         if(hospital == null){
-            throw new ResourceNotFoundException("No Hospital found for Hospital Id: "+ hospitalId);
+            throw new ResourceNotFoundException("No Hospital found for Hospital Id: "+ hospital.get().getHospId());
         }
 
         doctor.setHospital(hospital.get());

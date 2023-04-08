@@ -13,12 +13,12 @@ public class DoctorController {
         this.doctorService = doctorService;
     }
 
-    @PostMapping("/addDoctor/{hospitalId}")
-    public ResponseEntity<Doctor> addDoctor(@RequestBody Doctor doctor, @PathVariable int hospitalId){
+    @PostMapping("/addDoctor/{userId}")
+    public ResponseEntity<Doctor> addDoctor(@RequestBody Doctor doctor, @PathVariable String userId){
         Doctor savedDoctor;
 
         try{
-            savedDoctor = doctorService.addDoctor(doctor, hospitalId);
+            savedDoctor = doctorService.addDoctor(doctor, userId);
         }
         catch (RuntimeException exception){
             throw exception;
