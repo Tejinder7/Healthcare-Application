@@ -1,9 +1,7 @@
 package com.healthcareapp.backend.Service;
 
 import com.healthcareapp.backend.Exception.ResourceNotFoundException;
-import com.healthcareapp.backend.Model.Hospital;
-import com.healthcareapp.backend.Model.Patient;
-import com.healthcareapp.backend.Model.PendingQueue;
+import com.healthcareapp.backend.Model.*;
 import com.healthcareapp.backend.Repository.PendingQueueRepository;
 import org.springframework.stereotype.Component;
 
@@ -16,23 +14,28 @@ public class PendingQueueService {
     private PendingQueueRepository pendingQueueRepository;
     private PatientService patientService;
     private HospitalService hospitalService;
+
+    private FrontDeskService frontDeskService;
     private DoctorService doctorService;
 
-    public PendingQueueService(PendingQueueRepository pendingQueueRepository, PatientService patientService, HospitalService hospitalService, DoctorService doctorService) {
+    public PendingQueueService(FrontDeskService frontDeskService, PendingQueueRepository pendingQueueRepository, PatientService patientService, HospitalService hospitalService, DoctorService doctorService) {
+        this.frontDeskService = frontDeskService;
         this.pendingQueueRepository = pendingQueueRepository;
         this.patientService = patientService;
         this.hospitalService = hospitalService;
         this.doctorService = doctorService;
     }
 
-    public PendingQueue addPendingQueue(int hospId, int pid){
+    public PendingQueue addPendingQueue(String userId, int pid){
 
         PendingQueue pendingQueue = new PendingQueue();
 
         Patient patient = patientService.getPatientById(pid);
         pendingQueue.setPatient(patient);
 
-        Hospital hospital = hospitalService.getHospitalById(hospId);
+        FrontDesk frontDesk = frontDeskService.getFrontDeskByUserId(userId);
+
+        Hospital hospital = hospitalService.getHospitalById(frontDesk.getHospital().getHospId());
         pendingQueue.setHospital(hospital);
 
         try {
@@ -49,8 +52,11 @@ public class PendingQueueService {
         return pendingQueue;
     }
 
-    public List<PendingQueue> getPendingQueueByDocId(int hospId){
-        Hospital hospital = hospitalService.getHospitalById(hospId);
+    public List<PendingQueue> getPendingQueueByDocId(String userId){
+
+        FrontDesk frontDesk = frontDeskService.getFrontDeskByUserId(userId);
+
+        Hospital hospital = hospitalService.getHospitalById(frontDesk.getHospital().getHospId());
 
         List<PendingQueue> pendingQueueList = pendingQueueRepository.findPendingQueueByHospital(hospital);
 

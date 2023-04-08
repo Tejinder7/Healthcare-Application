@@ -17,26 +17,26 @@ public class FieldWorkerController {
         this.fieldWorkerService = fieldWorkerService;
     }
 
-    @PostMapping("/addFieldWorker/{supervisorId}")
-    public ResponseEntity<FieldWorker> addFieldWorker(@RequestBody FieldWorker fieldWorker, @PathVariable int supervisorId) {
+    @PostMapping("/addFieldWorker/{userId}")
+    public ResponseEntity<FieldWorker> addFieldWorker(@RequestBody FieldWorker fieldWorker, @PathVariable String userId) {
 
         try {
-            fieldWorker = fieldWorkerService.addFieldWorker(fieldWorker, supervisorId);
+            fieldWorker = fieldWorkerService.addFieldWorker(fieldWorker, userId);
         }catch (Exception exception){
             throw exception;
         }
         return ResponseEntity.of(Optional.of(fieldWorker));
     }
 
-    @GetMapping("/getFieldWorkers/{supervisorId}")
-    public ResponseEntity<List<FieldWorker>> getFieldWorkers(@PathVariable int supervisorId){
+    @GetMapping("/getFieldWorkers/{userId}")
+    public ResponseEntity<List<FieldWorker>> getFieldWorkers(@PathVariable String userId){
         List<FieldWorker> fieldWorkerList;
 
         try{
-            fieldWorkerList = fieldWorkerService.getFieldWorkers(supervisorId);
+            fieldWorkerList = fieldWorkerService.getFieldWorkers(userId);
         }
         catch (Exception exception){
-            throw new ResourceNotFoundException("No Field Workers under the SupervisorId: "+ supervisorId);
+            throw new ResourceNotFoundException("No Field Workers under the SupervisorId: "+ userId);
         }
         return ResponseEntity.ok(fieldWorkerList);
     }

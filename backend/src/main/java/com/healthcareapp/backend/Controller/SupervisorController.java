@@ -34,11 +34,11 @@ public class SupervisorController {
         return ResponseEntity.of(Optional.of(supervisor1));
     }
 
-    @GetMapping("/unassignedPatients/{supId}")
-    public ResponseEntity<List<Patient>> unassignedPatients(@PathVariable int supId){
+    @GetMapping("/unassignedPatients/{userId}")
+    public ResponseEntity<List<Patient>> unassignedPatients(@PathVariable String userId){
         List<Patient> patientList = new ArrayList<>();
         try{
-            patientList = supervisorService.unAssignedPatients(supId);
+            patientList = supervisorService.unAssignedPatients(userId);
         }catch (Exception e){
             return ResponseEntity.status(500).build();
         }

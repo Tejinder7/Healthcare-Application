@@ -12,4 +12,6 @@ public interface FrontDeskRepository extends JpaRepository<FrontDesk, Integer> {
 
     public FrontDesk findFrontDeskByAuthId(int id);
 
+    public FrontDesk findFrontDeskByUserId(String userId);
+
 }

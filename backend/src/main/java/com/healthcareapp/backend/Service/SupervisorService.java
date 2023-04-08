@@ -42,8 +42,8 @@ public class SupervisorService {
         }
     }
 
-    public List<Patient> unAssignedPatients(int supId){
-        Supervisor supervisor = supervisorRepository.findSupervisorByAuthId(supId);
+    public List<Patient> unAssignedPatients(String userId){
+        Supervisor supervisor = supervisorRepository.findSupervisorByUserId(userId);
 
         if(supervisor==null)
         {

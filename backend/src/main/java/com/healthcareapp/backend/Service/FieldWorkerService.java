@@ -32,11 +32,11 @@ public class FieldWorkerService {
     }
 
 
-    public FieldWorker addFieldWorker(FieldWorker fieldWorker, int authId){
+    public FieldWorker addFieldWorker(FieldWorker fieldWorker, String userId){
 
         Supervisor supervisor;
 
-        supervisor = supervisorRepository.findSupervisorByAuthId(authId);
+        supervisor = supervisorRepository.findSupervisorByUserId(userId);
 
         if(supervisor==null)
         {
@@ -56,8 +56,8 @@ public class FieldWorkerService {
 
 
 
-    public List<FieldWorker> getFieldWorkers(int supervisorId){
-        Supervisor supervisor = supervisorRepository.findSupervisorByAuthId(supervisorId);
+    public List<FieldWorker> getFieldWorkers(String userId){
+        Supervisor supervisor = supervisorRepository.findSupervisorByUserId(userId);
 
         if(supervisor==null)
         {
