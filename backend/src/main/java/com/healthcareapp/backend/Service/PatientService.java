@@ -53,9 +53,12 @@ public class PatientService {
         return patientsWithGivenNameList;
     }
 
-    public Patient getPatientByFieldWorker(FieldWorker fieldWorker){
-        Patient patient = patientRepository.findPatientByFieldWorker(fieldWorker);
-        return patient;
+    public List<Patient> getPatientByFieldWorker(FieldWorker fieldWorker){
+        List<Patient> patientList;
+        patientList = patientRepository.findPatientByFieldWorker(fieldWorker);
+        if(patientList.size() == 0)
+            return new ArrayList<Patient>();
+        return patientList;
     }
 
     public Patient updatePatient(Patient patient){

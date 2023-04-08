@@ -118,9 +118,12 @@ public class FollowUpService {
     public List<FollowUp> getFollowUpsByFieldWorker(int fieldWorkerId){
 
         FieldWorker fieldWorker = fieldWorkerService.getFieldWorkerById(fieldWorkerId);
-        Patient patient = patientService.getPatientByFieldWorker(fieldWorker);
-        List<FollowUp> followUpList = followUpRepository.findByPatient(patient);
-
+        List<Patient> patientList = patientService.getPatientByFieldWorker(fieldWorker);
+        List<FollowUp> followUpList = new ArrayList<>();
+        for(int i=0; i<patientList.size(); i++){
+            List<FollowUp> followUpListForPatient = followUpRepository.findByPatient(patientList.get(i));
+            followUpList.addAll(followUpListForPatient);
+        }
         return followUpList;
     }
 }

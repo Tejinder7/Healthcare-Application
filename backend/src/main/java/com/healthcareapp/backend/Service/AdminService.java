@@ -77,9 +77,24 @@ public class AdminService {
         return userList;
     }
 
-    public List<Admin> getListOfAdmins(){
-        List<Admin> adminList= adminRepository.findAll();
+//    public List<Admin> getListOfAdmins(){
+//        List<Admin> adminList= adminRepository.findAll();
+//
+//        return adminList;
+//    }
 
-        return adminList;
+
+    public List<Hospital> getHospitalsWhereAdminNotAssigned(){
+        List<Hospital> hospitalList = hospitalService.getAllHospitals();
+        List<Admin> adminList = adminRepository.findAll();
+
+        List<Hospital> hospitalAssignedList = new ArrayList<>();
+
+        adminList.forEach(admin -> {hospitalAssignedList.add(admin.getHospital());});
+
+        List<Hospital> hospitalNotAssignedList = new ArrayList<>(hospitalList);
+        hospitalNotAssignedList.removeAll(hospitalAssignedList);
+
+        return hospitalNotAssignedList;
     }
 }
