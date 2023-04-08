@@ -1,10 +1,7 @@
 package com.healthcareapp.backend.Service;
 
 import com.healthcareapp.backend.Exception.ResourceNotFoundException;
-import com.healthcareapp.backend.Model.FollowUp;
-import com.healthcareapp.backend.Model.Hospital;
-import com.healthcareapp.backend.Model.Patient;
-import com.healthcareapp.backend.Model.Supervisor;
+import com.healthcareapp.backend.Model.*;
 import com.healthcareapp.backend.Repository.SupervisorRepository;
 import org.springframework.stereotype.Component;
 
@@ -21,36 +18,30 @@ public class SupervisorService {
         this.supervisorRepository = supervisorRepository;
     }
 
-    public Supervisor addSupervisor(Supervisor supervisor){
-        try{
-            supervisor.setUserType("Supervisor");
-            supervisorRepository.save(supervisor);
-            return supervisor;
-        }
-        catch (Exception e){
-            throw new RuntimeException();
-        }
+    public Supervisor addSupervisor(Supervisor supervisor) throws RuntimeException{
+        supervisor.setUserType("Supervisor");
+        supervisorRepository.save(supervisor);
+        return supervisor;
     }
 
-    public Supervisor updateSupervisor(Supervisor supervisor){
-        try {
-            supervisorRepository.save(supervisor);
-            return supervisor;
-        }
-        catch (Exception e){
-            throw new RuntimeException();
-        }
+    public Supervisor updateSupervisor(Supervisor supervisor) throws RuntimeException{
+        supervisorRepository.save(supervisor);
+        return supervisor;
     }
 
-    public List<Patient> unAssignedPatients(int supId){
-        Supervisor supervisor = supervisorRepository.findSupervisorByAuthId(supId);
+    public List<Patient> unAssignedPatients(int supervisorId){
+        Optional<Supervisor> supervisor = supervisorRepository.findById(supervisorId);
 
-        if(supervisor==null)
+        if(supervisor.isEmpty())
         {
-            throw new RuntimeException();
+            throw new ResourceNotFoundException("No Supervisor with id: "+ supervisorId);
         }
 
-        List<Hospital> hospitalList = supervisor.getHospitalList();
+        List<Hospital> hospitalList = supervisor.get().getHospitalList();
+
+        if(hospitalList.isEmpty()){
+            throw new ResourceNotFoundException("No hospitals registered under supervisor with id: "+ supervisorId);
+        }
 
         List<FollowUp> followUpList = new ArrayList<>();
 
@@ -75,6 +66,12 @@ public class SupervisorService {
         }
 
         return supervisor.get();
+    }
+
+    public List<Supervisor> getListOfSupervisors(){
+        List<Supervisor> supervisorList= supervisorRepository.findAll();
+
+        return supervisorList;
     }
 }
 

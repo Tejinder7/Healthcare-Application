@@ -1,11 +1,13 @@
 package com.healthcareapp.backend.Service;
 
+import com.healthcareapp.backend.Exception.ResourceNotFoundException;
 import com.healthcareapp.backend.Model.*;
 import com.healthcareapp.backend.Repository.FieldWorkerRepository;
 import com.healthcareapp.backend.Repository.FollowUpRepository;
 import com.healthcareapp.backend.Repository.SupervisorRepository;
 import org.springframework.stereotype.Component;
 
+import javax.print.Doc;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -19,13 +21,16 @@ public class FollowUpService {
     private FieldWorkerService fieldWorkerService;
     private PatientService patientService;
 
-    public FollowUpService(FollowUpRepository followUpRepository, FieldWorkerRepository fieldWorkerRepository, SupervisorRepository supervisorRepository, EncounterService encounterService, FieldWorkerService fieldWorkerService, PatientService patientService) {
+    private DoctorService doctorService;
+
+    public FollowUpService(FollowUpRepository followUpRepository, FieldWorkerRepository fieldWorkerRepository, SupervisorRepository supervisorRepository, EncounterService encounterService, FieldWorkerService fieldWorkerService, PatientService patientService, DoctorService doctorService) {
         this.followUpRepository = followUpRepository;
         this.fieldWorkerRepository = fieldWorkerRepository;
         this.supervisorRepository = supervisorRepository;
         this.encounterService = encounterService;
         this.fieldWorkerService = fieldWorkerService;
         this.patientService = patientService;
+        this.doctorService = doctorService;
     }
 
     public List<FollowUp> getCurrentDateFollowUps(String date, int fieldWorkerAuthId){
@@ -124,6 +129,22 @@ public class FollowUpService {
             List<FollowUp> followUpListForPatient = followUpRepository.findByPatient(patientList.get(i));
             followUpList.addAll(followUpListForPatient);
         }
+        return followUpList;
+    }
+
+    public List<FollowUp> getAllFollowUpsAssignedByDoctor(String doctorUserId) throws RuntimeException{
+        Doctor doctor= doctorService.getDoctorByUserId(doctorUserId);
+
+        List<Encounter> encounterList= encounterService.getEncounterByDoctor(doctor);
+
+        List<FollowUp> followUpList= new ArrayList<>();
+
+        encounterList.forEach(encounter -> followUpList.addAll(encounter.getFollowUpList()));
+
+        if(followUpList.isEmpty()){
+            throw new ResourceNotFoundException("No Follow ups assigned to any patient till now");
+        }
+
         return followUpList;
     }
 }
