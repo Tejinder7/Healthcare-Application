@@ -18,12 +18,10 @@ public class HospitalService {
 
     private SupervisorService supervisorService;
 
-    private AdminService adminService;
 
-    public HospitalService(HospitalRepository hospitalRepository, SupervisorService supervisorService, AdminService adminService) {
+    public HospitalService(HospitalRepository hospitalRepository, SupervisorService supervisorService) {
         this.hospitalRepository = hospitalRepository;
         this.supervisorService = supervisorService;
-        this.adminService = adminService;
     }
 
     public Hospital getHospitalById(int id){
@@ -46,17 +44,9 @@ public class HospitalService {
         return savedHospital;
     }
 
-    public List<Hospital> getHospitalsWhereAdminNotAssigned(){
-        List<Hospital> hospitalList = hospitalRepository.findAll();
-        List<Admin> adminList = adminService.getListOfAdmins();
-
-        List<Hospital> hospitalAssignedList = new ArrayList<>();
-
-        adminList.forEach(admin -> {hospitalAssignedList.add(admin.getHospital());});
-
-        List<Hospital> hospitalNotAssignedList = new ArrayList<>(hospitalList);
-        hospitalNotAssignedList.removeAll(hospitalAssignedList);
-
-        return hospitalNotAssignedList;
+    public List<Hospital> getAllHospitals() throws RuntimeException{
+        List<Hospital> hospitalList = new ArrayList<>();
+        hospitalList = hospitalRepository.findAll();
+        return hospitalList;
     }
 }

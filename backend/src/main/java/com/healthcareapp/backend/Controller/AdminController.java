@@ -1,6 +1,7 @@
 package com.healthcareapp.backend.Controller;
 
 import com.healthcareapp.backend.Model.Admin;
+import com.healthcareapp.backend.Model.Hospital;
 import com.healthcareapp.backend.Service.AdminService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -54,5 +55,14 @@ public class AdminController {
             throw exception;
         }
         return userList;
+    }
+
+    @GetMapping("/hospitalsWithNoAdmins")
+    public List<Hospital> getHospitalsWithNoAdmins(){
+        List<Hospital> hospitalList;
+
+        hospitalList = adminService.getHospitalsWhereAdminNotAssigned();
+
+        return hospitalList;
     }
 }

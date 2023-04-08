@@ -40,7 +40,6 @@ public class FollowUp {
 //    @JsonBackReference("Patient-FollowUp")
     private Patient patient;
 
-
     public FollowUp() {
     }
 

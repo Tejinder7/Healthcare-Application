@@ -1,6 +1,7 @@
 package com.healthcareapp.backend.Controller;
 
 import com.healthcareapp.backend.Model.Hospital;
+import com.healthcareapp.backend.Service.AdminService;
 import com.healthcareapp.backend.Service.HospitalService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -30,12 +31,4 @@ public class HospitalController {
         return ResponseEntity.of(Optional.of(savedHospital));
     }
 
-    @GetMapping("/hospitalsWithNoAdmins")
-    public List<Hospital> getHospitalsWithNoAdmins(){
-        List<Hospital> hospitalList;
-
-        hospitalList = hospitalService.getHospitalsWhereAdminNotAssigned();
-
-        return hospitalList;
-    }
 }
