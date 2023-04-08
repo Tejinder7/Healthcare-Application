@@ -53,41 +53,41 @@ public class FollowUpService {
     }
 
 
-    public FollowUp updateFollowUp(FollowUp followUp){
+    public FollowUp updateFollowUpByFieldWorker(FollowUp followUp){
 
         int followUpId = followUp.getFollowUpId();
 
-        FollowUp validFollowUp = followUpRepository.findById(followUpId);
+        Optional<FollowUp> validFollowUp = followUpRepository.findById(followUpId);
 
-        if(validFollowUp==null)
+        if(validFollowUp.isEmpty())
         {
-            throw new RuntimeException();
+            throw new ResourceNotFoundException("Follow Up not found");
         }
 
-        validFollowUp.setFlag(followUp.isFlag());
-        validFollowUp.setLastSyncDate(followUp.getLastSyncDate());
-        validFollowUp.setRemarks(followUp.getRemarks());
+        validFollowUp.get().setFlag(followUp.isFlag());
+        validFollowUp.get().setLastSyncDate(followUp.getLastSyncDate());
+        validFollowUp.get().setFieldWorkerRemarks(followUp.getFieldWorkerRemarks());
 
         try {
-            validFollowUp = followUpRepository.save(validFollowUp);
+            followUpRepository.save(validFollowUp.get());
         }catch (Exception e){
-            throw new RuntimeException();
+            throw new RuntimeException("Update not saved");
         }
 
-        return validFollowUp;
+        return validFollowUp.get();
     }
 
-    public List<FollowUp> getAllFollowUp(int authId){
-        Supervisor supervisor = supervisorRepository.findSupervisorByAuthId(authId);
+    public List<FollowUp> getAllFollowUp(String userId){
+        Optional<Supervisor> supervisor = supervisorRepository.findSupervisorByUserId(userId);
 
-        if(supervisor==null)
+        if(supervisor.isEmpty())
         {
-            throw new RuntimeException();
+            throw new ResourceNotFoundException("No supervisor with userId : " + userId + " found");
         }
 
         List<FollowUp> followUpList = new ArrayList<FollowUp>();
 
-        List<Hospital> hospitalList = supervisor.getHospitalList();
+        List<Hospital> hospitalList = supervisor.get().getHospitalList();
 
         //System.out.printf(hospitalList.toString());
 

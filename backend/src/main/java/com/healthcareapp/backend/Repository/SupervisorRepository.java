@@ -11,5 +11,5 @@ public interface SupervisorRepository extends JpaRepository<Supervisor, Integer>
 
     public Optional<Supervisor> findByAddress(String address);
 
-    public Supervisor findSupervisorByUserId(String userId);
+    public Optional<Supervisor> findSupervisorByUserId(String userId);
 }
