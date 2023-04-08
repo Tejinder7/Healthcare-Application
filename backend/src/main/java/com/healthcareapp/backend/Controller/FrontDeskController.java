@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 
 @RestController
-@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class FrontDeskController {
     private FrontDeskService frontDeskService;
 
@@ -16,11 +15,11 @@ public class FrontDeskController {
         this.frontDeskService = frontDeskServices;
     }
 
-    @PostMapping("/addFrontDesk/{hospitalId}")
-    public ResponseEntity<FrontDesk> addFrontDesk(@RequestBody FrontDesk frontDesk, @PathVariable int hospitalId) {
+    @PostMapping("/addFrontDesk/{userId}")
+    public ResponseEntity<FrontDesk> addFrontDesk(@RequestBody FrontDesk frontDesk, @PathVariable String userId) {
         FrontDesk savedFrontDesk;
         try {
-            savedFrontDesk = frontDeskService.addFrontDesk(frontDesk, hospitalId);
+            savedFrontDesk = frontDeskService.addFrontDesk(frontDesk, userId);
         }
         catch (RuntimeException exception){
             throw exception;

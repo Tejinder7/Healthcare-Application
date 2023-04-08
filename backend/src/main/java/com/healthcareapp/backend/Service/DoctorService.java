@@ -1,10 +1,8 @@
 package com.healthcareapp.backend.Service;
 
 import com.healthcareapp.backend.Exception.ResourceNotFoundException;
-import com.healthcareapp.backend.Model.Doctor;
-import com.healthcareapp.backend.Model.Encounter;
-import com.healthcareapp.backend.Model.FollowUp;
-import com.healthcareapp.backend.Model.Hospital;
+import com.healthcareapp.backend.Model.*;
+import com.healthcareapp.backend.Repository.AdminRepository;
 import com.healthcareapp.backend.Repository.DoctorRepository;
 import com.healthcareapp.backend.Repository.HospitalRepository;
 import org.springframework.stereotype.Component;
@@ -15,28 +13,47 @@ import java.util.Optional;
 @Component
 public class DoctorService {
     private DoctorRepository doctorRepository;
-    private HospitalService hospitalService;
 
-    public DoctorService(DoctorRepository doctorRepository, HospitalService hospitalService) {
+    private HospitalRepository hospitalRepository;
+
+    private AdminRepository adminRepository;
+
+    public DoctorService(DoctorRepository doctorRepository, HospitalRepository hospitalRepository, AdminRepository adminRepository) {
         this.doctorRepository = doctorRepository;
-        this.hospitalService = hospitalService;
+        this.hospitalRepository = hospitalRepository;
+        this.adminRepository = adminRepository;
     }
 
-    public Doctor getDoctorById(int doctorId){
-        Optional<Doctor> doctor = doctorRepository.findById(doctorId);
+    public Doctor getDoctorByAuthId(int authId){
+        Optional<Doctor> doctor = doctorRepository.findById(authId);
 
         if(doctor.isEmpty()){
-            throw new ResourceNotFoundException("No doctor with id: "+ doctorId+ " found");
+            throw new ResourceNotFoundException("No doctor with id: "+ authId+ " found");
         }
 
         return doctor.get();
     }
 
-    public Doctor addDoctor(Doctor doctor, int hospitalId) throws RuntimeException{
+    public Hospital getHospitalByDocId(int authId){
+        Doctor doctor = getDoctorByAuthId(authId);
+        Hospital hospital = doctor.getHospital();
 
-        Hospital hospital = hospitalService.getHospitalById(hospitalId);
+        if(hospital == null){
+            throw new RuntimeException();
+        }
+        return hospital;
+    }
 
-        doctor.setHospital(hospital);
+
+    public Doctor addDoctor(Doctor doctor, String userId) throws RuntimeException{
+
+        Admin admin =  adminRepository.findAdminByUserId(userId);
+        Optional<Hospital> hospital = hospitalRepository.findById(admin.getHospital().getHospId());
+        if(hospital == null){
+            throw new ResourceNotFoundException("No Hospital found for Hospital Id: "+ hospital.get().getHospId());
+        }
+
+        doctor.setHospital(hospital.get());
         doctor.setUserType("Doctor");
 
         Doctor savedDoctor= doctorRepository.save(doctor);

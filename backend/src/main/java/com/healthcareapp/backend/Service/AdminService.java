@@ -92,4 +92,9 @@ public class AdminService {
 
         return hospitalNotAssignedList;
     }
+
+    public Admin getAdminByUserId(String userId){
+        Admin admin = adminRepository.findAdminByUserId(userId);
+        return admin;
+    }
 }
