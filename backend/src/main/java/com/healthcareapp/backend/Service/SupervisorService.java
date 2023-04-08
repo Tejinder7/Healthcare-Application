@@ -29,8 +29,9 @@ public class SupervisorService {
         return supervisor;
     }
 
-    public List<Patient> unAssignedPatients(int supervisorId){
-        Optional<Supervisor> supervisor = supervisorRepository.findById(supervisorId);
+
+    public List<Patient> unAssignedPatients(String userId){
+        Supervisor supervisor = supervisorRepository.findSupervisorByUserId(userId);
 
         if(supervisor.isEmpty())
         {

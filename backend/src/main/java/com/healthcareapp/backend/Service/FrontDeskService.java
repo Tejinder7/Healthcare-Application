@@ -52,4 +52,9 @@ public class FrontDeskService {
 
         return updatedFrontDesk.get();
     }
+
+    public FrontDesk getFrontDeskByUserId(String userId){
+        FrontDesk frontDesk = frontDeskRepository.findFrontDeskByUserId(userId);
+        return frontDesk;
+    }
 }

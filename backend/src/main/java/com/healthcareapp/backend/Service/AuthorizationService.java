@@ -1,5 +1,6 @@
 package com.healthcareapp.backend.Service;
 
+import com.healthcareapp.backend.Exception.ResourceNotFoundException;
 import com.healthcareapp.backend.Model.Authorization;
 import com.healthcareapp.backend.Repository.AuthorizationRepository;
 import org.springframework.stereotype.Component;
@@ -11,12 +12,20 @@ public class AuthorizationService {
     public AuthorizationService(AuthorizationRepository authorizationRepository) {
         this.authorizationRepository = authorizationRepository;
     }
-    public boolean loginAuthorization(Authorization authorization){
+    public Authorization loginAuthorization(Authorization authorization){
         Authorization authorization1= authorizationRepository.findByUserIdAndPasswordAndUserType(authorization.getUserId(), authorization.getPassword(), authorization.getUserType());
 
         if(authorization1== null){
-            return false;
+            throw new ResourceNotFoundException("USER NOT FOUND");
         }
-        return true;
+        return authorization1;
+    }
+
+    public Authorization getAuthorizationById(String userId){
+        Authorization authorization = authorizationRepository.findAuthorizationByUserId(userId);
+        if(authorization== null){
+            throw new ResourceNotFoundException("USER NOT FOUND");
+        }
+        return authorization;
     }
 }
