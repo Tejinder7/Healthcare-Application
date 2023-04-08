@@ -44,7 +44,7 @@ public class EncounterController {
         return ResponseEntity.of(Optional.of(savedEncounter));
     }
 
-    @PutMapping("saveEncounter/{eid}")
+    @PutMapping("/saveEncounter")
     public ResponseEntity<Encounter> completeEncounter(@RequestBody Encounter encounter){
         Encounter updatedEncounter;
         try {

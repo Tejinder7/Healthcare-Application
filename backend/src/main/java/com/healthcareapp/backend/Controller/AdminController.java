@@ -44,11 +44,11 @@ public class AdminController {
         return ResponseEntity.of(Optional.of(updatedAdmin));
     }
 
-    @GetMapping("/getAllHospitalUsers/{hospitalId}")
-    public List<Object> getAllHospitalUsers(@PathVariable int hospitalId){
+    @GetMapping("/getAllHospitalUsers/{userId}")
+    public List<Object> getAllHospitalUsers(@PathVariable String userId){
         List<Object> hospitalUsersList;
         try {
-            hospitalUsersList = adminService.getAllHospitalUsers(hospitalId);
+            hospitalUsersList = adminService.getAllHospitalUsers(userId);
         }
         catch (Exception exception){
             throw exception;
