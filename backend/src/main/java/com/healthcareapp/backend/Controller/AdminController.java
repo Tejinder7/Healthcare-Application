@@ -46,14 +46,14 @@ public class AdminController {
 
     @GetMapping("/getAllHospitalUsers/{hospitalId}")
     public List<Object> getAllHospitalUsers(@PathVariable int hospitalId){
-        List<Object> userList;
+        List<Object> hospitalUsersList;
         try {
-            userList = adminService.getAllHospitalUsers(hospitalId);
+            hospitalUsersList = adminService.getAllHospitalUsers(hospitalId);
         }
         catch (Exception exception){
             throw exception;
         }
-        return userList;
+        return hospitalUsersList;
     }
 
     @GetMapping("/hospitalsWithNoAdmins")
