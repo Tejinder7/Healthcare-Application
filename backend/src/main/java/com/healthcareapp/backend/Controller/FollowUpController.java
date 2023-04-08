@@ -65,4 +65,16 @@ public class FollowUpController {
         List<FollowUp> followUpList = followUpService.getFollowUpsByFieldWorker(fieldWorkerId);
         return ResponseEntity.of(Optional.of(followUpList));
     }
+
+    @GetMapping("/getListOfFollowUpsAssignedBy/{doctorUserId}")
+    public ResponseEntity<List<FollowUp>> getFollowUpsAssignedByDoctor(@PathVariable String doctorUserId){
+        List<FollowUp> followUpList;
+        try{
+            followUpList= followUpService.getAllFollowUpsAssignedByDoctor(doctorUserId);
+        }
+        catch(RuntimeException exception){
+            throw exception;
+        }
+        return ResponseEntity.of(Optional.of(followUpList));
+    }
 }

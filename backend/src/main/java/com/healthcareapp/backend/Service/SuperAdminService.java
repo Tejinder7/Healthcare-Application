@@ -1,5 +1,6 @@
 package com.healthcareapp.backend.Service;
 
+import com.healthcareapp.backend.Exception.ResourceNotFoundException;
 import com.healthcareapp.backend.Model.Admin;
 import com.healthcareapp.backend.Model.Supervisor;
 import com.healthcareapp.backend.Repository.AdminRepository;
@@ -12,27 +13,29 @@ import java.util.List;
 
 @Component
 public class SuperAdminService {
+    AdminService adminService;
 
-    @Autowired
-    AdminRepository adminRepository;
+    SupervisorService supervisorService;
 
-    @Autowired
-    SupervisorRepository supervisorRepository;
+    public SuperAdminService(AdminService adminService, SupervisorService supervisorService) {
+        this.adminService = adminService;
+        this.supervisorService = supervisorService;
+    }
 
     public List<Object> getAllUsers(){
         List<Admin> adminList;
         List<Supervisor> supervisorList;
 
-        try {
-            adminList = adminRepository.findAll();
-            supervisorList = supervisorRepository.findAll();
-        }catch (Exception e){
-            throw new RuntimeException();
-        }
+        adminList = adminService.getListOfAdmins();
+        supervisorList = supervisorService.getListOfSupervisors();
 
         List<Object> userList = new ArrayList<>();
         userList.addAll(adminList);
         userList.addAll(supervisorList);
+
+        if(userList.isEmpty()){
+            throw new ResourceNotFoundException("No resgistered Admin or Supervisor found");
+        }
 
         return userList;
     }

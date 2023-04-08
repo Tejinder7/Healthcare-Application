@@ -18,38 +18,38 @@ public class PatientService {
     public PatientService(PatientRepository patientRepository) {
         this.patientRepository = patientRepository;
     }
-    public Patient addPatient(Patient patient){
-        Patient patient1;
+    public Patient addPatient(Patient patient) throws RuntimeException{
+        Patient savedPatient;
         String patientName = patient.getName().toLowerCase();
         patient.setName(patientName);
-        try{
-            patient1 = patientRepository.save(patient);
-        }catch (Exception e){
-            throw new RuntimeException();
-        }
-        return patient1;
+
+        savedPatient = patientRepository.save(patient);
+
+        return savedPatient;
     }
     public Patient getPatientById(int Pid){
         Optional<Patient> patient = patientRepository.findById(Pid);
+
         if(patient.isEmpty()){
             throw new ResourceNotFoundException("No patient with id: "+ Pid+ " found");
         }
-
         return patient.get();
     }
 
-    public List<Patient> getPatientsByName(String name){
+    public List<Patient> getPatientsByName(String name) throws RuntimeException{
         List<Patient> patientList = patientRepository.findAll();
         List<Patient> patientsWithGivenNameList = new ArrayList<>();
-        try {
-            for (int i = 0; i < patientList.size(); i++) {
-                if (patientList.get(i).getName().contains(name)) {
-                    patientsWithGivenNameList.add(patientList.get(i));
-                }
+
+        for (int i = 0; i < patientList.size(); i++) {
+            if (patientList.get(i).getName().contains(name)) {
+                patientsWithGivenNameList.add(patientList.get(i));
             }
-        }catch (Exception e){
-            throw new RuntimeException();
         }
+
+        if(patientsWithGivenNameList.isEmpty()){
+            throw new ResourceNotFoundException("No patients with name: "+ name+ " found");
+        }
+
         return patientsWithGivenNameList;
     }
 

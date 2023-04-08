@@ -77,11 +77,11 @@ public class AdminService {
         return userList;
     }
 
-//    public List<Admin> getListOfAdmins(){
-//        List<Admin> adminList= adminRepository.findAll();
-//
-//        return adminList;
-//    }
+    public List<Admin> getListOfAdmins(){
+        List<Admin> adminList= adminRepository.findAll();
+
+        return adminList;
+    }
 
 
     public List<Hospital> getHospitalsWhereAdminNotAssigned(){

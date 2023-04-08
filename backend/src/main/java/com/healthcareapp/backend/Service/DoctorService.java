@@ -2,6 +2,8 @@ package com.healthcareapp.backend.Service;
 
 import com.healthcareapp.backend.Exception.ResourceNotFoundException;
 import com.healthcareapp.backend.Model.Doctor;
+import com.healthcareapp.backend.Model.Encounter;
+import com.healthcareapp.backend.Model.FollowUp;
 import com.healthcareapp.backend.Model.Hospital;
 import com.healthcareapp.backend.Repository.DoctorRepository;
 import com.healthcareapp.backend.Repository.HospitalRepository;
@@ -79,5 +81,15 @@ public class DoctorService {
 
         doctorRepository.save(updatedDoctor.get());
         return updatedDoctor.get();
+    }
+
+    public Doctor getDoctorByUserId(String doctorUserId){
+        Optional<Doctor> doctor= doctorRepository.findByUserId(doctorUserId);
+
+        if(doctor.isEmpty()){
+            throw new ResourceNotFoundException("No doctor with userID: "+ doctorUserId+" found");
+        }
+
+        return doctor.get();
     }
 }

@@ -16,7 +16,6 @@ import java.util.Optional;
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class SupervisorController {
     private SupervisorService supervisorService;
-    private Patient patient;
 
     public SupervisorController(SupervisorService supervisorService) {
         this.supervisorService = supervisorService;
@@ -24,37 +23,38 @@ public class SupervisorController {
 
     @PostMapping("/addSupervisor")
     public ResponseEntity<Supervisor> addSupervisor(@RequestBody Supervisor supervisor){
-        Supervisor supervisor1;
+        Supervisor savedSupervisor;
         try{
-            supervisor1 = supervisorService.addSupervisor(supervisor);
+            savedSupervisor = supervisorService.addSupervisor(supervisor);
         }
-        catch (Exception e){
-            return ResponseEntity.status(500).build();
+        catch (RuntimeException exception){
+            throw exception;
         }
-        return ResponseEntity.of(Optional.of(supervisor1));
+        return ResponseEntity.of(Optional.of(savedSupervisor));
     }
+
 
     @GetMapping("/unassignedPatients/{userId}")
     public ResponseEntity<List<Patient>> unassignedPatients(@PathVariable String userId){
-        List<Patient> patientList = new ArrayList<>();
+        List<Patient> patientList;
         try{
             patientList = supervisorService.unAssignedPatients(userId);
-        }catch (Exception e){
-            return ResponseEntity.status(500).build();
+        }catch (Exception exception){
+            throw exception;
         }
         return ResponseEntity.of(Optional.of(patientList));
     }
 
     @PutMapping("/updateSupervisor")
     public ResponseEntity<Supervisor> updateSupervisor(@RequestBody Supervisor supervisor){
-        Supervisor supervisor1;
+        Supervisor updatedSupervisor;
         try{
-            supervisor1 = supervisorService.updateSupervisor(supervisor);
+            updatedSupervisor = supervisorService.updateSupervisor(supervisor);
         }
-        catch (Exception e){
-            return ResponseEntity.status(500).build();
+        catch (RuntimeException exception){
+            throw exception;
         }
-        return ResponseEntity.of(Optional.of(supervisor1));
+        return ResponseEntity.of(Optional.of(updatedSupervisor));
     }
 
 }
