@@ -8,7 +8,14 @@ import com.healthcareapp.backend.Repository.PatientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.Period;
+import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,10 +25,24 @@ public class PatientService {
     public PatientService(PatientRepository patientRepository) {
         this.patientRepository = patientRepository;
     }
-    public Patient addPatient(Patient patient) throws RuntimeException{
+    public Patient addPatient(Patient patient) throws RuntimeException, ParseException {
         Patient savedPatient;
         String patientName = patient.getName().toLowerCase();
         patient.setName(patientName);
+
+        if(patient.getDOB() != null) {
+            SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+            Date date = formatter.parse(patient.getDOB());
+
+            LocalDate birthDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+
+            LocalDate currentDate = LocalDate.now();
+
+            int age = Period.between(birthDate, currentDate).getYears();
+
+            patient.setDOB(patient.getDOB());
+            patient.setAge(age);
+        }
 
         savedPatient = patientRepository.save(patient);
 
