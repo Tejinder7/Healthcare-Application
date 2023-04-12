@@ -24,13 +24,9 @@ public class AuthorizationService {
         return user.get();
     }
 
-    public Authorization getAuthorizationById(String userId){
+    public Optional<Authorization> getAuthorizationById(String userId){
         Optional<Authorization> authorization = authorizationRepository.findByUserId(userId);
 
-        if(authorization.isPresent()){
-            throw new ForbiddenException("User already exists. Please try again with a different userId");
-        }
-
-        return null;
+        return authorization;
     }
 }

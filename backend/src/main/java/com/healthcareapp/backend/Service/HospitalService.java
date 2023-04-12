@@ -6,6 +6,7 @@ import com.healthcareapp.backend.Model.Admin;
 import com.healthcareapp.backend.Model.Hospital;
 import com.healthcareapp.backend.Model.Supervisor;
 import com.healthcareapp.backend.Repository.HospitalRepository;
+import com.healthcareapp.backend.Repository.SupervisorRepository;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -16,12 +17,12 @@ import java.util.Optional;
 public class HospitalService {
     private HospitalRepository hospitalRepository;
 
-    private SupervisorService supervisorService;
+    private SupervisorRepository supervisorRepository;
 
 
-    public HospitalService(HospitalRepository hospitalRepository, SupervisorService supervisorService) {
+    public HospitalService(HospitalRepository hospitalRepository, SupervisorRepository supervisorRepository) {
         this.hospitalRepository = hospitalRepository;
-        this.supervisorService = supervisorService;
+        this.supervisorRepository = supervisorRepository;
     }
 
     public Hospital getHospitalById(int id){
@@ -35,9 +36,10 @@ public class HospitalService {
 
     public Hospital addHospital(Hospital hospital) throws RuntimeException{
         Hospital savedHospital;
-        Supervisor supervisor = supervisorService.getSupervisorByAddress(hospital.getAddress());
+        Optional<Supervisor> supervisor = supervisorRepository.findByPincode(hospital.getPincode());
 
-        hospital.setSupId(supervisor);
+        if(supervisor.isPresent())
+            hospital.setSupId(supervisor.get());
 
         savedHospital = hospitalRepository.save(hospital);
 
@@ -47,6 +49,16 @@ public class HospitalService {
     public List<Hospital> getAllHospitals() throws RuntimeException{
         List<Hospital> hospitalList = new ArrayList<>();
         hospitalList = hospitalRepository.findAll();
+        return hospitalList;
+    }
+
+    public Optional<List<Hospital>> getHospitalsWithPincode(Supervisor supervisor) throws RuntimeException{
+        Optional<List<Hospital>> hospitalList = hospitalRepository.findByPincode(supervisor.getPincode());
+        for (int i=0; i<hospitalList.get().size(); i++){
+            Hospital hospital = hospitalList.get().get(i);
+            hospital.setSupId(supervisor);
+            hospitalRepository.save(hospital);
+        }
         return hospitalList;
     }
 }

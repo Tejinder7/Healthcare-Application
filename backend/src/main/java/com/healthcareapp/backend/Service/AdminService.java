@@ -1,5 +1,6 @@
 package com.healthcareapp.backend.Service;
 
+import com.healthcareapp.backend.Exception.ForbiddenException;
 import com.healthcareapp.backend.Exception.ResourceNotFoundException;
 import com.healthcareapp.backend.Model.*;
 import com.healthcareapp.backend.Repository.AdminRepository;
@@ -29,7 +30,11 @@ public class AdminService {
     }
 
     public Admin addAdmin(Admin admin, int hospId) throws RuntimeException{
-        Authorization user= authorizationService.getAuthorizationById(admin.getUserId());
+        Optional<Authorization> user= authorizationService.getAuthorizationById(admin.getUserId());
+
+        if(user.isPresent()){
+            throw new ForbiddenException("User already exists. Please try again with a different userId");
+        }
 
         Hospital hospital;
 

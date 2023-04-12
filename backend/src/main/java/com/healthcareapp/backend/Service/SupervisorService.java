@@ -2,6 +2,7 @@ package com.healthcareapp.backend.Service;
 
 import com.healthcareapp.backend.Exception.ResourceNotFoundException;
 import com.healthcareapp.backend.Model.*;
+import com.healthcareapp.backend.Repository.HospitalRepository;
 import com.healthcareapp.backend.Repository.SupervisorRepository;
 import org.springframework.stereotype.Component;
 
@@ -14,13 +15,17 @@ import java.util.Optional;
 public class SupervisorService {
     SupervisorRepository supervisorRepository;
 
-    public SupervisorService(SupervisorRepository supervisorRepository) {
+    HospitalService hospitalService;
+
+    public SupervisorService(SupervisorRepository supervisorRepository, HospitalService hospitalService) {
         this.supervisorRepository = supervisorRepository;
+        this.hospitalService = hospitalService;
     }
 
     public Supervisor addSupervisor(Supervisor supervisor) throws RuntimeException{
         supervisor.setUserType("Supervisor");
         supervisorRepository.save(supervisor);
+        Optional<List<Hospital>> hospitalList = hospitalService.getHospitalsWithPincode(supervisor);
         return supervisor;
     }
 
@@ -59,14 +64,14 @@ public class SupervisorService {
         return unAssignedPatients;
     }
 
-    public Supervisor getSupervisorByAddress(String Address){
-        Optional<Supervisor> supervisor = supervisorRepository.findByAddress(Address);
+    public Optional<Supervisor> getSupervisorByPincode(int pincode){
+        Optional<Supervisor> supervisor = supervisorRepository.findByPincode(pincode);
 
-        if(supervisor.isEmpty()){
-            throw new ResourceNotFoundException("No supervisor for the address: "+ Address+ " found");
-        }
+//        if(supervisor.isEmpty()){
+//            throw new ResourceNotFoundException("No supervisor for the address: "+ pincode+ " found");
+//        }
 
-        return supervisor.get();
+        return supervisor;
     }
 
     public List<Supervisor> getListOfSupervisors(){
