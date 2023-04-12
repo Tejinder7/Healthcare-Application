@@ -1,15 +1,13 @@
 package com.healthcareapp.backend.Service;
 
 import com.healthcareapp.backend.Exception.ResourceNotFoundException;
-import com.healthcareapp.backend.Model.Admin;
-import com.healthcareapp.backend.Model.Doctor;
-import com.healthcareapp.backend.Model.FrontDesk;
-import com.healthcareapp.backend.Model.Hospital;
+import com.healthcareapp.backend.Model.*;
 import com.healthcareapp.backend.Repository.AdminRepository;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Component
 public class AdminService {
@@ -20,14 +18,19 @@ public class AdminService {
 
     FrontDeskService frontDeskService;
 
-    public AdminService(AdminRepository adminRepository, HospitalService hospitalService, DoctorService doctorService, FrontDeskService frontDeskService) {
+    AuthorizationService authorizationService;
+
+    public AdminService(AdminRepository adminRepository, HospitalService hospitalService, DoctorService doctorService, FrontDeskService frontDeskService, AuthorizationService authorizationService) {
         this.adminRepository = adminRepository;
         this.hospitalService = hospitalService;
         this.doctorService = doctorService;
         this.frontDeskService = frontDeskService;
+        this.authorizationService = authorizationService;
     }
 
     public Admin addAdmin(Admin admin, int hospId) throws RuntimeException{
+        Authorization user= authorizationService.getAuthorizationById(admin.getUserId());
+
         Hospital hospital;
 
         hospital= hospitalService.getHospitalById(hospId);
