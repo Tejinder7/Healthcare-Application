@@ -1,5 +1,6 @@
 package com.healthcareapp.backend.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 @Entity
@@ -13,6 +14,7 @@ public class FollowUp {
     @ManyToOne
     @JoinColumn(name= "encounter_id")
 //    @JsonBackReference(value="Encounter-FollowUp")
+    @JsonIgnore
     private Encounter encounter;
 
     private String date;
@@ -20,7 +22,6 @@ public class FollowUp {
     private String fieldWorkerRemarks;
 
     private String doctorRemarks;
-
 
     private boolean flag;
 

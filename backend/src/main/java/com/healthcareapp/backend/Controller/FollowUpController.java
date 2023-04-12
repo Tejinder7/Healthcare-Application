@@ -53,11 +53,11 @@ public class FollowUpController {
         return ResponseEntity.of(Optional.of(followUpList));
     }
 
-    @PostMapping("/addFollowUps/{en_id}")
-    public ResponseEntity<List<FollowUp>> addFollowUps(@RequestBody List<String> dateList, @PathVariable int en_id){
-        List<FollowUp> followUpList = followUpService.addFollowUps(dateList, en_id);
-        return ResponseEntity.of(Optional.of(followUpList));
-    }
+//    @PostMapping("/addFollowUps/{en_id}")
+//    public ResponseEntity<List<FollowUp>> addFollowUps(@RequestBody List<String> dateList, @PathVariable int en_id){
+//        List<FollowUp> followUpList = followUpService.addFollowUps(dateList, en_id);
+//        return ResponseEntity.of(Optional.of(followUpList));
+//    }
 
     @GetMapping("/getFollowUpsForFieldWorker/{fieldWorkerId}")
     public ResponseEntity<List<FollowUp>> getFollowUpsForFieldWorker(@PathVariable int fieldWorkerId){
