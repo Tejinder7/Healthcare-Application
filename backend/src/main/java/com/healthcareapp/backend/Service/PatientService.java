@@ -31,10 +31,12 @@ public class PatientService {
         patient.setName(patientName);
 
         if(patient.getDOB() != null) {
-            SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
-            Date date = formatter.parse(patient.getDOB());
+//            SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+//            Date date = formatter.parse(patient.getDOB());
 
-            LocalDate birthDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+//            LocalDate birthDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+
+            LocalDate birthDate = LocalDate.parse(patient.getDOB());
 
             LocalDate currentDate = LocalDate.now();
 
