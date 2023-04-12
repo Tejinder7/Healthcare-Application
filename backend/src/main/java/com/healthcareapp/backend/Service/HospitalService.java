@@ -47,8 +47,8 @@ public class HospitalService {
     }
 
     public List<Hospital> getAllHospitals() throws RuntimeException{
-        List<Hospital> hospitalList = new ArrayList<>();
-        hospitalList = hospitalRepository.findAll();
+        List<Hospital> hospitalList = hospitalRepository.findAll();
+
         return hospitalList;
     }
 

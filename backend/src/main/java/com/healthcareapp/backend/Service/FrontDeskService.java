@@ -28,9 +28,9 @@ public class FrontDeskService {
 
     public FrontDesk addFrontDesk(FrontDesk frontDesk, String userId) throws RuntimeException{
 
-        Admin admin = adminRepository.findAdminByUserId(userId);
+        Optional<Admin> admin = adminRepository.findByUserId(userId);
 
-        Hospital hospital = hospitalService.getHospitalById(admin.getHospital().getHospId());
+        Hospital hospital = hospitalService.getHospitalById(admin.get().getHospital().getHospId());
 
         frontDesk.setHospital(hospital);
         frontDesk.setUserType("Front Desk");

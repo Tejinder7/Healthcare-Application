@@ -47,8 +47,8 @@ public class DoctorService {
 
     public Doctor addDoctor(Doctor doctor, String userId) throws RuntimeException{
 
-        Admin admin =  adminRepository.findAdminByUserId(userId);
-        Optional<Hospital> hospital = hospitalRepository.findById(admin.getHospital().getHospId());
+        Optional<Admin> admin =  adminRepository.findByUserId(userId);
+        Optional<Hospital> hospital = hospitalRepository.findById(admin.get().getHospital().getHospId());
         if(hospital == null){
             throw new ResourceNotFoundException("No Hospital found for Hospital Id: "+ hospital.get().getHospId());
         }
