@@ -54,7 +54,7 @@ public class PatientService {
         Optional<Patient> patient = patientRepository.findById(Pid);
 
         if(patient.isEmpty()){
-            throw new ResourceNotFoundException("No patient with id: "+ Pid+ " found");
+            throw new ResourceNotFoundException("Patient with id: "+ Pid+ " not found");
         }
         return patient.get();
     }

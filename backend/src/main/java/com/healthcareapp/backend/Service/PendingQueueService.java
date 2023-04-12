@@ -13,20 +13,17 @@ import java.util.Optional;
 public class PendingQueueService {
     private PendingQueueRepository pendingQueueRepository;
     private PatientService patientService;
-    private HospitalService hospitalService;
-
     private FrontDeskService frontDeskService;
     private DoctorService doctorService;
 
-    public PendingQueueService(FrontDeskService frontDeskService, PendingQueueRepository pendingQueueRepository, PatientService patientService, HospitalService hospitalService, DoctorService doctorService) {
-        this.frontDeskService = frontDeskService;
+    public PendingQueueService(PendingQueueRepository pendingQueueRepository, PatientService patientService, FrontDeskService frontDeskService, DoctorService doctorService) {
         this.pendingQueueRepository = pendingQueueRepository;
         this.patientService = patientService;
-        this.hospitalService = hospitalService;
+        this.frontDeskService = frontDeskService;
         this.doctorService = doctorService;
     }
 
-    public PendingQueue addPendingQueue(String userId, int pid){
+    public PendingQueue addPendingQueue(String userId, int pid) throws RuntimeException{
 
         PendingQueue pendingQueue = new PendingQueue();
 
@@ -35,8 +32,7 @@ public class PendingQueueService {
 
         FrontDesk frontDesk = frontDeskService.getFrontDeskByUserId(userId);
 
-        Hospital hospital = hospitalService.getHospitalById(frontDesk.getHospital().getHospId());
-        pendingQueue.setHospital(hospital);
+        pendingQueue.setHospital(frontDesk.getHospital());
 
         try {
             String date = java.time.LocalDate.now().toString();
@@ -44,25 +40,21 @@ public class PendingQueueService {
             String dateTime = date + " " + time;
             pendingQueue.setDateTime(dateTime);
         }
-        catch (DateTimeException e){
-            throw new RuntimeException();
+        catch (DateTimeException exception){
+            throw new RuntimeException(exception);
         }
 
         pendingQueueRepository.save(pendingQueue);
         return pendingQueue;
     }
 
-    public List<PendingQueue> getPendingQueueByDocId(String doctorUserId){
+    public List<PendingQueue> getPendingQueueByDocId(String doctorUserId) throws RuntimeException{
 
         Doctor doctor = doctorService.getDoctorByUserId(doctorUserId);
 
-        Hospital hospital = hospitalService.getHospitalById(doctor.getHospital().getHospId());
+        Hospital hospital = doctor.getHospital();
 
-        List<PendingQueue> pendingQueueList = pendingQueueRepository.findPendingQueueByHospital(hospital);
-
-        if(pendingQueueList.size() == 0){
-            throw new RuntimeException();
-        }
+        List<PendingQueue> pendingQueueList = pendingQueueRepository.findByHospital(hospital);
 
         return pendingQueueList;
     }
@@ -73,8 +65,7 @@ public class PendingQueueService {
         if(pendingQueue.isEmpty()){
             throw new ResourceNotFoundException("No entry for patient with id: "+ patient.getPatientId()+ " in pending queue");
         }
-        int pendingQueueId = pendingQueue.get().getPendingQueueId();
-        pendingQueueRepository.deleteById(pendingQueueId);
+        pendingQueueRepository.deleteById(pendingQueue.get().getPendingQueueId());
     }
 
 }

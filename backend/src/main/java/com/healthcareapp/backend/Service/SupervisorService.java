@@ -17,15 +17,21 @@ public class SupervisorService {
 
     HospitalService hospitalService;
 
+    AuthorizationService authorizationService;
+
     public SupervisorService(SupervisorRepository supervisorRepository, HospitalService hospitalService) {
         this.supervisorRepository = supervisorRepository;
         this.hospitalService = hospitalService;
     }
 
     public Supervisor addSupervisor(Supervisor supervisor) throws RuntimeException{
+        authorizationService.checkIfUserIdExists(supervisor.getUserId());
+
         supervisor.setUserType("Supervisor");
         supervisorRepository.save(supervisor);
-        Optional<List<Hospital>> hospitalList = hospitalService.getHospitalsWithPincode(supervisor);
+
+        hospitalService.setSupervisorByPincode(supervisor);
+
         return supervisor;
     }
 
@@ -36,11 +42,11 @@ public class SupervisorService {
 
 
     public List<Patient> unAssignedPatients(String userId){
-        Optional<Supervisor> supervisor = supervisorRepository.findSupervisorByUserId(userId);
+        Optional<Supervisor> supervisor = supervisorRepository.findByUserId(userId);
 
         if(supervisor.isEmpty())
         {
-            throw new ResourceNotFoundException("No Supervisor with id: "+ userId);
+            throw new ResourceNotFoundException("Supervisor with id: "+ userId+ " not found");
         }
 
         List<Hospital> hospitalList = supervisor.get().getHospitalList();
@@ -64,20 +70,20 @@ public class SupervisorService {
         return unAssignedPatients;
     }
 
-    public Optional<Supervisor> getSupervisorByPincode(int pincode){
-        Optional<Supervisor> supervisor = supervisorRepository.findByPincode(pincode);
+//    public Optional<Supervisor> getSupervisorByPincode(int pincode){
+//        Optional<Supervisor> supervisor = supervisorRepository.findByPincode(pincode);
+//
+////        if(supervisor.isEmpty()){
+////            throw new ResourceNotFoundException("No supervisor for the address: "+ pincode+ " found");
+////        }
+//
+//        return supervisor;
+//    }
 
-//        if(supervisor.isEmpty()){
-//            throw new ResourceNotFoundException("No supervisor for the address: "+ pincode+ " found");
-//        }
-
-        return supervisor;
-    }
-
-    public List<Supervisor> getListOfSupervisors(){
-        List<Supervisor> supervisorList= supervisorRepository.findAll();
-
-        return supervisorList;
-    }
+//    public List<Supervisor> getListOfSupervisors(){
+//        List<Supervisor> supervisorList= supervisorRepository.findAll();
+//
+//        return supervisorList;
+//    }
 }
 

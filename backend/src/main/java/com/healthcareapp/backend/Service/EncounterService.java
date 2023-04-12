@@ -12,15 +12,15 @@ import java.util.Optional;
 
 @Component
 public class EncounterService {
-    private DoctorService doctorServices;
-    private PatientService patientServices;
+    private EncounterRepository encounterRepository;
+    private DoctorService doctorService;
+    private PatientService patientService;
 
     private PendingQueueService pendingQueueService;
-    private EncounterRepository encounterRepository;
 
-    public EncounterService(DoctorService doctorServices, PatientService patientServices, PendingQueueService pendingQueueService, EncounterRepository encounterRepository) {
-        this.doctorServices = doctorServices;
-        this.patientServices = patientServices;
+    public EncounterService(DoctorService doctorService, PatientService patientService, PendingQueueService pendingQueueService, EncounterRepository encounterRepository) {
+        this.doctorService = doctorService;
+        this.patientService = patientService;
         this.pendingQueueService = pendingQueueService;
         this.encounterRepository = encounterRepository;
     }
@@ -28,9 +28,9 @@ public class EncounterService {
     public Encounter addEncounter(int patientId, String doctorUserId) throws RuntimeException{
         Encounter encounter = new Encounter();
 
-        Patient patient= patientServices.getPatientById(patientId);
+        Patient patient= patientService.getPatientById(patientId);
 
-        Doctor doctor = doctorServices.getDoctorByUserId(doctorUserId);
+        Doctor doctor = doctorService.getDoctorByUserId(doctorUserId);
 
         encounter.setPatient(patient);
         encounter.setDoctor(doctor);
@@ -48,59 +48,48 @@ public class EncounterService {
         Optional<Encounter> updatedEncounter= encounterRepository.findById(encounter.getEncounterId());
 
         if(updatedEncounter.isEmpty()){
-            throw new ResourceNotFoundException("No encounter with id: "+ encounter.getEncounterId()+" found");
-        }
-        encounter.setDoctor(updatedEncounter.get().getDoctor());
-        encounter.setPatient(updatedEncounter.get().getPatient());
-        encounter.setFlag(true);
-        encounterRepository.save(encounter);
-
-        return encounter;
-    }
-
-    public Encounter getEncounterById(int encounterId){
-        Optional<Encounter> encounter = encounterRepository.findById(encounterId);
-
-        if(encounter.isEmpty()){
-            throw new ResourceNotFoundException("No encounter with id: "+ encounterId+ " found");
+            throw new ResourceNotFoundException("Encounter with id: "+ encounter.getEncounterId()+" not found");
         }
 
-        return encounter.get();
+        updatedEncounter.get().setPrescription(encounter.getPrescription());
+        updatedEncounter.get().setSymptoms(encounter.getSymptoms());
+        updatedEncounter.get().setFlag(true);
+
+        encounterRepository.save(updatedEncounter.get());
+
+        return updatedEncounter.get();
     }
 
-    public List<Encounter> getEncounterByDoctor(Doctor doctor){
+//    public Encounter getEncounterById(int encounterId){
+//        Optional<Encounter> encounter = encounterRepository.findById(encounterId);
+//
+//        if(encounter.isEmpty()){
+//            throw new ResourceNotFoundException("No encounter with id: "+ encounterId+ " found");
+//        }
+//
+//        return encounter.get();
+//    }
+
+    public List<Encounter> getEncountersByDoctor(Doctor doctor){
         List<Encounter> encounterList;
         encounterList= encounterRepository.findByDoctor(doctor);
-
-        if(encounterList.isEmpty()){
-            throw new ResourceNotFoundException("No encounters for the DoctorId: "+ doctor.getAuthId()+ " found");
-        }
 
         return encounterList;
     }
 
     public List<Encounter> getEncountersByPatientId(int patientId) throws RuntimeException{
-        Patient patient= patientServices.getPatientById(patientId);
+        Patient patient= patientService.getPatientById(patientId);
 
         List<Encounter> encounterList= encounterRepository.findByPatient(patient);
-
-        if(encounterList.isEmpty()){
-            throw new ResourceNotFoundException("No Medical History corresponding to the patient with id: "+ patientId+ " found");
-        }
 
         return encounterList;
     }
 
     public List<Encounter> getUnsavedEncounters(String doctorId){
-        Doctor doctor = doctorServices.getDoctorByUserId(doctorId);
-        try {
-            List<Encounter> encounterList = encounterRepository.findByDoctorAndFlagIsFalse(doctor);
-            if(encounterList.isEmpty()){
-                throw new ResourceNotFoundException("No Unsaved Encounters found for doctor id : " + doctorId);
-            }
-            return encounterList;
-        }catch (Exception exception){
-            throw new RuntimeException("Error While fetching encounters");
-        }
+        Doctor doctor = doctorService.getDoctorByUserId(doctorId);
+
+        List<Encounter> encounterList = encounterRepository.findByDoctorAndFlagIsFalse(doctor);
+
+        return encounterList;
     }
 }

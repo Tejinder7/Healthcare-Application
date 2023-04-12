@@ -13,63 +13,59 @@ import java.util.Optional;
 @Component
 public class DoctorService {
     private DoctorRepository doctorRepository;
+    private AuthorizationService authorizationService;
+    private AdminService adminService;
 
-    private HospitalRepository hospitalRepository;
-
-    private AdminRepository adminRepository;
-
-    public DoctorService(DoctorRepository doctorRepository, HospitalRepository hospitalRepository, AdminRepository adminRepository) {
+    public DoctorService(DoctorRepository doctorRepository, AuthorizationService authorizationService, AdminService adminService) {
         this.doctorRepository = doctorRepository;
-        this.hospitalRepository = hospitalRepository;
-        this.adminRepository = adminRepository;
+        this.authorizationService = authorizationService;
+        this.adminService = adminService;
     }
 
-    public Doctor getDoctorByAuthId(int authId){
-        Optional<Doctor> doctor = doctorRepository.findById(authId);
+//    public Doctor getDoctorByAuthId(int authId){
+//        Optional<Doctor> doctor = doctorRepository.findById(authId);
+//
+//        if(doctor.isEmpty()){
+//            throw new ResourceNotFoundException("No doctor with id: "+ authId+ " found");
+//        }
+//
+//        return doctor.get();
+//    }
 
-        if(doctor.isEmpty()){
-            throw new ResourceNotFoundException("No doctor with id: "+ authId+ " found");
-        }
-
-        return doctor.get();
-    }
-
-    public Hospital getHospitalByDocId(int authId){
-        Doctor doctor = getDoctorByAuthId(authId);
-        Hospital hospital = doctor.getHospital();
-
-        if(hospital == null){
-            throw new RuntimeException();
-        }
-        return hospital;
-    }
+//    public Hospital getHospitalByDocId(int authId){
+//        Doctor doctor = getDoctorByAuthId(authId);
+//        Hospital hospital = doctor.getHospital();
+//
+//        if(hospital == null){
+//            throw new RuntimeException();
+//        }
+//        return hospital;
+//    }
 
 
     public Doctor addDoctor(Doctor doctor, String userId) throws RuntimeException{
+        authorizationService.checkIfUserIdExists(doctor.getUserId());
 
-        Optional<Admin> admin =  adminRepository.findByUserId(userId);
-        Optional<Hospital> hospital = hospitalRepository.findById(admin.get().getHospital().getHospId());
-        if(hospital == null){
-            throw new ResourceNotFoundException("No Hospital found for Hospital Id: "+ hospital.get().getHospId());
-        }
+        Admin admin =  adminService.getAdminByUserId(userId);
+
+        doctor.setHospital(admin.getHospital());
 
         if(doctor.getDocSpecialization() == null){
             doctor.setDocSpecialization("General");
         }
-
-        doctor.setHospital(hospital.get());
+        
         doctor.setUserType("Doctor");
 
         Doctor savedDoctor= doctorRepository.save(doctor);
         return savedDoctor;
     }
 
-    public List<Doctor> getAllDoctorsByHospital(Hospital hospital){
-
-        List<Doctor> doctorList= doctorRepository.findByHospital(hospital);
-
-        return doctorList;
-    }
+//    public List<Doctor> getAllDoctorsByHospital(Hospital hospital){
+//
+//        List<Doctor> doctorList= doctorRepository.findByHospital(hospital);
+//
+//        return doctorList;
+//    }
 
     public Doctor updateDoctor(Doctor doctor) throws RuntimeException{
         Optional<Doctor> updatedDoctor = doctorRepository.findById(doctor.getAuthId());
@@ -93,7 +89,7 @@ public class DoctorService {
         Optional<Doctor> doctor= doctorRepository.findByUserId(doctorUserId);
 
         if(doctor.isEmpty()){
-            throw new ResourceNotFoundException("No doctor with userID: "+ doctorUserId+" found");
+            throw new ResourceNotFoundException("Doctor with userID: "+ doctorUserId+" not found");
         }
 
         return doctor.get();
