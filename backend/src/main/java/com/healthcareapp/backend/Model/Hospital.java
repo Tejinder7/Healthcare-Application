@@ -20,7 +20,7 @@ public class Hospital {
 
     private String address;
 
-    private String pincode;
+    private int pincode;
 
     @OneToOne(mappedBy = "hospital")
     @JsonIgnore
@@ -54,7 +54,7 @@ public class Hospital {
     public Hospital() {
     }
 
-    public Hospital(int hospId, String name, String address, String pincode, Admin admin, Supervisor supervisor, List<FrontDesk> frontDeskList, List<Doctor> doctorList, List<PendingQueue> pendingQueueList, List<FollowUp> followUpList) {
+    public Hospital(int hospId, String name, String address, int pincode, Admin admin, Supervisor supervisor, List<FrontDesk> frontDeskList, List<Doctor> doctorList, List<PendingQueue> pendingQueueList, List<FollowUp> followUpList) {
         this.hospId = hospId;
         this.name = name;
         this.address = address;
@@ -139,11 +139,11 @@ public class Hospital {
         this.followUpList = followUpList;
     }
 
-    public String getPincode() {
+    public int getPincode() {
         return pincode;
     }
 
-    public void setPincode(String pincode) {
+    public void setPincode(int pincode) {
         this.pincode = pincode;
     }
 
@@ -161,7 +161,7 @@ public class Hospital {
                 "hospId=" + hospId +
                 ", name='" + name + '\'' +
                 ", address='" + address + '\'' +
-                ", pincode='" + pincode + '\'' +
+                ", pincode=" + pincode +
                 ", admin=" + admin +
                 ", supervisor=" + supervisor +
                 ", frontDeskList=" + frontDeskList +

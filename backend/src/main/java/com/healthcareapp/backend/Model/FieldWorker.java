@@ -12,7 +12,7 @@ public class FieldWorker extends Authorization{
 
     private String address;
 
-    private String pincode;
+    private int pincode;
 
     private String contact;
 
@@ -30,7 +30,8 @@ public class FieldWorker extends Authorization{
     public FieldWorker() {
     }
 
-    public FieldWorker(String name, String address, String pincode, String contact, boolean availableStatus, Supervisor supervisor, List<Patient> patientList) {
+
+    public FieldWorker(String name, String address, int pincode, String contact, boolean availableStatus, Supervisor supervisor, List<Patient> patientList) {
         this.name = name;
         this.address = address;
         this.pincode = pincode;
@@ -88,11 +89,11 @@ public class FieldWorker extends Authorization{
         this.availableStatus = availableStatus;
     }
 
-    public String getPincode() {
+    public int getPincode() {
         return pincode;
     }
 
-    public void setPincode(String pincode) {
+    public void setPincode(int pincode) {
         this.pincode = pincode;
     }
 
@@ -101,12 +102,11 @@ public class FieldWorker extends Authorization{
         return "FieldWorker{" +
                 "name='" + name + '\'' +
                 ", address='" + address + '\'' +
-                ", pincode='" + pincode + '\'' +
+                ", pincode=" + pincode +
                 ", contact='" + contact + '\'' +
                 ", availableStatus=" + availableStatus +
                 ", supervisor=" + supervisor +
                 ", patientList=" + patientList +
                 '}';
     }
-
 }

@@ -25,7 +25,7 @@ public class Supervisor extends Authorization{
     private String address;
 
     @Column(unique = true)
-    private String pincode;
+    private int pincode;
 
     @OneToMany(mappedBy = "supervisor")
 //    @JsonManagedReference("FW-SUP")
@@ -39,7 +39,7 @@ public class Supervisor extends Authorization{
     public Supervisor() {
     }
 
-    public Supervisor(String name, String contact, String address, String pincode, List<FieldWorker> fieldWorkerList, List<Hospital> hospitalList) {
+    public Supervisor(String name, String contact, String address, int pincode, List<FieldWorker> fieldWorkerList, List<Hospital> hospitalList) {
         this.name = name;
         this.contact = contact;
         this.address = address;
@@ -88,11 +88,11 @@ public class Supervisor extends Authorization{
         this.hospitalList = hospitalList;
     }
 
-    public String getPincode() {
+    public int getPincode() {
         return pincode;
     }
 
-    public void setPincode(String pincode) {
+    public void setPincode(int pincode) {
         this.pincode = pincode;
     }
 
@@ -102,7 +102,7 @@ public class Supervisor extends Authorization{
                 "name='" + name + '\'' +
                 ", contact='" + contact + '\'' +
                 ", address='" + address + '\'' +
-                ", pincode='" + pincode + '\'' +
+                ", pincode=" + pincode +
                 ", fieldWorkerList=" + fieldWorkerList +
                 ", hospitalList=" + hospitalList +
                 '}';
