@@ -16,6 +16,7 @@ public class PendingQueue {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int pendingQueueId;
 
+    @Column(nullable = false)
     private String dateTime;
 
     private Boolean flag;

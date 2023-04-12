@@ -19,12 +19,17 @@ import java.util.List;
 @Entity
 @PrimaryKeyJoinColumn(name = "authId")
 public class Supervisor extends Authorization{
+
+    @Column(nullable = false)
     private String name;
 
+    @Column(nullable = false)
     private String contact;
+
+    @Column(nullable = false)
     private String address;
 
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     private int pincode;
 
     @OneToMany(mappedBy = "supervisor")

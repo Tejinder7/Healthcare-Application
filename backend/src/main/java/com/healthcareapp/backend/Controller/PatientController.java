@@ -5,6 +5,7 @@ import com.healthcareapp.backend.Service.PatientService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -18,14 +19,9 @@ public class PatientController {
     }
 
     @PostMapping("/addPatients")
-    public ResponseEntity<Patient> addPatient(@RequestBody Patient patient){
+    public ResponseEntity<Patient> addPatient(@RequestBody Patient patient) throws ParseException {
         Patient savedPatient;
-        try {
-            savedPatient = patientService.addPatient(patient);
-        }
-        catch (Exception exception){
-            throw exception;
-        }
+        savedPatient = patientService.addPatient(patient);
         return ResponseEntity.of(Optional.of(savedPatient));
     }
 

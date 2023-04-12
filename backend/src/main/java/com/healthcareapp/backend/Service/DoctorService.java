@@ -49,6 +49,11 @@ public class DoctorService {
         Admin admin =  adminService.getAdminByUserId(userId);
 
         doctor.setHospital(admin.getHospital());
+
+        if(doctor.getDocSpecialization() == null){
+            doctor.setDocSpecialization("General");
+        }
+        
         doctor.setUserType("Doctor");
 
         Doctor savedDoctor= doctorRepository.save(doctor);
