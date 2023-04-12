@@ -53,6 +53,10 @@ public class DoctorService {
             throw new ResourceNotFoundException("No Hospital found for Hospital Id: "+ hospital.get().getHospId());
         }
 
+        if(doctor.getDocSpecialization() == null){
+            doctor.setDocSpecialization("General");
+        }
+
         doctor.setHospital(hospital.get());
         doctor.setUserType("Doctor");
 

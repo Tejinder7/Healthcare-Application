@@ -8,12 +8,17 @@ import java.util.List;
 @Entity
 @PrimaryKeyJoinColumn(name = "authId")
 public class FieldWorker extends Authorization{
+
+    @Column(nullable = false)
     private String name;
 
+    @Column(nullable = false)
     private String address;
 
+    @Column(nullable = false)
     private int pincode;
 
+    @Column(nullable = false)
     private String contact;
 
     private boolean availableStatus;

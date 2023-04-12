@@ -16,10 +16,13 @@ public class Hospital {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int hospId;
 
+    @Column(nullable = false)
     private String name;
 
+    @Column(nullable = false)
     private String address;
 
+    @Column(nullable = false)
     private int pincode;
 
     @OneToOne(mappedBy = "hospital")

@@ -9,13 +9,17 @@ import java.util.Optional;
 @Entity
 @PrimaryKeyJoinColumn(name = "authId")
 public class Doctor extends Authorization{
+
+    @Column(nullable = false)
     private String name;
 
     @Column(unique = true)
     private String licId;
 
+    @Column(nullable = false)
     private String contact;
 
+    @Column(nullable = false)
     private String docSpecialization;
 
     @ManyToOne

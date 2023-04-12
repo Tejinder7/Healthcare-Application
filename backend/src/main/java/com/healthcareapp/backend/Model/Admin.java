@@ -13,6 +13,8 @@ import lombok.NoArgsConstructor;
 @Entity
 @PrimaryKeyJoinColumn(name = "authId")
 public class Admin extends Authorization{
+
+    @Column(nullable = false)
     private String name;
 
     @OneToOne

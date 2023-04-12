@@ -22,17 +22,23 @@ public class Patient {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int patientId;
 
+    @Column(nullable = false)
     private String name;
 
     private String address;
 
     private int pincode;
 
+
     private String DOB;
+
+
     private int age;
 
+    @Column(nullable = false)
     private String sex;
 
+    @Column(nullable = false)
     private String contact;
 
     @ManyToOne
