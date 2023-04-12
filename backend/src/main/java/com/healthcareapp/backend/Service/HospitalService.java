@@ -19,6 +19,8 @@ public class HospitalService {
 
     private SupervisorRepository supervisorRepository;
 
+    private AdminService adminService;
+
 
     public HospitalService(HospitalRepository hospitalRepository, SupervisorRepository supervisorRepository) {
         this.hospitalRepository = hospitalRepository;
@@ -52,13 +54,9 @@ public class HospitalService {
         return hospitalList;
     }
 
-    public Optional<List<Hospital>> getHospitalsWithPincode(Supervisor supervisor) throws RuntimeException{
-        Optional<List<Hospital>> hospitalList = hospitalRepository.findByPincode(supervisor.getPincode());
-        for (int i=0; i<hospitalList.get().size(); i++){
-            Hospital hospital = hospitalList.get().get(i);
-            hospital.setSupId(supervisor);
-            hospitalRepository.save(hospital);
-        }
-        return hospitalList;
+    public void setSupervisorByPincode(Supervisor supervisor) throws RuntimeException{
+        List<Hospital> hospitalList = hospitalRepository.findByPincode(supervisor.getPincode());
+
+        hospitalList.forEach(hospital -> hospital.setSupervisor(supervisor));
     }
 }

@@ -39,10 +39,10 @@ public class FrontDeskService {
         return frontDesk;
     }
 
-    public List<FrontDesk> getAllFrontDeskByHospital(Hospital hospital){
-        List<FrontDesk> frontDeskList= frontDeskRepository.findByHospital(hospital);
-        return frontDeskList;
-    }
+//    public List<FrontDesk> getAllFrontDeskByHospital(Hospital hospital){
+//        List<FrontDesk> frontDeskList= frontDeskRepository.findByHospital(hospital);
+//        return frontDeskList;
+//    }
 
     public FrontDesk updateFrontDesk(FrontDesk frontDesk) throws RuntimeException{
         Optional<FrontDesk> updatedFrontDesk = frontDeskRepository.findById(frontDesk.getAuthId());

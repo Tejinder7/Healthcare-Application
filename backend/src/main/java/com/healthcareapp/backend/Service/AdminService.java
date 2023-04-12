@@ -1,10 +1,11 @@
 package com.healthcareapp.backend.Service;
 
-import com.healthcareapp.backend.Exception.ForbiddenException;
 import com.healthcareapp.backend.Exception.ResourceNotFoundException;
 import com.healthcareapp.backend.Model.*;
 import com.healthcareapp.backend.Repository.AdminRepository;
 import com.healthcareapp.backend.Repository.AuthorizationRepository;
+import com.healthcareapp.backend.Repository.DoctorRepository;
+import com.healthcareapp.backend.Repository.FrontDeskRepository;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -14,27 +15,21 @@ import java.util.Optional;
 @Component
 public class AdminService {
     AdminRepository adminRepository;
-    AuthorizationRepository authorizationRepository;
+    DoctorRepository doctorRepository;
+    FrontDeskRepository frontDeskRepository;
     HospitalService hospitalService;
-    DoctorService doctorService;
-    FrontDeskService frontDeskService;
+    AuthorizationService authorizationService;
 
-//    AuthorizationService authorizationService;
-
-    public AdminService(AdminRepository adminRepository, HospitalService hospitalService, DoctorService doctorService, FrontDeskService frontDeskService, AuthorizationRepository authorizationRepository) {
+    public AdminService(AdminRepository adminRepository, HospitalService hospitalService, AuthorizationService authorizationService, DoctorRepository doctorRepository, FrontDeskRepository frontDeskRepository) {
         this.adminRepository = adminRepository;
+        this.doctorRepository = doctorRepository;
+        this.frontDeskRepository = frontDeskRepository;
         this.hospitalService = hospitalService;
-        this.doctorService = doctorService;
-        this.frontDeskService = frontDeskService;
-        this.authorizationRepository = authorizationRepository;
+        this.authorizationService = authorizationService;
     }
 
     public Admin addAdmin(Admin admin, int hospId) throws RuntimeException{
-        Optional<Authorization> user= authorizationRepository.findByUserId(admin.getUserId());
-
-        if(user.isPresent()){
-            throw new ForbiddenException("User already exists. Please try again with a different userId");
-        }
+        authorizationService.checkIfUserIdExists(admin.getUserId());
 
         Hospital hospital= hospitalService.getHospitalById(hospId);
 
@@ -65,8 +60,8 @@ public class AdminService {
 
         hospital = hospitalService.getHospitalById(admin.get().getHospital().getHospId());
 
-        doctorList = doctorService.getAllDoctorsByHospital(hospital);
-        frontDeskList = frontDeskService.getAllFrontDeskByHospital(hospital);
+        doctorList = doctorRepository.findByHospital(hospital);
+        frontDeskList = frontDeskRepository.findByHospital(hospital);
 
         List<Object> userList = new ArrayList<>();
 
@@ -97,8 +92,13 @@ public class AdminService {
         return hospitalNotAssignedList;
     }
 
-//    public Admin getAdminByUserId(String userId){
-//        Admin admin = adminRepository.findAdminByUserId(userId);
-//        return admin;
-//    }
+    public Admin getAdminByUserId(String userId){
+        Optional<Admin> admin = adminRepository.findByUserId(userId);
+
+        if(admin.isEmpty()){
+            throw new ResourceNotFoundException("Admin with userId: "+ userId+ " not found");
+        }
+
+        return admin.get();
+    }
 }

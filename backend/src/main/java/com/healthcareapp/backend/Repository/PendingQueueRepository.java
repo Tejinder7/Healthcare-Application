@@ -10,7 +10,7 @@ import java.util.Optional;
 
 public interface PendingQueueRepository extends JpaRepository<PendingQueue, Integer> {
 
-    public List<PendingQueue> findPendingQueueByHospital(Hospital hospital);
+    public List<PendingQueue> findByHospital(Hospital hospital);
 
     public Optional<PendingQueue> findByPatient(Patient patient);
 

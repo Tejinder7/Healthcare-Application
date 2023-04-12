@@ -10,7 +10,7 @@ import java.util.Optional;
 public interface HospitalRepository extends JpaRepository<Hospital, Integer> {
 //    public Hospital findByHospId(int id);
 
-    public Optional<List<Hospital>> findByPincode(int pincode);
+    public List<Hospital> findByPincode(int pincode);
 
 }
 

@@ -35,7 +35,7 @@ public class FieldWorkerService {
 
     public FieldWorker addFieldWorker(FieldWorker fieldWorker, String userId){
 
-        Optional<Supervisor> supervisor = supervisorRepository.findSupervisorByUserId(userId);
+        Optional<Supervisor> supervisor = supervisorRepository.findByUserId(userId);
 
         if(supervisor.isEmpty())
         {
@@ -57,7 +57,7 @@ public class FieldWorkerService {
 
 
     public List<FieldWorker> getFieldWorkers(String userId){
-        Optional<Supervisor> supervisor = supervisorRepository.findSupervisorByUserId(userId);
+        Optional<Supervisor> supervisor = supervisorRepository.findByUserId(userId);
 
         if(supervisor.isEmpty())
         {
@@ -75,7 +75,7 @@ public class FieldWorkerService {
     }
 
     public List<FieldWorker> getAvailableFieldWorkers(String userId){
-        Optional<Supervisor> supervisor = supervisorRepository.findSupervisorByUserId(userId);
+        Optional<Supervisor> supervisor = supervisorRepository.findByUserId(userId);
 
         if(supervisor.isEmpty())
         {

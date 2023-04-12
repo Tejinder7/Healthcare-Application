@@ -7,7 +7,6 @@ import com.healthcareapp.backend.Repository.FollowUpRepository;
 import com.healthcareapp.backend.Repository.SupervisorRepository;
 import org.springframework.stereotype.Component;
 
-import javax.print.Doc;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -78,7 +77,7 @@ public class FollowUpService {
     }
 
     public List<FollowUp> getAllFollowUp(String userId){
-        Optional<Supervisor> supervisor = supervisorRepository.findSupervisorByUserId(userId);
+        Optional<Supervisor> supervisor = supervisorRepository.findByUserId(userId);
 
         if(supervisor.isEmpty())
         {
@@ -126,7 +125,7 @@ public class FollowUpService {
     public List<FollowUp> getAllFollowUpsAssignedByDoctor(String doctorUserId) throws RuntimeException{
         Doctor doctor= doctorService.getDoctorByUserId(doctorUserId);
 
-        List<Encounter> encounterList= encounterService.getEncounterByDoctor(doctor);
+        List<Encounter> encounterList= encounterService.getEncountersByDoctor(doctor);
 
         List<FollowUp> followUpList= new ArrayList<>();
 

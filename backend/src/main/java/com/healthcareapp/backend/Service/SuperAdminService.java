@@ -13,29 +13,21 @@ import java.util.List;
 
 @Component
 public class SuperAdminService {
-    AdminService adminService;
+    AdminRepository adminRepository;
+    SupervisorRepository supervisorRepository;
 
-    SupervisorService supervisorService;
-
-    public SuperAdminService(AdminService adminService, SupervisorService supervisorService) {
-        this.adminService = adminService;
-        this.supervisorService = supervisorService;
+    public SuperAdminService(AdminRepository adminRepository, SupervisorRepository supervisorRepository) {
+        this.adminRepository = adminRepository;
+        this.supervisorRepository = supervisorRepository;
     }
 
     public List<Object> getAllUsers(){
-        List<Admin> adminList;
-        List<Supervisor> supervisorList;
-
-        adminList = adminService.getListOfAdmins();
-        supervisorList = supervisorService.getListOfSupervisors();
+        List<Admin> adminList= adminRepository.findAll();
+        List<Supervisor> supervisorList= supervisorRepository.findAll();
 
         List<Object> userList = new ArrayList<>();
         userList.addAll(adminList);
         userList.addAll(supervisorList);
-
-        if(userList.isEmpty()){
-            throw new ResourceNotFoundException("No resgistered Admin or Supervisor found");
-        }
 
         return userList;
     }
