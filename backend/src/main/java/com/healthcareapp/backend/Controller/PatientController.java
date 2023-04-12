@@ -50,7 +50,6 @@ public class PatientController {
         catch (Exception exception){
             throw exception;
         }
-
         return ResponseEntity.of(Optional.of(patientList));
     }
 

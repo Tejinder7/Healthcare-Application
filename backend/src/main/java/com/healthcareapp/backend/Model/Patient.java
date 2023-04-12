@@ -26,6 +26,8 @@ public class Patient {
 
     private String address;
 
+    private int pincode;
+
     private int age;
 
     private String sex;
@@ -56,10 +58,11 @@ public class Patient {
     public Patient() {
     }
 
-    public Patient(int patientId, String name, String address, int age, String sex, String contact, FieldWorker fieldWorker, PendingQueue pendingQueue, List<Encounter> encounterList, List<FollowUp> followUpList) {
+    public Patient(int patientId, String name, String address, int pincode, int age, String sex, String contact, FieldWorker fieldWorker, PendingQueue pendingQueue, List<Encounter> encounterList, List<FollowUp> followUpList) {
         this.patientId = patientId;
         this.name = name;
         this.address = address;
+        this.pincode = pincode;
         this.age = age;
         this.sex = sex;
         this.contact = contact;
@@ -149,12 +152,21 @@ public class Patient {
         this.pendingQueue = pendingQueue;
     }
 
+    public int getPincode() {
+        return pincode;
+    }
+
+    public void setPincode(int pincode) {
+        this.pincode = pincode;
+    }
+
     @Override
     public String toString() {
         return "Patient{" +
                 "patientId=" + patientId +
                 ", name='" + name + '\'' +
                 ", address='" + address + '\'' +
+                ", pincode=" + pincode +
                 ", age=" + age +
                 ", sex='" + sex + '\'' +
                 ", contact='" + contact + '\'' +

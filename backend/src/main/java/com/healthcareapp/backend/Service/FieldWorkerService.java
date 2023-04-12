@@ -1,5 +1,6 @@
 package com.healthcareapp.backend.Service;
 
+import com.healthcareapp.backend.Exception.ResourceNotFoundException;
 import com.healthcareapp.backend.Model.FieldWorker;
 import com.healthcareapp.backend.Model.FollowUp;
 import com.healthcareapp.backend.Model.Patient;
@@ -43,6 +44,7 @@ public class FieldWorkerService {
 
         fieldWorker.setSupervisor(supervisor.get());
         fieldWorker.setUserType("FieldWorker");
+        fieldWorker.setAvailableStatus(true);
 
         try {
             fieldWorker = fieldWorkerRepository.save(fieldWorker);
@@ -57,12 +59,30 @@ public class FieldWorkerService {
     public List<FieldWorker> getFieldWorkers(String userId){
         Optional<Supervisor> supervisor = supervisorRepository.findSupervisorByUserId(userId);
 
-        if(supervisor==null)
+        if(supervisor.isEmpty())
         {
-            throw new RuntimeException();
+            throw new ResourceNotFoundException("Supervisor with userId" + userId + "not found");
         }
 
         List<FieldWorker> fieldWorkerList = fieldWorkerRepository.findFieldWorkerBySupervisor(supervisor.get());
+
+        if(fieldWorkerList.size()==0)
+        {
+            throw new RuntimeException();
+        }
+        else
+            return fieldWorkerList;
+    }
+
+    public List<FieldWorker> getAvailableFieldWorkers(String userId){
+        Optional<Supervisor> supervisor = supervisorRepository.findSupervisorByUserId(userId);
+
+        if(supervisor.isEmpty())
+        {
+            throw new ResourceNotFoundException("Supervisor with userId" + userId + "not found");
+        }
+
+        List<FieldWorker> fieldWorkerList = fieldWorkerRepository.findFieldWorkerBySupervisorAndAvailableStatusIsTrue(supervisor.get());
 
         if(fieldWorkerList.size()==0)
         {

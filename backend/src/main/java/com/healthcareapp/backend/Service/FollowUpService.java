@@ -96,26 +96,17 @@ public class FollowUpService {
         return followUpList;
     }
 
-    public List<FollowUp> addFollowUps(List<String> dateList, int en_id){
-        Encounter encounter = encounterService.getEncounterById(en_id);
-        Patient patient = encounter.getPatient();
-        Doctor doctor = encounter.getDoctor();
-        Hospital hospital = doctor.getHospital();
-        List<FollowUp> followUpList = new ArrayList<>();
-        try {
-            for (int i = 0; i < dateList.size(); i++) {
-                FollowUp followUp = new FollowUp();
-                followUp.setEncounter(encounter);
-                followUp.setDate(dateList.get(i));
-                followUp.setFlag(false);
-                followUp.setPatient(patient);
-                followUp.setHospital(hospital);
-                followUpRepository.save(followUp);
+    public List<FollowUp> addFollowUps(Encounter encounter){
+        Hospital hospital = encounter.getDoctor().getHospital();
 
-                followUpList.add(followUp);
-            }
-        }catch (Exception e){
-            throw new RuntimeException();
+        List<FollowUp> followUpList = encounter.getFollowUpList();
+
+        for (FollowUp followUp : followUpList) {
+            followUp.setEncounter(encounter);
+            followUp.setFlag(false);
+            followUp.setPatient(encounter.getPatient());
+            followUp.setHospital(hospital);
+            followUpRepository.save(followUp);
         }
         return followUpList;
     }

@@ -29,11 +29,11 @@ public class PendingQueueController {
         return ResponseEntity.of(Optional.of(pendingQueue));
     }
 
-    @GetMapping("/pendingQueue/{userId}")
-    public ResponseEntity<List<PendingQueue>> getPendingQueue(@PathVariable String userId){
+    @GetMapping("/pendingQueue/{doctorUserId}")
+    public ResponseEntity<List<PendingQueue>> getPendingQueue(@PathVariable String doctorUserId){
 
         try{
-            List<PendingQueue> pendingQueueList = pendingQueueService.getPendingQueueByDocId(userId);
+            List<PendingQueue> pendingQueueList = pendingQueueService.getPendingQueueByDocId(doctorUserId);
             return ResponseEntity.of(Optional.of(pendingQueueList));
         }
         catch (Exception e){

@@ -22,9 +22,10 @@ public class Supervisor extends Authorization{
     private String name;
 
     private String contact;
+    private String address;
 
     @Column(unique = true)
-    private String address;
+    private int pincode;
 
     @OneToMany(mappedBy = "supervisor")
 //    @JsonManagedReference("FW-SUP")
@@ -38,10 +39,11 @@ public class Supervisor extends Authorization{
     public Supervisor() {
     }
 
-    public Supervisor(String name, String contact, String address, List<FieldWorker> fieldWorkerList, List<Hospital> hospitalList) {
+    public Supervisor(String name, String contact, String address, int pincode, List<FieldWorker> fieldWorkerList, List<Hospital> hospitalList) {
         this.name = name;
         this.contact = contact;
         this.address = address;
+        this.pincode = pincode;
         this.fieldWorkerList = fieldWorkerList;
         this.hospitalList = hospitalList;
     }
@@ -86,12 +88,21 @@ public class Supervisor extends Authorization{
         this.hospitalList = hospitalList;
     }
 
+    public int getPincode() {
+        return pincode;
+    }
+
+    public void setPincode(int pincode) {
+        this.pincode = pincode;
+    }
+
     @Override
     public String toString() {
         return "Supervisor{" +
                 "name='" + name + '\'' +
                 ", contact='" + contact + '\'' +
                 ", address='" + address + '\'' +
+                ", pincode=" + pincode +
                 ", fieldWorkerList=" + fieldWorkerList +
                 ", hospitalList=" + hospitalList +
                 '}';

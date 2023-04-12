@@ -11,6 +11,9 @@ public interface FieldWorkerRepository extends JpaRepository<FieldWorker, Intege
 
     public List<FieldWorker> findFieldWorkerBySupervisor(Supervisor supervisor);
 
+    public List<FieldWorker> findFieldWorkerBySupervisorAndAvailableStatusIsTrue(Supervisor supervisor);
+
+
     public FieldWorker findFieldWorkerByAuthId(int fieldWorkerAuthId);
 
 }

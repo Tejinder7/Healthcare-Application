@@ -20,6 +20,8 @@ public class Hospital {
 
     private String address;
 
+    private int pincode;
+
     @OneToOne(mappedBy = "hospital")
     @JsonIgnore
     @JoinColumn(unique = true)
@@ -52,10 +54,11 @@ public class Hospital {
     public Hospital() {
     }
 
-    public Hospital(int hospId, String name, String address, Admin admin, Supervisor supervisor, List<FrontDesk> frontDeskList, List<Doctor> doctorList, List<PendingQueue> pendingQueueList, List<FollowUp> followUpList) {
+    public Hospital(int hospId, String name, String address, int pincode, Admin admin, Supervisor supervisor, List<FrontDesk> frontDeskList, List<Doctor> doctorList, List<PendingQueue> pendingQueueList, List<FollowUp> followUpList) {
         this.hospId = hospId;
         this.name = name;
         this.address = address;
+        this.pincode = pincode;
         this.admin = admin;
         this.supervisor = supervisor;
         this.frontDeskList = frontDeskList;
@@ -136,12 +139,29 @@ public class Hospital {
         this.followUpList = followUpList;
     }
 
+    public int getPincode() {
+        return pincode;
+    }
+
+    public void setPincode(int pincode) {
+        this.pincode = pincode;
+    }
+
+    public Supervisor getSupervisor() {
+        return supervisor;
+    }
+
+    public void setSupervisor(Supervisor supervisor) {
+        this.supervisor = supervisor;
+    }
+
     @Override
     public String toString() {
         return "Hospital{" +
                 "hospId=" + hospId +
                 ", name='" + name + '\'' +
                 ", address='" + address + '\'' +
+                ", pincode=" + pincode +
                 ", admin=" + admin +
                 ", supervisor=" + supervisor +
                 ", frontDeskList=" + frontDeskList +

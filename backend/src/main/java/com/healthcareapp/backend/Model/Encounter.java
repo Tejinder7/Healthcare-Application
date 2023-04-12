@@ -28,7 +28,7 @@ public class Encounter {
 
     @OneToMany(mappedBy = "encounter")
 //    @JsonManagedReference(value = "Encounter-FollowUp")
-    @JsonIgnore
+//    @JsonIgnore
     private List<FollowUp> followUpList;
 
     private String prescription;

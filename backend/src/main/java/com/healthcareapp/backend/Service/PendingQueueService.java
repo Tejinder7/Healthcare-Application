@@ -52,11 +52,11 @@ public class PendingQueueService {
         return pendingQueue;
     }
 
-    public List<PendingQueue> getPendingQueueByDocId(String userId){
+    public List<PendingQueue> getPendingQueueByDocId(String doctorUserId){
 
-        FrontDesk frontDesk = frontDeskService.getFrontDeskByUserId(userId);
+        Doctor doctor = doctorService.getDoctorByUserId(doctorUserId);
 
-        Hospital hospital = hospitalService.getHospitalById(frontDesk.getHospital().getHospId());
+        Hospital hospital = hospitalService.getHospitalById(doctor.getHospital().getHospId());
 
         List<PendingQueue> pendingQueueList = pendingQueueRepository.findPendingQueueByHospital(hospital);
 

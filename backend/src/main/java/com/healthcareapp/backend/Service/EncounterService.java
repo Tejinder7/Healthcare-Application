@@ -25,12 +25,12 @@ public class EncounterService {
         this.encounterRepository = encounterRepository;
     }
 
-    public Encounter addEncounter(int patientId, int doctorId) throws RuntimeException{
+    public Encounter addEncounter(int patientId, String doctorUserId) throws RuntimeException{
         Encounter encounter = new Encounter();
 
         Patient patient= patientServices.getPatientById(patientId);
 
-        Doctor doctor = doctorServices.getDoctorByAuthId(doctorId);
+        Doctor doctor = doctorServices.getDoctorByUserId(doctorUserId);
 
         encounter.setPatient(patient);
         encounter.setDoctor(doctor);
@@ -50,7 +50,9 @@ public class EncounterService {
         if(updatedEncounter.isEmpty()){
             throw new ResourceNotFoundException("No encounter with id: "+ encounter.getEncounterId()+" found");
         }
-
+        encounter.setDoctor(updatedEncounter.get().getDoctor());
+        encounter.setPatient(updatedEncounter.get().getPatient());
+        encounter.setFlag(true);
         encounterRepository.save(encounter);
 
         return encounter;
@@ -87,5 +89,18 @@ public class EncounterService {
         }
 
         return encounterList;
+    }
+
+    public List<Encounter> getUnsavedEncounters(String doctorId){
+        Doctor doctor = doctorServices.getDoctorByUserId(doctorId);
+        try {
+            List<Encounter> encounterList = encounterRepository.findByDoctorAndFlagIsFalse(doctor);
+            if(encounterList.isEmpty()){
+                throw new ResourceNotFoundException("No Unsaved Encounters found for doctor id : " + doctorId);
+            }
+            return encounterList;
+        }catch (Exception exception){
+            throw new RuntimeException("Error While fetching encounters");
+        }
     }
 }
