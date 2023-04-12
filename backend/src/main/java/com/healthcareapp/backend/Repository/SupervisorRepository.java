@@ -9,7 +9,7 @@ import java.util.Optional;
 public interface SupervisorRepository extends JpaRepository<Supervisor, Integer> {
     public Supervisor findSupervisorByAuthId(int authId);
 
-    public Optional<Supervisor> findByAddress(String address);
+    public Optional<Supervisor> findByPincode(int address);
 
     public Optional<Supervisor> findSupervisorByUserId(String userId);
 }

@@ -23,7 +23,7 @@ public class AdminController {
         try{
             savedAdmin = adminService.addAdmin(admin, hospId);
         }
-        catch (Exception exception){
+        catch (RuntimeException exception){
             throw exception;
         }
 
