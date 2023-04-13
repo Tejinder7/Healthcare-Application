@@ -5,6 +5,7 @@ import com.healthcareapp.backend.Model.Hospital;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface FrontDeskRepository extends JpaRepository<FrontDesk, Integer> {
 
@@ -12,6 +13,6 @@ public interface FrontDeskRepository extends JpaRepository<FrontDesk, Integer> {
 
     public FrontDesk findFrontDeskByAuthId(int id);
 
-    public FrontDesk findFrontDeskByUserId(String userId);
+    public Optional<FrontDesk> findByUserId(String userId);
 
 }

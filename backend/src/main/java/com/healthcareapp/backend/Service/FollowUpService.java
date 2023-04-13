@@ -4,6 +4,7 @@ import com.healthcareapp.backend.Exception.ResourceNotFoundException;
 import com.healthcareapp.backend.Model.*;
 import com.healthcareapp.backend.Repository.FieldWorkerRepository;
 import com.healthcareapp.backend.Repository.FollowUpRepository;
+import com.healthcareapp.backend.Repository.PatientRepository;
 import com.healthcareapp.backend.Repository.SupervisorRepository;
 import org.springframework.stereotype.Component;
 
@@ -14,37 +15,29 @@ import java.util.Optional;
 @Component
 public class FollowUpService {
     private FollowUpRepository followUpRepository;
-    private FieldWorkerRepository fieldWorkerRepository;
-    private SupervisorRepository supervisorRepository;
-    private EncounterService encounterService;
+    private PatientRepository patientRepository;
+    private SupervisorService supervisorService;
     private FieldWorkerService fieldWorkerService;
-    private PatientService patientService;
-
     private DoctorService doctorService;
 
-    public FollowUpService(FollowUpRepository followUpRepository, FieldWorkerRepository fieldWorkerRepository, SupervisorRepository supervisorRepository, EncounterService encounterService, FieldWorkerService fieldWorkerService, PatientService patientService, DoctorService doctorService) {
+    public FollowUpService(FollowUpRepository followUpRepository, SupervisorService supervisorService, FieldWorkerService fieldWorkerService, PatientRepository patientRepository, DoctorService doctorService) {
         this.followUpRepository = followUpRepository;
-        this.fieldWorkerRepository = fieldWorkerRepository;
-        this.supervisorRepository = supervisorRepository;
-        this.encounterService = encounterService;
+        this.supervisorService = supervisorService;
         this.fieldWorkerService = fieldWorkerService;
-        this.patientService = patientService;
+        this.patientRepository = patientRepository;
         this.doctorService = doctorService;
     }
 
     public List<FollowUp> getCurrentDateFollowUps(String date, int fieldWorkerAuthId){
         FieldWorker fieldWorker;
 
-        fieldWorker = fieldWorkerRepository.findFieldWorkerByAuthId(fieldWorkerAuthId);
-
-        if(fieldWorker==null)
-        {
-            throw new RuntimeException();
-        }
+        fieldWorker = fieldWorkerService.getFieldWorkerById(fieldWorkerAuthId);
 
         List<Patient> patientList = fieldWorker.getPatientList();
 
-        List<FollowUp> followUpList = new ArrayList<>();
+        List<FollowUp> followUpList= new ArrayList<FollowUp>();
+
+//        patientList.forEach(patient -> followUpRepository.findByDateAndPatient(date, patient).forEach(followUp -> followUpList.add(followUp)));
 
         patientList.forEach(patient -> {followUpList.addAll(followUpRepository.findByDateAndPatient(date, patient));});
 
@@ -52,43 +45,33 @@ public class FollowUpService {
     }
 
 
-    public FollowUp updateFollowUpByFieldWorker(FollowUp followUp){
+    public FollowUp updateFollowUp(FollowUp followUp) throws RuntimeException{
 
-        int followUpId = followUp.getFollowUpId();
+//        int followUpId = followUp.getFollowUpId();
 
-        Optional<FollowUp> validFollowUp = followUpRepository.findById(followUpId);
+        Optional<FollowUp> updatedFollowUp = followUpRepository.findById(followUp.getFollowUpId());
 
-        if(validFollowUp.isEmpty())
+        if(updatedFollowUp.isEmpty())
         {
-            throw new ResourceNotFoundException("Follow Up not found");
+            throw new ResourceNotFoundException("Follow up with id: "+ followUp.getFollowUpId()+ " not found");
         }
 
-        validFollowUp.get().setFlag(followUp.isFlag());
-        validFollowUp.get().setLastSyncDate(followUp.getLastSyncDate());
-        validFollowUp.get().setFieldWorkerRemarks(followUp.getFieldWorkerRemarks());
+        updatedFollowUp.get().setFlag(followUp.isFlag());
+        updatedFollowUp.get().setLastSyncDate(followUp.getLastSyncDate());
+        updatedFollowUp.get().setFieldWorkerRemarks(followUp.getFieldWorkerRemarks());
 
-        try {
-            followUpRepository.save(validFollowUp.get());
-        }catch (Exception e){
-            throw new RuntimeException("Update not saved");
-        }
-
-        return validFollowUp.get();
+        followUpRepository.save(updatedFollowUp.get());
+        return updatedFollowUp.get();
     }
 
-    public List<FollowUp> getAllFollowUp(String userId){
-        Optional<Supervisor> supervisor = supervisorRepository.findByUserId(userId);
-
-        if(supervisor.isEmpty())
-        {
-            throw new ResourceNotFoundException("No supervisor with userId : " + userId + " found");
-        }
+    public List<FollowUp> getAllFollowUpsUnderSupervisor(String userId){
+        Supervisor supervisor = supervisorService.getSupervisorByUserId(userId);
 
         List<FollowUp> followUpList = new ArrayList<FollowUp>();
 
-        List<Hospital> hospitalList = supervisor.get().getHospitalList();
+        List<Hospital> hospitalList = supervisor.getHospitalList();
 
-        //System.out.printf(hospitalList.toString());
+//        hospitalList.forEach(hospital -> followUpRepository.findByHospitalAndFlagIsFalse(hospital).forEach(followUp -> followUpList.add(followUp)));
 
         hospitalList.forEach(hospital -> {followUpList.addAll(followUpRepository.findByHospitalAndFlagIsFalse(hospital));});
 
@@ -96,15 +79,13 @@ public class FollowUpService {
     }
 
     public List<FollowUp> addFollowUps(Encounter encounter){
-        Hospital hospital = encounter.getDoctor().getHospital();
-
         List<FollowUp> followUpList = encounter.getFollowUpList();
 
         for (FollowUp followUp : followUpList) {
             followUp.setEncounter(encounter);
             followUp.setFlag(false);
             followUp.setPatient(encounter.getPatient());
-            followUp.setHospital(hospital);
+            followUp.setHospital(encounter.getDoctor().getHospital());
             followUpRepository.save(followUp);
         }
         return followUpList;
@@ -113,8 +94,10 @@ public class FollowUpService {
     public List<FollowUp> getFollowUpsByFieldWorker(int fieldWorkerId){
 
         FieldWorker fieldWorker = fieldWorkerService.getFieldWorkerById(fieldWorkerId);
-        List<Patient> patientList = patientService.getPatientByFieldWorker(fieldWorker);
+        List<Patient> patientList = patientRepository.findByFieldWorker(fieldWorker);
+
         List<FollowUp> followUpList = new ArrayList<>();
+
         for(int i=0; i<patientList.size(); i++){
             List<FollowUp> followUpListForPatient = followUpRepository.findByPatient(patientList.get(i));
             followUpList.addAll(followUpListForPatient);
@@ -125,15 +108,11 @@ public class FollowUpService {
     public List<FollowUp> getAllFollowUpsAssignedByDoctor(String doctorUserId) throws RuntimeException{
         Doctor doctor= doctorService.getDoctorByUserId(doctorUserId);
 
-        List<Encounter> encounterList= encounterService.getEncountersByDoctor(doctor);
+        List<Encounter> encounterList= doctor.getEncounterList();
 
         List<FollowUp> followUpList= new ArrayList<>();
 
         encounterList.forEach(encounter -> followUpList.addAll(encounter.getFollowUpList()));
-
-        if(followUpList.isEmpty()){
-            throw new ResourceNotFoundException("No Follow ups assigned to any patient till now");
-        }
 
         return followUpList;
     }

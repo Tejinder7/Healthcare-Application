@@ -16,21 +16,21 @@ import java.util.Optional;
 @Component
 public class FrontDeskService {
     private FrontDeskRepository frontDeskRepository;
-    private HospitalService hospitalService;
+    private AuthorizationService authorizationService;
+//    private HospitalService hospitalService;
+    private AdminService adminService;
 
-    private AdminRepository adminRepository;
-
-    public FrontDeskService(FrontDeskRepository frontDeskRepository, HospitalService hospitalService, AdminRepository adminRepository) {
+    public FrontDeskService(FrontDeskRepository frontDeskRepository, AdminService adminService) {
         this.frontDeskRepository = frontDeskRepository;
-        this.hospitalService = hospitalService;
-        this.adminRepository = adminRepository;
+        this.adminService = adminService;
     }
 
     public FrontDesk addFrontDesk(FrontDesk frontDesk, String userId) throws RuntimeException{
+        authorizationService.checkIfUserIdExists(userId);
 
-        Optional<Admin> admin = adminRepository.findByUserId(userId);
+        Admin admin = adminService.getAdminByUserId(userId);
 
-        Hospital hospital = hospitalService.getHospitalById(admin.get().getHospital().getHospId());
+        Hospital hospital = admin.getHospital();
 
         frontDesk.setHospital(hospital);
         frontDesk.setUserType("Front Desk");
@@ -48,7 +48,7 @@ public class FrontDeskService {
         Optional<FrontDesk> updatedFrontDesk = frontDeskRepository.findById(frontDesk.getAuthId());
 
         if(updatedFrontDesk.isEmpty()){
-            throw new ResourceNotFoundException("No Front Desk with id: "+ frontDesk.getAuthId()+ " found");
+            throw new ResourceNotFoundException("Front Desk with id: "+ frontDesk.getAuthId()+ " not found");
         }
 
         updatedFrontDesk.get().setName(frontDesk.getName());
@@ -61,7 +61,10 @@ public class FrontDeskService {
     }
 
     public FrontDesk getFrontDeskByUserId(String userId){
-        FrontDesk frontDesk = frontDeskRepository.findFrontDeskByUserId(userId);
-        return frontDesk;
+        Optional<FrontDesk> frontDesk = frontDeskRepository.findByUserId(userId);
+        if(frontDesk.isEmpty()){
+            throw new ResourceNotFoundException("Front Desk with userId: "+ userId+ " not found");
+        }
+        return frontDesk.get();
     }
 }

@@ -25,10 +25,10 @@ public class PatientService {
     public PatientService(PatientRepository patientRepository) {
         this.patientRepository = patientRepository;
     }
-    public Patient addPatient(Patient patient) throws RuntimeException, ParseException {
+    public Patient addPatient(Patient patient) throws RuntimeException{
         Patient savedPatient;
-        String patientName = patient.getName().toLowerCase();
-        patient.setName(patientName);
+//        String patientName = patient.getName().toLowerCase();
+//        patient.setName(patientName);
 
         if(patient.getDOB() != null) {
 //            SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
@@ -64,25 +64,23 @@ public class PatientService {
         List<Patient> patientsWithGivenNameList = new ArrayList<>();
 
         for (int i = 0; i < patientList.size(); i++) {
-            if (patientList.get(i).getName().contains(name)) {
+            if (patientList.get(i).getName().toLowerCase().contains(name.toLowerCase())) {
                 patientsWithGivenNameList.add(patientList.get(i));
             }
-        }
-
-        if(patientsWithGivenNameList.isEmpty()){
-            throw new ResourceNotFoundException("No patients with name: "+ name+ " found");
         }
 
         return patientsWithGivenNameList;
     }
 
-    public List<Patient> getPatientByFieldWorker(FieldWorker fieldWorker){
-        List<Patient> patientList;
-        patientList = patientRepository.findPatientByFieldWorker(fieldWorker);
-        if(patientList.size() == 0)
-            return new ArrayList<Patient>();
-        return patientList;
-    }
+//    public List<Patient> getPatientByFieldWorker(FieldWorker fieldWorker){
+//        List<Patient> patientList;
+//        patientList = patientRepository.findByFieldWorker(fieldWorker);
+//
+//        if(patientList.size() == 0)
+//            return new ArrayList<Patient>();
+//
+//        return patientList;
+//    }
 
     public Patient updatePatient(Patient patient){
         patientRepository.save(patient);

@@ -1,14 +1,9 @@
 package com.healthcareapp.backend.Service;
 
-import com.healthcareapp.backend.Exception.ResourceNotFoundException;
 import com.healthcareapp.backend.Model.FieldWorker;
-import com.healthcareapp.backend.Model.FollowUp;
 import com.healthcareapp.backend.Model.Patient;
 import com.healthcareapp.backend.Model.Supervisor;
 import com.healthcareapp.backend.Repository.FieldWorkerRepository;
-import com.healthcareapp.backend.Repository.FollowUpRepository;
-import com.healthcareapp.backend.Repository.PatientRepository;
-import com.healthcareapp.backend.Repository.SupervisorRepository;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -18,92 +13,74 @@ import java.util.Optional;
 @Component
 public class FieldWorkerService {
     private FieldWorkerRepository fieldWorkerRepository;
-    private SupervisorRepository supervisorRepository;
-    private FollowUpRepository followUpRepository;
-    private PatientRepository patientRepository;
+//    private SupervisorRepository supervisorRepository;
+
+    private SupervisorService supervisorService;
+//    private FollowUpRepository followUpRepository;
+//    private PatientRepository patientRepository;
 
     private PatientService patientService;
-    
-    public FieldWorkerService(FieldWorkerRepository fieldWorkerRepository, SupervisorRepository supervisorRepository, FollowUpRepository followUpRepository, PatientRepository patientRepository, PatientService patientService) {
+
+    private AuthorizationService authorizationService;
+
+    public FieldWorkerService(FieldWorkerRepository fieldWorkerRepository, SupervisorService supervisorService, PatientService patientService, AuthorizationService authorizationService) {
         this.fieldWorkerRepository = fieldWorkerRepository;
-        this.supervisorRepository = supervisorRepository;
-        this.followUpRepository = followUpRepository;
-        this.patientRepository = patientRepository;
+        this.supervisorService = supervisorService;
         this.patientService = patientService;
+        this.authorizationService = authorizationService;
     }
 
+    public FieldWorker addFieldWorker(FieldWorker fieldWorker, String supervisorUserId) throws RuntimeException{
+        authorizationService.checkIfUserIdExists(supervisorUserId);
 
-    public FieldWorker addFieldWorker(FieldWorker fieldWorker, String userId){
+        FieldWorker savedFieldWorker;;
 
-        Optional<Supervisor> supervisor = supervisorRepository.findByUserId(userId);
+        Supervisor supervisor = supervisorService.getSupervisorByUserId(supervisorUserId);
 
-        if(supervisor.isEmpty())
-        {
-            throw new RuntimeException();
-        }
-
-        fieldWorker.setSupervisor(supervisor.get());
+        fieldWorker.setSupervisor(supervisor);
         fieldWorker.setUserType("FieldWorker");
         fieldWorker.setAvailableStatus(true);
 
-        try {
-            fieldWorker = fieldWorkerRepository.save(fieldWorker);
-        }catch (Exception e){
-            throw new RuntimeException();
-        }
-        return fieldWorker;
+        savedFieldWorker = fieldWorkerRepository.save(fieldWorker);
+
+        return savedFieldWorker;
     }
 
 
 
-    public List<FieldWorker> getFieldWorkers(String userId){
-        Optional<Supervisor> supervisor = supervisorRepository.findByUserId(userId);
+    public List<FieldWorker> getFieldWorkers(String supervisorUserId){
+        Supervisor supervisor = supervisorService.getSupervisorByUserId(supervisorUserId);
 
-        if(supervisor.isEmpty())
-        {
-            throw new ResourceNotFoundException("Supervisor with userId" + userId + "not found");
-        }
-
-        List<FieldWorker> fieldWorkerList = fieldWorkerRepository.findFieldWorkerBySupervisor(supervisor.get());
+        List<FieldWorker> fieldWorkerList = fieldWorkerRepository.findBySupervisor(supervisor);
 
         if(fieldWorkerList.size()==0)
         {
-            throw new RuntimeException();
+            return new ArrayList<FieldWorker>();
         }
         else
             return fieldWorkerList;
     }
 
-    public List<FieldWorker> getAvailableFieldWorkers(String userId){
-        Optional<Supervisor> supervisor = supervisorRepository.findByUserId(userId);
+    public List<FieldWorker> getAvailableFieldWorkers(String supervisorUserId){
+        Supervisor supervisor = supervisorService.getSupervisorByUserId(supervisorUserId);
 
-        if(supervisor.isEmpty())
-        {
-            throw new ResourceNotFoundException("Supervisor with userId" + userId + "not found");
-        }
-
-        List<FieldWorker> fieldWorkerList = fieldWorkerRepository.findFieldWorkerBySupervisorAndAvailableStatusIsTrue(supervisor.get());
+        List<FieldWorker> fieldWorkerList = fieldWorkerRepository.findBySupervisorAndAvailableStatusIsTrue(supervisor);
 
         if(fieldWorkerList.size()==0)
         {
-            throw new RuntimeException();
+            return new ArrayList<FieldWorker>();
         }
         else
             return fieldWorkerList;
     }
 
-    public FieldWorker assignFollowUp(int patientId, int fieldWorkerAuthId){
+    public FieldWorker assignFollowUp(int patientId, int fieldWorkerAuthId) throws RuntimeException{
 
         Patient patient = patientService.getPatientById(patientId);
 
 //        List<FollowUp> followUpList = followUpRepository.findByPatient(patient);
 
-        FieldWorker fieldWorker = fieldWorkerRepository.findFieldWorkerByAuthId(fieldWorkerAuthId);
-
-        if(patient==null || fieldWorker==null)
-        {
-            throw new RuntimeException();
-        }
+        FieldWorker fieldWorker = this.getFieldWorkerById(fieldWorkerAuthId);
 
 //        Patient patient = followUp.getPatient();
 
@@ -117,20 +94,17 @@ public class FieldWorkerService {
 
         patient.setFieldWorker(fieldWorker);
 
-        try{
-            patientService.updatePatient(patient);
-            //fieldWorker = fieldWorkerDao.save(fieldWorker);
-        }catch (Exception e){
-            throw new RuntimeException();
-        }
-
-        fieldWorker = fieldWorkerRepository.findFieldWorkerByAuthId(fieldWorkerAuthId);
+        patientService.updatePatient(patient);
 
         return fieldWorker;
     }
 
     public FieldWorker getFieldWorkerById(int fieldWorkerId){
-        FieldWorker fieldWorker = fieldWorkerRepository.findFieldWorkerByAuthId(fieldWorkerId);
-        return fieldWorker;
+        Optional<FieldWorker> fieldWorker = fieldWorkerRepository.findById(fieldWorkerId);
+        if(fieldWorker.isEmpty()){
+            throw new RuntimeException("Field Worker with id: "+ fieldWorkerId+ " not found");
+        }
+
+        return fieldWorker.get();
     }
 }

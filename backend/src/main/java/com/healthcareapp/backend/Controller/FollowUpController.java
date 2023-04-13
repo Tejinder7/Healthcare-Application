@@ -33,7 +33,7 @@ public class FollowUpController {
     @PutMapping("/updateFollowUpByFieldWorker")
     public ResponseEntity<FollowUp> updateFollowUpByFieldWorker(@RequestBody FollowUp followUp){
         try{
-            followUpService.updateFollowUpByFieldWorker(followUp);
+            followUpService.updateFollowUp(followUp);
         }
         catch (Exception exception){
             throw exception;
@@ -45,7 +45,7 @@ public class FollowUpController {
     public ResponseEntity<List<FollowUp>> getFollowUps(@PathVariable String userId){
         List<FollowUp> followUpList;
         try{
-            followUpList = followUpService.getAllFollowUp(userId);
+            followUpList = followUpService.getAllFollowUpsUnderSupervisor(userId);
         }catch (Exception e){
             return ResponseEntity.status(404).build();
         }
