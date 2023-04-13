@@ -19,7 +19,7 @@ public class HospitalService {
 
     private SupervisorRepository supervisorRepository;
 
-    private AdminService adminService;
+//    private AdminService adminService;
 
 
     public HospitalService(HospitalRepository hospitalRepository, SupervisorRepository supervisorRepository) {
@@ -31,7 +31,7 @@ public class HospitalService {
         Optional<Hospital> hospital = hospitalRepository.findById(id);
 
         if(hospital.isEmpty()){
-            throw new ResourceNotFoundException("No Hospital found for Hospital id: "+ id);
+            throw new ResourceNotFoundException("Hospital with id: "+ id+ " not found");
         }
         return hospital.get();
     }

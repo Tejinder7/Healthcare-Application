@@ -70,6 +70,16 @@ public class SupervisorService {
         return unAssignedPatients;
     }
 
+    public Supervisor getSupervisorByUserId(String userId){
+        Optional<Supervisor> supervisor= supervisorRepository.findByUserId(userId);
+
+        if(supervisor.isEmpty()){
+            throw new ResourceNotFoundException("Supervisor with userId: "+ userId+ " not found");
+        }
+
+        return supervisor.get();
+    }
+
 //    public Optional<Supervisor> getSupervisorByPincode(int pincode){
 //        Optional<Supervisor> supervisor = supervisorRepository.findByPincode(pincode);
 //
