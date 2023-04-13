@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
+@RequestMapping("/login")
 //@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class LoginController {
     AuthorizationService authorizationService;
@@ -16,7 +17,7 @@ public class LoginController {
         this.authorizationService = authorizationService;
     }
 
-    @PostMapping("/login")
+    @PostMapping()
     public Authorization loginUser(@RequestBody Authorization authorization){
         try {
             return authorizationService.loginAuthorization(authorization);

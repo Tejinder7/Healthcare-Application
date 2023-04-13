@@ -5,7 +5,6 @@ import com.healthcareapp.backend.Model.Encounter;
 import com.healthcareapp.backend.Model.Patient;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import javax.print.Doc;
 import java.util.List;
 
 public interface EncounterRepository extends JpaRepository<Encounter, Integer> {

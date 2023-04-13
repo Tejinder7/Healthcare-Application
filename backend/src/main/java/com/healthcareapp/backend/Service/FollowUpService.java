@@ -2,10 +2,8 @@ package com.healthcareapp.backend.Service;
 
 import com.healthcareapp.backend.Exception.ResourceNotFoundException;
 import com.healthcareapp.backend.Model.*;
-import com.healthcareapp.backend.Repository.FieldWorkerRepository;
 import com.healthcareapp.backend.Repository.FollowUpRepository;
 import com.healthcareapp.backend.Repository.PatientRepository;
-import com.healthcareapp.backend.Repository.SupervisorRepository;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -78,7 +76,7 @@ public class FollowUpService {
         return followUpList;
     }
 
-    public List<FollowUp> addFollowUps(Encounter encounter){
+    public void addFollowUps(Encounter encounter){
         List<FollowUp> followUpList = encounter.getFollowUpList();
 
         for (FollowUp followUp : followUpList) {
@@ -88,7 +86,6 @@ public class FollowUpService {
             followUp.setHospital(encounter.getDoctor().getHospital());
             followUpRepository.save(followUp);
         }
-        return followUpList;
     }
 
     public List<FollowUp> getFollowUpsByFieldWorker(int fieldWorkerId){

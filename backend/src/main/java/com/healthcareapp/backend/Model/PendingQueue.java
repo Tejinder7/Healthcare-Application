@@ -2,10 +2,6 @@ package com.healthcareapp.backend.Model;
 
 import jakarta.persistence.*;
 
-//@Data
-//@Builder
-//@AllArgsConstructor
-//@NoArgsConstructor
 @Entity
 public class PendingQueue {
     @Id
