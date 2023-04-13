@@ -1,13 +1,11 @@
 package com.healthcareapp.backend.Service;
 
 import com.healthcareapp.backend.Exception.ResourceNotFoundException;
-import com.healthcareapp.backend.Model.*;
-import com.healthcareapp.backend.Repository.AdminRepository;
+import com.healthcareapp.backend.Model.Admin;
+import com.healthcareapp.backend.Model.Doctor;
 import com.healthcareapp.backend.Repository.DoctorRepository;
-import com.healthcareapp.backend.Repository.HospitalRepository;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
 import java.util.Optional;
 
 @Component

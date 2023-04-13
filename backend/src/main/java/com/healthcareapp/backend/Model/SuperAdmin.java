@@ -3,10 +3,6 @@ package com.healthcareapp.backend.Model;
 import jakarta.persistence.Entity;
 import jakarta.persistence.PrimaryKeyJoinColumn;
 
-//@Data
-//@NoArgsConstructor
-//@AllArgsConstructor
-//@Builder
 @Entity
 @PrimaryKeyJoinColumn(name = "authId")
 public class SuperAdmin extends Authorization{
