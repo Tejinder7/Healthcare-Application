@@ -8,11 +8,20 @@ import java.util.List;
 @Entity
 @PrimaryKeyJoinColumn(name = "authId")
 public class FieldWorker extends Authorization{
+
+    @Column(nullable = false)
     private String name;
 
+    @Column(nullable = false)
     private String address;
 
+    @Column(nullable = false)
+    private int pincode;
+
+    @Column(nullable = false)
     private String contact;
+
+    private boolean availableStatus;
 
     @ManyToOne
     @JoinColumn(name= "supervisor_id")
@@ -26,10 +35,13 @@ public class FieldWorker extends Authorization{
     public FieldWorker() {
     }
 
-    public FieldWorker(String name, String address, String contact, Supervisor supervisor, List<Patient> patientList) {
+
+    public FieldWorker(String name, String address, int pincode, String contact, boolean availableStatus, Supervisor supervisor, List<Patient> patientList) {
         this.name = name;
         this.address = address;
+        this.pincode = pincode;
         this.contact = contact;
+        this.availableStatus = availableStatus;
         this.supervisor = supervisor;
         this.patientList = patientList;
     }
@@ -74,12 +86,30 @@ public class FieldWorker extends Authorization{
         this.patientList = patientList;
     }
 
+    public boolean isAvailableStatus() {
+        return availableStatus;
+    }
+
+    public void setAvailableStatus(boolean availableStatus) {
+        this.availableStatus = availableStatus;
+    }
+
+    public int getPincode() {
+        return pincode;
+    }
+
+    public void setPincode(int pincode) {
+        this.pincode = pincode;
+    }
+
     @Override
     public String toString() {
         return "FieldWorker{" +
                 "name='" + name + '\'' +
                 ", address='" + address + '\'' +
-                ", phoneNo='" + contact + '\'' +
+                ", pincode=" + pincode +
+                ", contact='" + contact + '\'' +
+                ", availableStatus=" + availableStatus +
                 ", supervisor=" + supervisor +
                 ", patientList=" + patientList +
                 '}';

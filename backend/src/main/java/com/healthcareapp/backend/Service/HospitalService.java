@@ -1,19 +1,17 @@
 package com.healthcareapp.backend.Service;
 
 
+import com.healthcareapp.backend.Exception.ResourceNotFoundException;
 import com.healthcareapp.backend.Model.Admin;
-import com.healthcareapp.backend.Model.Supervisor;
-import com.healthcareapp.backend.Repository.AdminRepository;
-import com.healthcareapp.backend.Repository.HospitalRepository;
 import com.healthcareapp.backend.Model.Hospital;
+import com.healthcareapp.backend.Model.Supervisor;
+import com.healthcareapp.backend.Repository.HospitalRepository;
 import com.healthcareapp.backend.Repository.SupervisorRepository;
-import jakarta.persistence.criteria.CriteriaBuilder;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Component
 public class HospitalService {
@@ -21,8 +19,7 @@ public class HospitalService {
 
     private SupervisorRepository supervisorRepository;
 
-    @Autowired
-    private AdminRepository adminRepository;
+//    private AdminService adminService;
 
 
     public HospitalService(HospitalRepository hospitalRepository, SupervisorRepository supervisorRepository) {
@@ -31,46 +28,35 @@ public class HospitalService {
     }
 
     public Hospital getHospitalById(int id){
-        Hospital hospital = hospitalRepository.getHospitalsByHospId(id);
-        if(hospital == null){
-            throw new RuntimeException();
+        Optional<Hospital> hospital = hospitalRepository.findById(id);
+
+        if(hospital.isEmpty()){
+            throw new ResourceNotFoundException("Hospital with id: "+ id+ " not found");
         }
-        return hospital;
+        return hospital.get();
     }
 
-    public Hospital addHospital(Hospital hospital){
+    public Hospital addHospital(Hospital hospital) throws RuntimeException{
+        Hospital savedHospital;
+        Optional<Supervisor> supervisor = supervisorRepository.findByPincode(hospital.getPincode());
 
-        Supervisor supervisor = supervisorRepository.findByAddress(hospital.getAddress());
+        if(supervisor.isPresent())
+            hospital.setSupId(supervisor.get());
 
-        if(supervisor == null){
-            throw new RuntimeException();
-        }
+        savedHospital = hospitalRepository.save(hospital);
 
-        hospital.setAddress(hospital.getAddress());
-        hospital.setName(hospital.getName());
-        hospital.setSupId(supervisor);
-
-
-        try {
-            hospital = hospitalRepository.save(hospital);
-        }
-        catch (Exception e)
-        {
-            throw new RuntimeException();
-        }
-        return hospital;
+        return savedHospital;
     }
 
-    public List<Hospital> getHospitalsWhereAdminNotAssigned(){
+    public List<Hospital> getAllHospitals() throws RuntimeException{
         List<Hospital> hospitalList = hospitalRepository.findAll();
-        List<Admin> adminList = adminRepository.findAll();
-        List<Hospital> hospitalAssignedList = new ArrayList<>();
 
-        adminList.forEach(admin -> {hospitalAssignedList.add(admin.getHospital());});
+        return hospitalList;
+    }
 
-        List<Hospital> hospitalNotAssignedList = new ArrayList<>(hospitalList);
-        hospitalNotAssignedList.removeAll(hospitalAssignedList);
+    public void setSupervisorByPincode(Supervisor supervisor) throws RuntimeException{
+        List<Hospital> hospitalList = hospitalRepository.findByPincode(supervisor.getPincode());
 
-        return hospitalNotAssignedList;
+        hospitalList.forEach(hospital -> hospital.setSupervisor(supervisor));
     }
 }

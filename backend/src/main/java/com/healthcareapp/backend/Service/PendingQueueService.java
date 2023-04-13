@@ -1,37 +1,38 @@
 package com.healthcareapp.backend.Service;
 
-import com.healthcareapp.backend.Model.Hospital;
-import com.healthcareapp.backend.Model.Patient;
-import com.healthcareapp.backend.Model.PendingQueue;
+import com.healthcareapp.backend.Exception.ResourceNotFoundException;
+import com.healthcareapp.backend.Model.*;
 import com.healthcareapp.backend.Repository.PendingQueueRepository;
 import org.springframework.stereotype.Component;
 
 import java.time.DateTimeException;
 import java.util.List;
+import java.util.Optional;
 
 @Component
 public class PendingQueueService {
     private PendingQueueRepository pendingQueueRepository;
     private PatientService patientService;
-    private HospitalService hospitalService;
+    private FrontDeskService frontDeskService;
     private DoctorService doctorService;
 
-    public PendingQueueService(PendingQueueRepository pendingQueueRepository, PatientService patientService, HospitalService hospitalService, DoctorService doctorService) {
+    public PendingQueueService(PendingQueueRepository pendingQueueRepository, PatientService patientService, FrontDeskService frontDeskService, DoctorService doctorService) {
         this.pendingQueueRepository = pendingQueueRepository;
         this.patientService = patientService;
-        this.hospitalService = hospitalService;
+        this.frontDeskService = frontDeskService;
         this.doctorService = doctorService;
     }
 
-    public PendingQueue addPendingQueue(int hospId, int pid){
+    public PendingQueue addPendingQueue(String userId, int pid) throws RuntimeException{
 
         PendingQueue pendingQueue = new PendingQueue();
 
         Patient patient = patientService.getPatientById(pid);
         pendingQueue.setPatient(patient);
 
-        Hospital hospital = hospitalService.getHospitalById(hospId);
-        pendingQueue.setHospital(hospital);
+        FrontDesk frontDesk = frontDeskService.getFrontDeskByUserId(userId);
+
+        pendingQueue.setHospital(frontDesk.getHospital());
 
         try {
             String date = java.time.LocalDate.now().toString();
@@ -39,30 +40,32 @@ public class PendingQueueService {
             String dateTime = date + " " + time;
             pendingQueue.setDateTime(dateTime);
         }
-        catch (DateTimeException e){
-            throw new RuntimeException();
+        catch (DateTimeException exception){
+            throw new RuntimeException(exception);
         }
 
         pendingQueueRepository.save(pendingQueue);
         return pendingQueue;
     }
 
-    public List<PendingQueue> getPendingQueueByDocId(int hospId){
-        Hospital hospital = hospitalService.getHospitalById(hospId);
+    public List<PendingQueue> getPendingQueueByDocId(String doctorUserId) throws RuntimeException{
 
-        List<PendingQueue> pendingQueueList = pendingQueueRepository.findPendingQueueByHospital(hospital);
+        Doctor doctor = doctorService.getDoctorByUserId(doctorUserId);
 
-        if(pendingQueueList.size() == 0){
-            throw new RuntimeException();
-        }
+        Hospital hospital = doctor.getHospital();
+
+        List<PendingQueue> pendingQueueList = pendingQueueRepository.findByHospital(hospital);
 
         return pendingQueueList;
     }
 
-    public void deletePendingQueue(Patient patient){
-        PendingQueue pendingQueue = pendingQueueRepository.findPendingQueueByPatient(patient);
-        int pendingQueueId = pendingQueue.getPendingQueueId();
-        pendingQueueRepository.deleteById(pendingQueueId);
+    public void deletePendingQueue(Patient patient) throws RuntimeException{
+        Optional<PendingQueue> pendingQueue = pendingQueueRepository.findByPatient(patient);
+
+        if(pendingQueue.isEmpty()){
+            throw new ResourceNotFoundException("No entry for patient with id: "+ patient.getPatientId()+ " in pending queue");
+        }
+        pendingQueueRepository.deleteById(pendingQueue.get().getPendingQueueId());
     }
 
 }

@@ -1,17 +1,15 @@
 package com.healthcareapp.backend.Controller;
 
-import com.healthcareapp.backend.Exception.ResourceNotFoundException;
 import com.healthcareapp.backend.Model.Hospital;
+import com.healthcareapp.backend.Service.AdminService;
 import com.healthcareapp.backend.Service.HospitalService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @RestController
-@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class HospitalController {
     private HospitalService hospitalService;
 
@@ -21,27 +19,15 @@ public class HospitalController {
 
     @PostMapping("/addHospital")
     public ResponseEntity<Hospital> addHospital(@RequestBody Hospital hospital){
-        Hospital hospital1;
+        Hospital savedHospital;
         try{
-            hospital1 = hospitalService.addHospital(hospital);
-        }
-        catch (Exception e)
+            savedHospital = hospitalService.addHospital(hospital);
+        }catch (RuntimeException exception)
         {
-            return ResponseEntity.status(404).build();
+            throw exception;
         }
 
-        return ResponseEntity.of(Optional.of(hospital1));
+        return ResponseEntity.of(Optional.of(savedHospital));
     }
 
-    @GetMapping("/hospitalsWithNoAdmins")
-    public List<Hospital> getHospitalsWithNoAdmins(){
-        List<Hospital> hospitalList;
-        try{
-            hospitalList = hospitalService.getHospitalsWhereAdminNotAssigned();
-        }catch (Exception e){
-            throw new ResourceNotFoundException("");
-        }
-
-        return hospitalList;
-    }
 }

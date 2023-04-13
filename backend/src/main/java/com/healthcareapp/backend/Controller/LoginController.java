@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@CrossOrigin(origins = "*", allowedHeaders = "*")
+//@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class LoginController {
     AuthorizationService authorizationService;
 
@@ -17,8 +17,12 @@ public class LoginController {
     }
 
     @PostMapping("/login")
-    public boolean loginUser(@RequestBody Authorization authorization){
-        return authorizationService.loginAuthorization(authorization);
+    public Authorization loginUser(@RequestBody Authorization authorization){
+        try {
+            return authorizationService.loginAuthorization(authorization);
+        }catch (Exception exception){
+            throw exception;
+        }
     }
 
     @PostMapping("/forgotPassword/{email}")

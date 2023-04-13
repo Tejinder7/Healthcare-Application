@@ -9,19 +9,20 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class SuperAdminController {
-
-    @Autowired
     private SuperAdminService superAdminService;
+
+    public SuperAdminController(SuperAdminService superAdminService) {
+        this.superAdminService = superAdminService;
+    }
 
     @GetMapping("/getAllUsers")
     public List<Object> getAllUser(){
         try {
             List<Object> userList = superAdminService.getAllUsers();
             return userList;
-        }catch (Exception e){
-            throw new RuntimeException();
+        }catch (Exception exception){
+            throw exception;
         }
     }
 

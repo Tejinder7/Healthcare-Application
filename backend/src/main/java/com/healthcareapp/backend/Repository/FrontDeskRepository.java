@@ -5,11 +5,14 @@ import com.healthcareapp.backend.Model.Hospital;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface FrontDeskRepository extends JpaRepository<FrontDesk, Integer> {
 
-    public List<FrontDesk> getFrontDeskByHospital(Hospital hospital);
+    public List<FrontDesk> findByHospital(Hospital hospital);
 
     public FrontDesk findFrontDeskByAuthId(int id);
+
+    public Optional<FrontDesk> findByUserId(String userId);
 
 }

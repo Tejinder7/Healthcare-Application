@@ -1,14 +1,18 @@
 package com.healthcareapp.backend.Controller;
 
+
+import com.healthcareapp.backend.Model.Hospital;
+import com.healthcareapp.backend.Model.Patient;
 import com.healthcareapp.backend.Model.Supervisor;
 import com.healthcareapp.backend.Service.SupervisorService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
-@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class SupervisorController {
     private SupervisorService supervisorService;
 
@@ -18,25 +22,38 @@ public class SupervisorController {
 
     @PostMapping("/addSupervisor")
     public ResponseEntity<Supervisor> addSupervisor(@RequestBody Supervisor supervisor){
-        Supervisor supervisor1;
+        Supervisor savedSupervisor;
         try{
-            supervisor1 = supervisorService.addSupervisor(supervisor);
+            savedSupervisor = supervisorService.addSupervisor(supervisor);
         }
-        catch (Exception e){
-            return ResponseEntity.status(500).build();
+        catch (RuntimeException exception){
+            throw exception;
         }
-        return ResponseEntity.of(Optional.of(supervisor1));
+        return ResponseEntity.of(Optional.of(savedSupervisor));
+    }
+
+
+    @GetMapping("/unassignedPatients/{userId}")
+    public ResponseEntity<List<Patient>> unassignedPatients(@PathVariable String userId){
+        List<Patient> patientList;
+        try{
+            patientList = supervisorService.unAssignedPatients(userId);
+        }catch (Exception exception){
+            throw exception;
+        }
+        return ResponseEntity.of(Optional.of(patientList));
     }
 
     @PutMapping("/updateSupervisor")
     public ResponseEntity<Supervisor> updateSupervisor(@RequestBody Supervisor supervisor){
-        Supervisor supervisor1;
+        Supervisor updatedSupervisor;
         try{
-            supervisor1 = supervisorService.updateSupervisor(supervisor);
+            updatedSupervisor = supervisorService.updateSupervisor(supervisor);
         }
-        catch (Exception e){
-            return ResponseEntity.status(500).build();
+        catch (RuntimeException exception){
+            throw exception;
         }
-        return ResponseEntity.of(Optional.of(supervisor1));
+        return ResponseEntity.of(Optional.of(updatedSupervisor));
     }
+
 }

@@ -1,6 +1,7 @@
 package com.healthcareapp.backend.Controller;
 
 import com.healthcareapp.backend.Model.Admin;
+import com.healthcareapp.backend.Model.Hospital;
 import com.healthcareapp.backend.Service.AdminService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -9,7 +10,6 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class AdminController {
     private AdminService adminService;
 
@@ -19,34 +19,49 @@ public class AdminController {
 
     @PostMapping("/addAdmin/{hospId}")
     public ResponseEntity<Admin> addAdmin(@RequestBody Admin admin, @PathVariable int hospId){
-        Admin admin1;
+        Admin savedAdmin;
         try{
-            admin1 = adminService.addAdmin(admin, hospId);
+            savedAdmin = adminService.addAdmin(admin, hospId);
         }
-        catch (Exception e){
-            return ResponseEntity.status(500).build();
+        catch (RuntimeException exception){
+            throw exception;
         }
-        return ResponseEntity.of(Optional.of(admin1));
+
+        return ResponseEntity.of(Optional.of(savedAdmin));
     }
 
     @PutMapping("/updateAdmin")
     public ResponseEntity<Admin> updateAdmin(@RequestBody Admin admin){
-        Admin admin1;
+        Admin updatedAdmin;
+
         try{
-            admin1 = adminService.updateAdmin(admin);
-        }catch (Exception e){
-            return ResponseEntity.status(500).build();
+            updatedAdmin = adminService.updateAdmin(admin);
         }
-        return ResponseEntity.of(Optional.of(admin1));
+        catch (RuntimeException exception){
+            throw exception;
+        }
+
+        return ResponseEntity.of(Optional.of(updatedAdmin));
     }
 
-    @GetMapping("/getAllHospitalUsers/{hospitalId}")
-    public List<Object> getAllHospitalUser(@PathVariable int hospitalId){
+    @GetMapping("/getAllHospitalUsers/{userId}")
+    public List<Object> getAllHospitalUsers(@PathVariable String userId){
+        List<Object> hospitalUsersList;
         try {
-            List<Object> userList = adminService.getAllHospitalUsers(hospitalId);
-            return userList;
-        }catch (Exception e){
-            throw new RuntimeException();
+            hospitalUsersList = adminService.getAllHospitalUsers(userId);
         }
+        catch (Exception exception){
+            throw exception;
+        }
+        return hospitalUsersList;
+    }
+
+    @GetMapping("/hospitalsWithNoAdmins")
+    public List<Hospital> getHospitalsWithNoAdmins(){
+        List<Hospital> hospitalList;
+
+        hospitalList = adminService.getHospitalsWhereAdminNotAssigned();
+
+        return hospitalList;
     }
 }

@@ -1,14 +1,8 @@
 package com.healthcareapp.backend.Model;
 
 
-import com.fasterxml.jackson.annotation.*;
-
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.util.List;
 
@@ -22,20 +16,24 @@ public class Patient {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int patientId;
 
+    @Column(nullable = false)
     private String name;
 
     private String address;
 
+    private int pincode;
+
+
+    private String DOB;
+
+
     private int age;
 
+    @Column(nullable = false)
     private String sex;
 
+    @Column(nullable = false)
     private String contact;
-
-    @OneToMany(mappedBy = "patient")
-//    @JsonManagedReference(value = "Patient-MedicalHistory")
-    @JsonIgnore
-    private List<MedicalHistory> medicalHistoryList;
 
     @ManyToOne
     @JoinColumn(name= "field_worker_id")
@@ -61,14 +59,15 @@ public class Patient {
     public Patient() {
     }
 
-    public Patient(int patientId, String name, String address, int age, String sex, String contact, List<MedicalHistory> medicalHistoryList, FieldWorker fieldWorker, PendingQueue pendingQueue, List<Encounter> encounterList, List<FollowUp> followUpList) {
+    public Patient(int patientId, String name, String address, int pincode, String DOB, int age, String sex, String contact, FieldWorker fieldWorker, PendingQueue pendingQueue, List<Encounter> encounterList, List<FollowUp> followUpList) {
         this.patientId = patientId;
         this.name = name;
         this.address = address;
+        this.pincode = pincode;
+        this.DOB = DOB;
         this.age = age;
         this.sex = sex;
         this.contact = contact;
-        this.medicalHistoryList = medicalHistoryList;
         this.fieldWorker = fieldWorker;
         this.pendingQueue = pendingQueue;
         this.encounterList = encounterList;
@@ -123,14 +122,6 @@ public class Patient {
         this.contact = contact;
     }
 
-    public List<MedicalHistory> getMedicalHistoryList() {
-        return medicalHistoryList;
-    }
-
-    public void setMedicalHistoryList(List<MedicalHistory> medicalHistoryList) {
-        this.medicalHistoryList = medicalHistoryList;
-    }
-
     public List<Encounter> getEncounterList() {
         return encounterList;
     }
@@ -163,16 +154,33 @@ public class Patient {
         this.pendingQueue = pendingQueue;
     }
 
+    public int getPincode() {
+        return pincode;
+    }
+
+    public void setPincode(int pincode) {
+        this.pincode = pincode;
+    }
+
+    public String getDOB() {
+        return DOB;
+    }
+
+    public void setDOB(String DOB) {
+        this.DOB = DOB;
+    }
+
     @Override
     public String toString() {
         return "Patient{" +
                 "patientId=" + patientId +
                 ", name='" + name + '\'' +
                 ", address='" + address + '\'' +
+                ", pincode=" + pincode +
+                ", DOB='" + DOB + '\'' +
                 ", age=" + age +
                 ", sex='" + sex + '\'' +
                 ", contact='" + contact + '\'' +
-                ", medicalHistoryList=" + medicalHistoryList +
                 ", fieldWorker=" + fieldWorker +
                 ", pendingQueue=" + pendingQueue +
                 ", encounterList=" + encounterList +

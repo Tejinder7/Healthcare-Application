@@ -1,13 +1,11 @@
 package com.healthcareapp.backend.Model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.PrimaryKeyJoinColumn;
+import jakarta.persistence.*;
 
 @Entity
 @PrimaryKeyJoinColumn(name = "authId")
 public class FrontDesk extends Authorization{
+    @Column(nullable = false)
     private String name;
 
     @ManyToOne
@@ -31,11 +29,11 @@ public class FrontDesk extends Authorization{
         this.name = name;
     }
 
-    public Hospital getHospId() {
+    public Hospital getHospital() {
         return hospital;
     }
 
-    public void setHospId(Hospital hospital) {
+    public void setHospital(Hospital hospital) {
         this.hospital = hospital;
     }
 

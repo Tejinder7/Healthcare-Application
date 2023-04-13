@@ -1,69 +1,70 @@
 package com.healthcareapp.backend.Service;
 
+import com.healthcareapp.backend.Exception.ResourceNotFoundException;
+import com.healthcareapp.backend.Model.Admin;
 import com.healthcareapp.backend.Model.Doctor;
 import com.healthcareapp.backend.Model.FrontDesk;
 import com.healthcareapp.backend.Model.Hospital;
+import com.healthcareapp.backend.Repository.AdminRepository;
 import com.healthcareapp.backend.Repository.FrontDeskRepository;
 import com.healthcareapp.backend.Repository.HospitalRepository;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
 
 @Component
 public class FrontDeskService {
     private FrontDeskRepository frontDeskRepository;
-    private HospitalRepository hospitalRepository;
-    
-    public FrontDeskService(FrontDeskRepository frontDeskRepository, HospitalRepository hospitalRepository) {
+    private AuthorizationService authorizationService;
+//    private HospitalService hospitalService;
+    private AdminService adminService;
+
+    public FrontDeskService(FrontDeskRepository frontDeskRepository, AdminService adminService) {
         this.frontDeskRepository = frontDeskRepository;
-        this.hospitalRepository = hospitalRepository;
+        this.adminService = adminService;
     }
 
+    public FrontDesk addFrontDesk(FrontDesk frontDesk, String userId) throws RuntimeException{
+        authorizationService.checkIfUserIdExists(userId);
 
-    public FrontDesk addFrontDesk(FrontDesk frontDesk, int hospitalId){
+        Admin admin = adminService.getAdminByUserId(userId);
 
-        Hospital hospital;
+        Hospital hospital = admin.getHospital();
 
-        hospital = hospitalRepository.getHospitalsByHospId(hospitalId);
-
-        if(hospital==null)
-        {
-            throw new RuntimeException();
-        }
-
-        frontDesk.setHospId(hospital);
+        frontDesk.setHospital(hospital);
         frontDesk.setUserType("Front Desk");
 
-
-        try {
-            frontDeskRepository.save(frontDesk);
-        }catch (Exception e){
-            throw new RuntimeException();
-        }
+        frontDeskRepository.save(frontDesk);
         return frontDesk;
     }
 
-    public List<FrontDesk> getAllFrontDeskByHospital(Hospital hospital){
-        List<FrontDesk> frontDeskList;
-        try{
-            frontDeskList = frontDeskRepository.getFrontDeskByHospital(hospital);
-        }catch (Exception e){
-            throw new RuntimeException();
+//    public List<FrontDesk> getAllFrontDeskByHospital(Hospital hospital){
+//        List<FrontDesk> frontDeskList= frontDeskRepository.findByHospital(hospital);
+//        return frontDeskList;
+//    }
+
+    public FrontDesk updateFrontDesk(FrontDesk frontDesk) throws RuntimeException{
+        Optional<FrontDesk> updatedFrontDesk = frontDeskRepository.findById(frontDesk.getAuthId());
+
+        if(updatedFrontDesk.isEmpty()){
+            throw new ResourceNotFoundException("Front Desk with id: "+ frontDesk.getAuthId()+ " not found");
         }
-        return frontDeskList;
+
+        updatedFrontDesk.get().setName(frontDesk.getName());
+        updatedFrontDesk.get().setUserId(frontDesk.getUserId());
+        updatedFrontDesk.get().setPassword(frontDesk.getPassword());
+
+        frontDeskRepository.save(updatedFrontDesk.get());
+
+        return updatedFrontDesk.get();
     }
 
-    public FrontDesk updateFrontDesk(FrontDesk frontDesk){
-        FrontDesk frontDesk1 = frontDeskRepository.findFrontDeskByAuthId(frontDesk.getAuthId());
-        frontDesk1.setName(frontDesk.getName());
-        frontDesk1.setUserId(frontDesk.getUserId());
-        frontDesk1.setPassword(frontDesk.getPassword());
-        try {
-            frontDeskRepository.save(frontDesk1);
-            return frontDesk1;
+    public FrontDesk getFrontDeskByUserId(String userId){
+        Optional<FrontDesk> frontDesk = frontDeskRepository.findByUserId(userId);
+        if(frontDesk.isEmpty()){
+            throw new ResourceNotFoundException("Front Desk with userId: "+ userId+ " not found");
         }
-        catch (Exception e){
-            throw new RuntimeException();
-        }
+        return frontDesk.get();
     }
 }

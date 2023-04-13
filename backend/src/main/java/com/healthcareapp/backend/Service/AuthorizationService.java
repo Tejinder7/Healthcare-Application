@@ -1,8 +1,12 @@
 package com.healthcareapp.backend.Service;
 
+import com.healthcareapp.backend.Exception.ForbiddenException;
+import com.healthcareapp.backend.Exception.ResourceNotFoundException;
 import com.healthcareapp.backend.Model.Authorization;
 import com.healthcareapp.backend.Repository.AuthorizationRepository;
 import org.springframework.stereotype.Component;
+
+import java.util.Optional;
 
 @Component
 public class AuthorizationService {
@@ -11,12 +15,20 @@ public class AuthorizationService {
     public AuthorizationService(AuthorizationRepository authorizationRepository) {
         this.authorizationRepository = authorizationRepository;
     }
-    public boolean loginAuthorization(Authorization authorization){
-        Authorization authorization1= authorizationRepository.findByUserIdAndPasswordAndUserType(authorization.getUserId(), authorization.getPassword(), authorization.getUserType());
+    public Authorization loginAuthorization(Authorization authorization){
+        Optional<Authorization> user= authorizationRepository.findByUserIdAndPasswordAndUserType(authorization.getUserId(), authorization.getPassword(), authorization.getUserType());
 
-        if(authorization1== null){
-            return false;
+        if(user.isEmpty()){
+            throw new ResourceNotFoundException("Invalid Credentials. Please try again with valid credentials");
         }
-        return true;
+        return user.get();
+    }
+
+    public void checkIfUserIdExists(String userId){
+        Optional<Authorization> authorization = authorizationRepository.findByUserId(userId);
+
+        if(authorization.isPresent()){
+            throw new ForbiddenException("User already exists. Please try again with a different User id");
+        }
     }
 }

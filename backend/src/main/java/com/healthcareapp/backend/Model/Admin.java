@@ -1,10 +1,6 @@
 package com.healthcareapp.backend.Model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 //@Data
 //@AllArgsConstructor
@@ -13,6 +9,8 @@ import lombok.NoArgsConstructor;
 @Entity
 @PrimaryKeyJoinColumn(name = "authId")
 public class Admin extends Authorization{
+
+    @Column(nullable = false)
     private String name;
 
     @OneToOne

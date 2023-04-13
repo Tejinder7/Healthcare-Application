@@ -2,8 +2,6 @@ package com.healthcareapp.backend.Model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.PrimaryKeyJoinColumn;
-import lombok.*;
-import org.hibernate.annotations.AnyKeyJavaClass;
 
 //@Data
 //@NoArgsConstructor

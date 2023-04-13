@@ -5,10 +5,6 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.PrimaryKeyJoinColumn;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.util.List;
 
@@ -19,12 +15,18 @@ import java.util.List;
 @Entity
 @PrimaryKeyJoinColumn(name = "authId")
 public class Supervisor extends Authorization{
+
+    @Column(nullable = false)
     private String name;
 
+    @Column(nullable = false)
     private String contact;
 
-    @Column(unique = true)
+    @Column(nullable = false)
     private String address;
+
+    @Column(unique = true, nullable = false)
+    private int pincode;
 
     @OneToMany(mappedBy = "supervisor")
 //    @JsonManagedReference("FW-SUP")
@@ -38,10 +40,11 @@ public class Supervisor extends Authorization{
     public Supervisor() {
     }
 
-    public Supervisor(String name, String contact, String address, List<FieldWorker> fieldWorkerList, List<Hospital> hospitalList) {
+    public Supervisor(String name, String contact, String address, int pincode, List<FieldWorker> fieldWorkerList, List<Hospital> hospitalList) {
         this.name = name;
         this.contact = contact;
         this.address = address;
+        this.pincode = pincode;
         this.fieldWorkerList = fieldWorkerList;
         this.hospitalList = hospitalList;
     }
@@ -86,12 +89,21 @@ public class Supervisor extends Authorization{
         this.hospitalList = hospitalList;
     }
 
+    public int getPincode() {
+        return pincode;
+    }
+
+    public void setPincode(int pincode) {
+        this.pincode = pincode;
+    }
+
     @Override
     public String toString() {
         return "Supervisor{" +
                 "name='" + name + '\'' +
                 ", contact='" + contact + '\'' +
                 ", address='" + address + '\'' +
+                ", pincode=" + pincode +
                 ", fieldWorkerList=" + fieldWorkerList +
                 ", hospitalList=" + hospitalList +
                 '}';

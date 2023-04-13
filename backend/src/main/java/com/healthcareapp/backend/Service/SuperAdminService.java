@@ -1,5 +1,6 @@
 package com.healthcareapp.backend.Service;
 
+import com.healthcareapp.backend.Exception.ResourceNotFoundException;
 import com.healthcareapp.backend.Model.Admin;
 import com.healthcareapp.backend.Model.Supervisor;
 import com.healthcareapp.backend.Repository.AdminRepository;
@@ -12,23 +13,17 @@ import java.util.List;
 
 @Component
 public class SuperAdminService {
-
-    @Autowired
     AdminRepository adminRepository;
-
-    @Autowired
     SupervisorRepository supervisorRepository;
 
-    public List<Object> getAllUsers(){
-        List<Admin> adminList;
-        List<Supervisor> supervisorList;
+    public SuperAdminService(AdminRepository adminRepository, SupervisorRepository supervisorRepository) {
+        this.adminRepository = adminRepository;
+        this.supervisorRepository = supervisorRepository;
+    }
 
-        try {
-            adminList = adminRepository.findAll();
-            supervisorList = supervisorRepository.findAll();
-        }catch (Exception e){
-            throw new RuntimeException();
-        }
+    public List<Object> getAllUsers(){
+        List<Admin> adminList= adminRepository.findAll();
+        List<Supervisor> supervisorList= supervisorRepository.findAll();
 
         List<Object> userList = new ArrayList<>();
         userList.addAll(adminList);

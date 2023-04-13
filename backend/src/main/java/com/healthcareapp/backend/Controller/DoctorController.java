@@ -7,33 +7,35 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 @RestController
-@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class DoctorController {
     private DoctorService doctorService;
     public DoctorController(DoctorService doctorService) {
         this.doctorService = doctorService;
     }
 
-    @PostMapping("/addDoctor/{hospitalId}")
-    public ResponseEntity<Doctor> addDoctor(@RequestBody Doctor doctor, @PathVariable int hospitalId){
-        Doctor doctor1;
+    @PostMapping("/addDoctor/{userId}")
+    public ResponseEntity<Doctor> addDoctor(@RequestBody Doctor doctor, @PathVariable String userId){
+        Doctor savedDoctor;
 
         try{
-            doctor1 = doctorService.addDoctor(doctor, hospitalId);
-        }catch (Exception e){
-            return ResponseEntity.status(404).build();
+            savedDoctor = doctorService.addDoctor(doctor, userId);
         }
-        return ResponseEntity.of(Optional.of(doctor1));
+        catch (RuntimeException exception){
+            throw exception;
+        }
+        return ResponseEntity.of(Optional.of(savedDoctor));
     }
 
     @PutMapping("/updateDoctor")
     public ResponseEntity<Doctor> updateDoctor(@RequestBody Doctor doctor){
-        Doctor doctor1;
+        Doctor updatedDoctor;
+
         try{
-            doctor1 = doctorService.updateDoctor(doctor);
-        }catch (Exception e){
-            return ResponseEntity.status(500).build();
+            updatedDoctor = doctorService.updateDoctor(doctor);
+        }catch (RuntimeException exception){
+            throw exception;
         }
-        return ResponseEntity.of(Optional.of(doctor1));
+
+        return ResponseEntity.of(Optional.of(updatedDoctor));
     }
 }

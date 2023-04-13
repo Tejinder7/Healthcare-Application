@@ -5,12 +5,12 @@ import com.healthcareapp.backend.Service.PatientService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @RestController
-@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class PatientController {
     private PatientService patientService;
 
@@ -19,15 +19,10 @@ public class PatientController {
     }
 
     @PostMapping("/addPatients")
-    public ResponseEntity<Patient> addPatient(@RequestBody Patient patient){
-        Patient patient1 = new Patient();
-        try {
-            patient1 = this.patientService.addPatient(patient);
-        }
-        catch (Exception e){
-            ResponseEntity.status(404).build();
-        }
-        return ResponseEntity.of(Optional.of(patient1));
+    public ResponseEntity<Patient> addPatient(@RequestBody Patient patient) throws ParseException {
+        Patient savedPatient;
+        savedPatient = patientService.addPatient(patient);
+        return ResponseEntity.of(Optional.of(savedPatient));
     }
 
     @GetMapping("/getPatientById/{patientId}")
@@ -35,21 +30,24 @@ public class PatientController {
         Patient patient;
         try {
             patient = patientService.getPatientById(patientId);
-            return ResponseEntity.of(Optional.of(patient));
         }
-        catch (Exception e) {
-            return ResponseEntity.status(404).build();
+        catch (Exception exception) {
+            throw exception;
         }
+        return ResponseEntity.of(Optional.of(patient));
     }
 
     @GetMapping("/getPatientsByName/{patientName}")
     public ResponseEntity<List<Patient>> getPatientsByName(@PathVariable String patientName){
-        List<Patient> patientList = new ArrayList<>();
+        List<Patient> patientList;
         try{
             patientList = patientService.getPatientsByName(patientName);
-            return ResponseEntity.of(Optional.of(patientList));
-        }catch (Exception e){
-            return ResponseEntity.status(500).build();
         }
+        catch (Exception exception){
+            throw exception;
+        }
+        return ResponseEntity.of(Optional.of(patientList));
     }
+
+
 }

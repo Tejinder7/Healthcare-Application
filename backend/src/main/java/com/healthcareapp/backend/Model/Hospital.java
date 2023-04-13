@@ -3,10 +3,6 @@ package com.healthcareapp.backend.Model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.util.List;
 
@@ -16,9 +12,14 @@ public class Hospital {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int hospId;
 
+    @Column(nullable = false)
     private String name;
 
+    @Column(nullable = false)
     private String address;
+
+    @Column(nullable = false)
+    private int pincode;
 
     @OneToOne(mappedBy = "hospital")
     @JsonIgnore
@@ -52,10 +53,11 @@ public class Hospital {
     public Hospital() {
     }
 
-    public Hospital(int hospId, String name, String address, Admin admin, Supervisor supervisor, List<FrontDesk> frontDeskList, List<Doctor> doctorList, List<PendingQueue> pendingQueueList, List<FollowUp> followUpList) {
+    public Hospital(int hospId, String name, String address, int pincode, Admin admin, Supervisor supervisor, List<FrontDesk> frontDeskList, List<Doctor> doctorList, List<PendingQueue> pendingQueueList, List<FollowUp> followUpList) {
         this.hospId = hospId;
         this.name = name;
         this.address = address;
+        this.pincode = pincode;
         this.admin = admin;
         this.supervisor = supervisor;
         this.frontDeskList = frontDeskList;
@@ -136,12 +138,29 @@ public class Hospital {
         this.followUpList = followUpList;
     }
 
+    public int getPincode() {
+        return pincode;
+    }
+
+    public void setPincode(int pincode) {
+        this.pincode = pincode;
+    }
+
+    public Supervisor getSupervisor() {
+        return supervisor;
+    }
+
+    public void setSupervisor(Supervisor supervisor) {
+        this.supervisor = supervisor;
+    }
+
     @Override
     public String toString() {
         return "Hospital{" +
                 "hospId=" + hospId +
                 ", name='" + name + '\'' +
                 ", address='" + address + '\'' +
+                ", pincode=" + pincode +
                 ", admin=" + admin +
                 ", supervisor=" + supervisor +
                 ", frontDeskList=" + frontDeskList +

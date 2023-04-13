@@ -1,11 +1,7 @@
 package com.healthcareapp.backend.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
 
 @Entity
 public class FollowUp {
@@ -18,11 +14,14 @@ public class FollowUp {
     @ManyToOne
     @JoinColumn(name= "encounter_id")
 //    @JsonBackReference(value="Encounter-FollowUp")
+    @JsonIgnore
     private Encounter encounter;
 
     private String date;
 
-    private String remarks;
+    private String fieldWorkerRemarks;
+
+    private String doctorRemarks;
 
     private boolean flag;
 
@@ -38,15 +37,15 @@ public class FollowUp {
 //    @JsonBackReference("Patient-FollowUp")
     private Patient patient;
 
-
     public FollowUp() {
     }
 
-    public FollowUp(int followUpId, Encounter encounter, String date, String remarks, boolean flag, String lastSyncDate, Hospital hospital, Patient patient) {
+    public FollowUp(int followUpId, Encounter encounter, String date, String fieldWorkerRemarks, String doctorRemarks, boolean flag, String lastSyncDate, Hospital hospital, Patient patient) {
         this.followUpId = followUpId;
         this.encounter = encounter;
         this.date = date;
-        this.remarks = remarks;
+        this.fieldWorkerRemarks = fieldWorkerRemarks;
+        this.doctorRemarks = doctorRemarks;
         this.flag = flag;
         this.lastSyncDate = lastSyncDate;
         this.hospital = hospital;
@@ -93,14 +92,6 @@ public class FollowUp {
         this.date = date;
     }
 
-    public String getRemarks() {
-        return remarks;
-    }
-
-    public void setRemarks(String remarks) {
-        this.remarks = remarks;
-    }
-
     public boolean isFlag() {
         return flag;
     }
@@ -117,13 +108,30 @@ public class FollowUp {
         this.lastSyncDate = lastSyncDate;
     }
 
+    public String getFieldWorkerRemarks() {
+        return fieldWorkerRemarks;
+    }
+
+    public void setFieldWorkerRemarks(String fieldWorkerRemarks) {
+        this.fieldWorkerRemarks = fieldWorkerRemarks;
+    }
+
+    public String getDoctorRemarks() {
+        return doctorRemarks;
+    }
+
+    public void setDoctorRemarks(String doctorRemarks) {
+        this.doctorRemarks = doctorRemarks;
+    }
+
     @Override
     public String toString() {
         return "FollowUp{" +
                 "followUpId=" + followUpId +
                 ", encounter=" + encounter +
                 ", date='" + date + '\'' +
-                ", remarks='" + remarks + '\'' +
+                ", fieldWorkerRemarks='" + fieldWorkerRemarks + '\'' +
+                ", doctorRemarks='" + doctorRemarks + '\'' +
                 ", flag=" + flag +
                 ", lastSyncDate='" + lastSyncDate + '\'' +
                 ", hospital=" + hospital +

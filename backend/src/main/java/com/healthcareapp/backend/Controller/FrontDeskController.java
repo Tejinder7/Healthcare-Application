@@ -1,42 +1,41 @@
 package com.healthcareapp.backend.Controller;
 
-import com.healthcareapp.backend.Model.Doctor;
 import com.healthcareapp.backend.Model.FrontDesk;
 import com.healthcareapp.backend.Service.FrontDeskService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
 @RestController
-@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class FrontDeskController {
-    private FrontDeskService frontDeskServices;
+    private FrontDeskService frontDeskService;
 
     public FrontDeskController(FrontDeskService frontDeskServices) {
-        this.frontDeskServices = frontDeskServices;
+        this.frontDeskService = frontDeskServices;
     }
 
-    @PostMapping("/addFrontDesk/{hospitalId}")
-    public ResponseEntity<FrontDesk> addFrontDesk(@RequestBody FrontDesk frontDesk, @PathVariable int hospitalId) {
-
+    @PostMapping("/addFrontDesk/{userId}")
+    public ResponseEntity<FrontDesk> addFrontDesk(@RequestBody FrontDesk frontDesk, @PathVariable String userId) {
+        FrontDesk savedFrontDesk;
         try {
-            frontDesk = frontDeskServices.addFrontDesk(frontDesk, hospitalId);
-        }catch (Exception e){
-            return ResponseEntity.status(404).build();
+            savedFrontDesk = frontDeskService.addFrontDesk(frontDesk, userId);
         }
-        return ResponseEntity.of(Optional.of(frontDesk));
+        catch (RuntimeException exception){
+            throw exception;
+        }
+        return ResponseEntity.of(Optional.of(savedFrontDesk));
     }
 
     @PutMapping("/updateFrontDesk")
-    public ResponseEntity<FrontDesk> updateDoctor(@RequestBody FrontDesk frontDesk){
-        FrontDesk frontDesk1;
+    public ResponseEntity<FrontDesk> updateFrontDesk(@RequestBody FrontDesk frontDesk){
+        FrontDesk updatedFrontDesk;
         try{
-            frontDesk1 = frontDeskServices.updateFrontDesk(frontDesk);
-        }catch (Exception e){
-            return ResponseEntity.status(500).build();
+            updatedFrontDesk = frontDeskService.updateFrontDesk(frontDesk);
+        }catch (RuntimeException exception){
+            throw exception;
         }
-        return ResponseEntity.of(Optional.of(frontDesk1));
+
+        return ResponseEntity.of(Optional.of(updatedFrontDesk));
     }
 }

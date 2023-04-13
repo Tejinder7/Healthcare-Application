@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class PendingQueueController {
     private PendingQueueService pendingQueueService;
 
@@ -17,12 +16,12 @@ public class PendingQueueController {
         this.pendingQueueService = pendingQueueService;
     }
 
-    @PostMapping("/addPendingQueue/{hosp_id}/{p_id}")
-    public ResponseEntity<PendingQueue> addPendingQueue(@PathVariable int hosp_id, @PathVariable int p_id){
+    @PostMapping("/addPendingQueue/{userId}/{pid}")
+    public ResponseEntity<PendingQueue> addPendingQueue(@PathVariable String userId, @PathVariable int pid){
 
         PendingQueue pendingQueue;
         try {
-            pendingQueue = this.pendingQueueService.addPendingQueue(hosp_id, p_id);
+            pendingQueue = this.pendingQueueService.addPendingQueue(userId, pid);
         }
         catch (Exception e){
             return ResponseEntity.status(404).build();
@@ -30,11 +29,11 @@ public class PendingQueueController {
         return ResponseEntity.of(Optional.of(pendingQueue));
     }
 
-    @GetMapping("/pendingQueue/{hospId}")
-    public ResponseEntity<List<PendingQueue>> getPendingQueue(@PathVariable int hospId){
+    @GetMapping("/pendingQueue/{doctorUserId}")
+    public ResponseEntity<List<PendingQueue>> getPendingQueue(@PathVariable String doctorUserId){
 
         try{
-            List<PendingQueue> pendingQueueList = pendingQueueService.getPendingQueueByDocId(hospId);
+            List<PendingQueue> pendingQueueList = pendingQueueService.getPendingQueueByDocId(doctorUserId);
             return ResponseEntity.of(Optional.of(pendingQueueList));
         }
         catch (Exception e){
