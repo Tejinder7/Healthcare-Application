@@ -56,5 +56,6 @@ public class HospitalService {
         List<Hospital> hospitalList = hospitalRepository.findByPincode(supervisor.getPincode());
 
         hospitalList.forEach(hospital -> hospital.setSupervisor(supervisor));
+        hospitalRepository.saveAll(hospitalList);
     }
 }

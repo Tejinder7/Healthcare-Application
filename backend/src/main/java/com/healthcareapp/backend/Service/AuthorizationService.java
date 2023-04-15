@@ -15,17 +15,17 @@ public class AuthorizationService {
     public AuthorizationService(AuthorizationRepository authorizationRepository) {
         this.authorizationRepository = authorizationRepository;
     }
-    public Authorization loginAuthorization(Authorization authorization){
-        Optional<Authorization> user= authorizationRepository.findByUserIdAndPasswordAndUserType(authorization.getUserId(), authorization.getPassword(), authorization.getUserType());
+//    public Authorization loginAuthorization(Authorization authorization){
+//        Optional<Authorization> user= authorizationRepository.findByUsernameAndPasswordAndRole(authorization.getUsername(), authorization.getPassword(), authorization.getRole());
+//
+//        if(user.isEmpty()){
+//            throw new ResourceNotFoundException("Invalid Credentials. Please try again with valid credentials");
+//        }
+//        return user.get();
+//    }
 
-        if(user.isEmpty()){
-            throw new ResourceNotFoundException("Invalid Credentials. Please try again with valid credentials");
-        }
-        return user.get();
-    }
-
-    public void checkIfUserIdExists(String userId){
-        Optional<Authorization> authorization = authorizationRepository.findByUserId(userId);
+    public void checkIfUserIdExists(String username){
+        Optional<Authorization> authorization = authorizationRepository.findByUsername(username);
 
         if(authorization.isPresent()){
             throw new ForbiddenException("User already exists. Please try again with a different User id");

@@ -2,6 +2,7 @@ package com.healthcareapp.backend.Service;
 
 import com.healthcareapp.backend.Exception.ResourceNotFoundException;
 import com.healthcareapp.backend.Model.*;
+import com.healthcareapp.backend.Repository.EncounterRepository;
 import com.healthcareapp.backend.Repository.FollowUpRepository;
 import com.healthcareapp.backend.Repository.PatientRepository;
 import org.springframework.stereotype.Component;
@@ -14,15 +15,18 @@ import java.util.Optional;
 public class FollowUpService {
     private FollowUpRepository followUpRepository;
     private PatientRepository patientRepository;
+    private EncounterRepository encounterRepository;
     private SupervisorService supervisorService;
     private FieldWorkerService fieldWorkerService;
     private DoctorService doctorService;
 
-    public FollowUpService(FollowUpRepository followUpRepository, SupervisorService supervisorService, FieldWorkerService fieldWorkerService, PatientRepository patientRepository, DoctorService doctorService) {
+
+    public FollowUpService(FollowUpRepository followUpRepository, PatientRepository patientRepository, EncounterRepository encounterRepository, SupervisorService supervisorService, FieldWorkerService fieldWorkerService, DoctorService doctorService) {
         this.followUpRepository = followUpRepository;
+        this.patientRepository = patientRepository;
+        this.encounterRepository = encounterRepository;
         this.supervisorService = supervisorService;
         this.fieldWorkerService = fieldWorkerService;
-        this.patientRepository = patientRepository;
         this.doctorService = doctorService;
     }
 
@@ -78,12 +82,12 @@ public class FollowUpService {
 
     public void addFollowUps(Encounter encounter){
         List<FollowUp> followUpList = encounter.getFollowUpList();
-
+        Encounter encounter1 = encounterRepository.findById(encounter.getEncounterId()).orElseThrow();
         for (FollowUp followUp : followUpList) {
-            followUp.setEncounter(encounter);
+            followUp.setEncounter(encounter1);
             followUp.setFlag(false);
-            followUp.setPatient(encounter.getPatient());
-            followUp.setHospital(encounter.getDoctor().getHospital());
+            followUp.setPatient(encounter1.getPatient());
+            followUp.setHospital(encounter1.getDoctor().getHospital());
             followUpRepository.save(followUp);
         }
     }

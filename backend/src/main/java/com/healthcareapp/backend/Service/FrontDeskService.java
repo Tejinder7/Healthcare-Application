@@ -4,7 +4,9 @@ import com.healthcareapp.backend.Exception.ResourceNotFoundException;
 import com.healthcareapp.backend.Model.Admin;
 import com.healthcareapp.backend.Model.FrontDesk;
 import com.healthcareapp.backend.Model.Hospital;
+import com.healthcareapp.backend.Model.Role;
 import com.healthcareapp.backend.Repository.FrontDeskRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
@@ -16,20 +18,25 @@ public class FrontDeskService {
 //    private HospitalService hospitalService;
     private AdminService adminService;
 
-    public FrontDeskService(FrontDeskRepository frontDeskRepository, AdminService adminService) {
+    private PasswordEncoder passwordEncoder;
+
+    public FrontDeskService(FrontDeskRepository frontDeskRepository, AuthorizationService authorizationService, AdminService adminService, PasswordEncoder passwordEncoder) {
         this.frontDeskRepository = frontDeskRepository;
+        this.authorizationService = authorizationService;
         this.adminService = adminService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public FrontDesk addFrontDesk(FrontDesk frontDesk, String userId) throws RuntimeException{
-        authorizationService.checkIfUserIdExists(userId);
+        authorizationService.checkIfUserIdExists(frontDesk.getUsername());
 
         Admin admin = adminService.getAdminByUserId(userId);
 
         Hospital hospital = admin.getHospital();
 
         frontDesk.setHospital(hospital);
-        frontDesk.setUserType("Front Desk");
+        frontDesk.setRole(Role.ROLE_FRONT_DESK);
+        frontDesk.setPassword(passwordEncoder.encode(frontDesk.getPassword()));
 
         frontDeskRepository.save(frontDesk);
         return frontDesk;
@@ -48,16 +55,17 @@ public class FrontDeskService {
         }
 
         updatedFrontDesk.get().setName(frontDesk.getName());
-        updatedFrontDesk.get().setUserId(frontDesk.getUserId());
-        updatedFrontDesk.get().setPassword(frontDesk.getPassword());
+        updatedFrontDesk.get().setUsername(frontDesk.getUsername());
+        if(frontDesk.getPassword() != null)
+            updatedFrontDesk.get().setPassword(passwordEncoder.encode(frontDesk.getPassword()));
 
-        frontDeskRepository.save(updatedFrontDesk.get());
+        FrontDesk frontDesk1 = frontDeskRepository.save(updatedFrontDesk.get());
 
-        return updatedFrontDesk.get();
+        return frontDesk1;
     }
 
     public FrontDesk getFrontDeskByUserId(String userId){
-        Optional<FrontDesk> frontDesk = frontDeskRepository.findByUserId(userId);
+        Optional<FrontDesk> frontDesk = frontDeskRepository.findByUsername(userId);
         if(frontDesk.isEmpty()){
             throw new ResourceNotFoundException("Front Desk with userId: "+ userId+ " not found");
         }

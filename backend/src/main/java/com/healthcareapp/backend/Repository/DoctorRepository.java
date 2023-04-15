@@ -13,6 +13,6 @@ public interface DoctorRepository extends JpaRepository<Doctor, Integer> {
 
     public List<Doctor> findByHospital(Hospital hospital);
 
-    public Optional<Doctor> findByUserId(String userId);
+    public Optional<Doctor> findByUsername(String userId);
 
 }
