@@ -28,6 +28,8 @@ public class SecurityConfiguration {
         http
                 .csrf()
                 .disable()
+                .cors()
+                .disable()
                 .authorizeHttpRequests()
                 .requestMatchers("/superadmin/**")
                 .hasRole("SUPER_ADMIN")
