@@ -56,7 +56,7 @@ public class FrontDeskService {
 
         updatedFrontDesk.get().setName(frontDesk.getName());
         updatedFrontDesk.get().setUsername(frontDesk.getUsername());
-        if(frontDesk.getPassword() != null)
+        if(frontDesk.getPassword() != "")
             updatedFrontDesk.get().setPassword(passwordEncoder.encode(frontDesk.getPassword()));
 
         FrontDesk frontDesk1 = frontDeskRepository.save(updatedFrontDesk.get());

@@ -1,7 +1,6 @@
 package com.healthcareapp.backend.Model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.healthcareapp.backend.Security.token.Token;
 import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -26,20 +25,16 @@ public class Authorization implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @OneToMany(mappedBy = "authorization")
-    @JsonIgnore
-    private List<Token> tokens;
-
 
     public Authorization() {
     }
 
-    public Authorization(int authId, String username, String password, Role role, List<Token> tokens) {
+
+    public Authorization(int authId, String username, String password, Role role) {
         this.authId = authId;
         this.username = username;
         this.password = password;
         this.role = role;
-        this.tokens = tokens;
     }
 
     @Override
@@ -88,14 +83,6 @@ public class Authorization implements UserDetails {
         this.username = username;
     }
 
-    public List<Token> getTokens() {
-        return tokens;
-    }
-
-    public void setTokens(List<Token> tokens) {
-        this.tokens = tokens;
-    }
-
 
     public String getPassword() {
         return password;
@@ -113,6 +100,7 @@ public class Authorization implements UserDetails {
         this.role = role;
     }
 
+
     @Override
     public String toString() {
         return "Authorization{" +
@@ -120,9 +108,6 @@ public class Authorization implements UserDetails {
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 ", role=" + role +
-                ", tokens=" + tokens +
                 '}';
     }
-
-
 }
