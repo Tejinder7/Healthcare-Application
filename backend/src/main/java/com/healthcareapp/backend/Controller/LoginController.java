@@ -10,6 +10,7 @@ import com.healthcareapp.backend.Service.SuperAdminService;
 import com.healthcareapp.backend.Service.SupervisorService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import com.healthcareapp.backend.Security.auth.JwtResponse;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +31,7 @@ public class LoginController {
     }
 
     @PostMapping("/")
-    public ResponseEntity<AuthenticationResponse> loginUser(@RequestBody Authorization request){
+    public ResponseEntity<JwtResponse> loginUser(@RequestBody Authorization request){
         return ResponseEntity.ok(authenticationService.authenticate(request));
     }
 
