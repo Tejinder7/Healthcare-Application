@@ -16,7 +16,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/login")
-@CrossOrigin(origins = "*", allowedHeaders = "*")
+//@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class LoginController {
     AuthorizationService authorizationService;
     AuthenticationService authenticationService;
