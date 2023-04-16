@@ -1,11 +1,6 @@
 package com.healthcareapp.backend.Model;
 
 import jakarta.persistence.*;
-
-//@Data
-//@AllArgsConstructor
-//@NoArgsConstructor
-//@Builder
 @Entity
 @PrimaryKeyJoinColumn(name = "authId")
 public class Admin extends Authorization{

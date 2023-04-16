@@ -13,6 +13,6 @@ public interface FrontDeskRepository extends JpaRepository<FrontDesk, Integer> {
 
     public FrontDesk findFrontDeskByAuthId(int id);
 
-    public Optional<FrontDesk> findByUserId(String userId);
+    public Optional<FrontDesk> findByUsername(String userId);
 
 }

@@ -2,14 +2,12 @@ package com.healthcareapp.backend.Service;
 
 
 import com.healthcareapp.backend.Exception.ResourceNotFoundException;
-import com.healthcareapp.backend.Model.Admin;
 import com.healthcareapp.backend.Model.Hospital;
 import com.healthcareapp.backend.Model.Supervisor;
 import com.healthcareapp.backend.Repository.HospitalRepository;
 import com.healthcareapp.backend.Repository.SupervisorRepository;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -58,5 +56,6 @@ public class HospitalService {
         List<Hospital> hospitalList = hospitalRepository.findByPincode(supervisor.getPincode());
 
         hospitalList.forEach(hospital -> hospital.setSupervisor(supervisor));
+        hospitalRepository.saveAll(hospitalList);
     }
 }

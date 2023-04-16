@@ -1,13 +1,14 @@
 package com.healthcareapp.backend.Service;
 
 import com.healthcareapp.backend.Exception.ResourceNotFoundException;
-import com.healthcareapp.backend.Model.*;
-import com.healthcareapp.backend.Repository.AdminRepository;
+import com.healthcareapp.backend.Model.Admin;
+import com.healthcareapp.backend.Model.Doctor;
+import com.healthcareapp.backend.Model.Role;
 import com.healthcareapp.backend.Repository.DoctorRepository;
-import com.healthcareapp.backend.Repository.HospitalRepository;
+import com.healthcareapp.backend.Security.Configuration.ApplicationConfig;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
 import java.util.Optional;
 
 @Component
@@ -16,13 +17,16 @@ public class DoctorService {
     private AuthorizationService authorizationService;
     private AdminService adminService;
 
-    public DoctorService(DoctorRepository doctorRepository, AuthorizationService authorizationService, AdminService adminService) {
+    private PasswordEncoder passwordEncoder;
+
+    public DoctorService(DoctorRepository doctorRepository, AuthorizationService authorizationService, AdminService adminService, PasswordEncoder passwordEncoder) {
         this.doctorRepository = doctorRepository;
         this.authorizationService = authorizationService;
         this.adminService = adminService;
+        this.passwordEncoder = passwordEncoder;
     }
 
-//    public Doctor getDoctorByAuthId(int authId){
+    //    public Doctor getDoctorByAuthId(int authId){
 //        Optional<Doctor> doctor = doctorRepository.findById(authId);
 //
 //        if(doctor.isEmpty()){
@@ -44,17 +48,19 @@ public class DoctorService {
 
 
     public Doctor addDoctor(Doctor doctor, String userId) throws RuntimeException{
-        authorizationService.checkIfUserIdExists(doctor.getUserId());
+        authorizationService.checkIfUserIdExists(doctor.getUsername());
 
         Admin admin =  adminService.getAdminByUserId(userId);
 
         doctor.setHospital(admin.getHospital());
 
+        doctor.setPassword(passwordEncoder.encode(doctor.getPassword()));
+
         if(doctor.getDocSpecialization() == null){
             doctor.setDocSpecialization("General");
         }
         
-        doctor.setUserType("Doctor");
+        doctor.setRole(Role.ROLE_DOCTOR);
 
         Doctor savedDoctor= doctorRepository.save(doctor);
         return savedDoctor;
@@ -78,15 +84,16 @@ public class DoctorService {
         updatedDoctor.get().setName(doctor.getName());
         updatedDoctor.get().setLicId(doctor.getLicId());
         updatedDoctor.get().setContact(doctor.getContact());
-        updatedDoctor.get().setUserId(doctor.getUserId());
-        updatedDoctor.get().setPassword(doctor.getPassword());
+        updatedDoctor.get().setUsername(doctor.getUsername());
+        if(doctor.getPassword() != null)
+            updatedDoctor.get().setPassword(passwordEncoder.encode(doctor.getPassword()));
 
-        doctorRepository.save(updatedDoctor.get());
-        return updatedDoctor.get();
+        Doctor doctor1 = doctorRepository.save(updatedDoctor.get());
+        return doctor1;
     }
 
     public Doctor getDoctorByUserId(String doctorUserId){
-        Optional<Doctor> doctor= doctorRepository.findByUserId(doctorUserId);
+        Optional<Doctor> doctor= doctorRepository.findByUsername(doctorUserId);
 
         if(doctor.isEmpty()){
             throw new ResourceNotFoundException("Doctor with userID: "+ doctorUserId+" not found");

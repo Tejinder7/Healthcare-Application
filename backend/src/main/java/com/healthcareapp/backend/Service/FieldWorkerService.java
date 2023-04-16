@@ -2,8 +2,10 @@ package com.healthcareapp.backend.Service;
 
 import com.healthcareapp.backend.Model.FieldWorker;
 import com.healthcareapp.backend.Model.Patient;
+import com.healthcareapp.backend.Model.Role;
 import com.healthcareapp.backend.Model.Supervisor;
 import com.healthcareapp.backend.Repository.FieldWorkerRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -23,22 +25,26 @@ public class FieldWorkerService {
 
     private AuthorizationService authorizationService;
 
-    public FieldWorkerService(FieldWorkerRepository fieldWorkerRepository, SupervisorService supervisorService, PatientService patientService, AuthorizationService authorizationService) {
+    private PasswordEncoder passwordEncoder;
+
+    public FieldWorkerService(FieldWorkerRepository fieldWorkerRepository, SupervisorService supervisorService, PatientService patientService, AuthorizationService authorizationService, PasswordEncoder passwordEncoder) {
         this.fieldWorkerRepository = fieldWorkerRepository;
         this.supervisorService = supervisorService;
         this.patientService = patientService;
         this.authorizationService = authorizationService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public FieldWorker addFieldWorker(FieldWorker fieldWorker, String supervisorUserId) throws RuntimeException{
-        authorizationService.checkIfUserIdExists(supervisorUserId);
+        authorizationService.checkIfUserIdExists(fieldWorker.getUsername());
 
         FieldWorker savedFieldWorker;;
 
         Supervisor supervisor = supervisorService.getSupervisorByUserId(supervisorUserId);
 
+        fieldWorker.setPassword(passwordEncoder.encode(fieldWorker.getPassword()));
         fieldWorker.setSupervisor(supervisor);
-        fieldWorker.setUserType("FieldWorker");
+        fieldWorker.setRole(Role.ROLE_FIELD_WORKER);
         fieldWorker.setAvailableStatus(true);
 
         savedFieldWorker = fieldWorkerRepository.save(fieldWorker);

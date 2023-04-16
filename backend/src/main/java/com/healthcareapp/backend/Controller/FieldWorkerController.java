@@ -1,8 +1,8 @@
 package com.healthcareapp.backend.Controller;
 
-import com.healthcareapp.backend.Exception.ResourceNotFoundException;
-import com.healthcareapp.backend.Model.FieldWorker;
+import com.healthcareapp.backend.Model.FollowUp;
 import com.healthcareapp.backend.Service.FieldWorkerService;
+import com.healthcareapp.backend.Service.FollowUpService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,72 +11,46 @@ import java.util.Optional;
 
 @RestController
 //@CrossOrigin(origins = "*", allowedHeaders = "*")
+@RequestMapping("/fieldworker")
 public class FieldWorkerController {
     private FieldWorkerService fieldWorkerService;
-    public FieldWorkerController(FieldWorkerService fieldWorkerService) {
+    private FollowUpService followUpService;
+
+    public FieldWorkerController(FieldWorkerService fieldWorkerService, FollowUpService followUpService) {
         this.fieldWorkerService = fieldWorkerService;
+        this.followUpService = followUpService;
     }
 
-    @PostMapping("/addFieldWorker/{userId}")
-    public ResponseEntity<FieldWorker> addFieldWorker(@RequestBody FieldWorker fieldWorker, @PathVariable String userId) {
+    @GetMapping("/getFollowUpsForFieldWorker/{fieldWorkerId}")
+    public ResponseEntity<List<FollowUp>> getFollowUpsForFieldWorker(@PathVariable int fieldWorkerId){
+        List<FollowUp> followUpList;
+        try{
+            followUpList = followUpService.getFollowUpsByFieldWorker(fieldWorkerId);
+        }catch (RuntimeException exception){
+            throw exception;
+        }
+        return ResponseEntity.of(Optional.of(followUpList));
+    }
+    @GetMapping("/getTodayFollowUps/{date}/{fieldWorkerId}")
+    public ResponseEntity<List<FollowUp>> getTodayFollowUp(@PathVariable String date, @PathVariable int fieldWorkerId){
+        List<FollowUp> followUpList;
 
         try {
-            fieldWorker = fieldWorkerService.addFieldWorker(fieldWorker, userId);
+            followUpList = followUpService.getCurrentDateFollowUps(date, fieldWorkerId);
         }catch (Exception exception){
             throw exception;
         }
-        return ResponseEntity.of(Optional.of(fieldWorker));
+
+        return ResponseEntity.ok(followUpList);
     }
-
-    @GetMapping("/getFieldWorkers/{userId}")
-    public ResponseEntity<List<FieldWorker>> getFieldWorkers(@PathVariable String userId){
-        List<FieldWorker> fieldWorkerList;
-
+    @PutMapping("/updateFollowUpByFieldWorker")
+    public ResponseEntity<FollowUp> updateFollowUpByFieldWorker(@RequestBody FollowUp followUp){
         try{
-            fieldWorkerList = fieldWorkerService.getFieldWorkers(userId);
+            followUpService.updateFollowUp(followUp);
         }
         catch (Exception exception){
-            throw new ResourceNotFoundException("No Field Workers under the SupervisorId: "+ userId);
+            throw exception;
         }
-        return ResponseEntity.ok(fieldWorkerList);
+        return ResponseEntity.of(Optional.of(followUp));
     }
-
-    @GetMapping("/getAvailableFieldWorkers/{userId}")
-    public ResponseEntity<List<FieldWorker>> getAvailableFieldWorkers(@PathVariable String userId){
-        List<FieldWorker> fieldWorkerList;
-
-        try{
-            fieldWorkerList = fieldWorkerService.getAvailableFieldWorkers(userId);
-        }
-        catch (Exception exception){
-            throw new ResourceNotFoundException("No Field Workers under the SupervisorId: "+ userId);
-        }
-        return ResponseEntity.ok(fieldWorkerList);
-    }
-
-
-    @PutMapping ("/assignFollowUp/{fieldWorkerId}/{patientId}")
-    public ResponseEntity<FieldWorker> assignFollowUp(@PathVariable int fieldWorkerId, @PathVariable int patientId){
-        FieldWorker fieldWorker;
-
-        try {
-            fieldWorker = fieldWorkerService.assignFollowUp(patientId, fieldWorkerId);
-        }catch (Exception e){
-            return ResponseEntity.status(404).build();
-        }
-
-        return ResponseEntity.of(Optional.of(fieldWorker));
-    }
-
-    @GetMapping("/getFieldWorkerDetail/{fieldWorkerId}")
-    public ResponseEntity<FieldWorker> getFieldWorkerDetail(@PathVariable int fieldWorkerId){
-        FieldWorker fieldWorker;
-        try{
-            fieldWorker = fieldWorkerService.getFieldWorkerById(fieldWorkerId);
-            return ResponseEntity.of(Optional.of(fieldWorker));
-        }catch (Exception e){
-            return ResponseEntity.status(404).build();
-        }
-    }
-
 }

@@ -3,9 +3,10 @@ package com.healthcareapp.backend.Service;
 import com.healthcareapp.backend.Exception.ResourceNotFoundException;
 import com.healthcareapp.backend.Model.*;
 import com.healthcareapp.backend.Repository.AdminRepository;
-import com.healthcareapp.backend.Repository.AuthorizationRepository;
 import com.healthcareapp.backend.Repository.DoctorRepository;
 import com.healthcareapp.backend.Repository.FrontDeskRepository;
+import com.healthcareapp.backend.Security.Configuration.ApplicationConfig;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -20,29 +21,40 @@ public class AdminService {
     HospitalService hospitalService;
     AuthorizationService authorizationService;
 
-    public AdminService(AdminRepository adminRepository, HospitalService hospitalService, AuthorizationService authorizationService, DoctorRepository doctorRepository, FrontDeskRepository frontDeskRepository) {
+    PasswordEncoder passwordEncoder;
+
+    public AdminService(AdminRepository adminRepository, DoctorRepository doctorRepository, FrontDeskRepository frontDeskRepository, HospitalService hospitalService, AuthorizationService authorizationService, PasswordEncoder passwordEncoder) {
         this.adminRepository = adminRepository;
         this.doctorRepository = doctorRepository;
         this.frontDeskRepository = frontDeskRepository;
         this.hospitalService = hospitalService;
         this.authorizationService = authorizationService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public Admin addAdmin(Admin admin, int hospId) throws RuntimeException{
-        authorizationService.checkIfUserIdExists(admin.getUserId());
+        authorizationService.checkIfUserIdExists(admin.getUsername());
 
         Hospital hospital= hospitalService.getHospitalById(hospId);
 
         admin.setHospital(hospital);
-        admin.setUserType("Admin");
+        admin.setRole(Role.ROLE_ADMIN);
+        admin.setPassword(passwordEncoder.encode(admin.getPassword()));
 
         Admin savedAdmin= adminRepository.save(admin);
 
         return savedAdmin;
     }
 
-    public Admin updateAdmin(Admin admin) throws RuntimeException{
-        Admin updatedAdmin= adminRepository.save(admin);
+    public Admin updateAdmin(Admin admin) throws RuntimeException{   //TAKE NULL FROM PASSWORD IF NOT UPDATED
+        Optional<Admin> adminFromDb = adminRepository.findById(admin.getAuthId());
+
+        adminFromDb.get().setUsername(admin.getUsername());
+        adminFromDb.get().setName(admin.getName());
+        if(admin.getPassword() != null){
+            adminFromDb.get().setPassword(passwordEncoder.encode(admin.getPassword()));
+        }
+        Admin updatedAdmin =adminRepository.save(adminFromDb.get());
 
         return updatedAdmin;
     }
@@ -52,7 +64,7 @@ public class AdminService {
         List<FrontDesk> frontDeskList;
         Hospital hospital;
 
-        Optional<Admin> admin = adminRepository.findByUserId(userId);
+        Optional<Admin> admin = adminRepository.findByUsername(userId);
 
         if(admin.isEmpty()){
             throw new ResourceNotFoundException("Admin with userId: "+ userId+ " not found");
@@ -93,7 +105,7 @@ public class AdminService {
     }
 
     public Admin getAdminByUserId(String userId){
-        Optional<Admin> admin = adminRepository.findByUserId(userId);
+        Optional<Admin> admin = adminRepository.findByUsername(userId);
 
         if(admin.isEmpty()){
             throw new ResourceNotFoundException("Admin with userId: "+ userId+ " not found");

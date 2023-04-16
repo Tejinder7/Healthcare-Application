@@ -8,10 +8,6 @@ import jakarta.persistence.PrimaryKeyJoinColumn;
 
 import java.util.List;
 
-//@Data
-//@AllArgsConstructor
-//@NoArgsConstructor
-//@Builder
 @Entity
 @PrimaryKeyJoinColumn(name = "authId")
 public class Supervisor extends Authorization{
