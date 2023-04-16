@@ -76,7 +76,9 @@ public class DoctorService {
 
     public Doctor updateDoctor(Doctor doctor) throws RuntimeException{
         Optional<Doctor> updatedDoctor = doctorRepository.findById(doctor.getAuthId());
-
+        if(updatedDoctor.get().getUsername() != doctor.getUsername()){
+            authorizationService.checkIfUserIdExists(doctor.getUsername());
+        }
         if(updatedDoctor.isEmpty()){
             throw new ResourceNotFoundException("No Doctor with id: "+ doctor.getAuthId()+ " found");
         }

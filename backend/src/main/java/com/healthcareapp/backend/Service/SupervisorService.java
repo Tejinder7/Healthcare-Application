@@ -40,6 +40,11 @@ public class SupervisorService {
 
     public Supervisor updateSupervisor(Supervisor supervisor) throws RuntimeException{
         Supervisor supervisorFromDb = supervisorRepository.findById(supervisor.getAuthId()).orElseThrow();
+
+        if(supervisorFromDb.getUsername() != supervisor.getUsername()){
+            authorizationService.checkIfUserIdExists(supervisor.getUsername());
+        }
+
         supervisorFromDb.setUsername(supervisor.getUsername());
         supervisorFromDb.setName(supervisor.getName());
         supervisorFromDb.setContact(supervisor.getContact());
