@@ -30,10 +30,16 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
+        http.authorizeHttpRequests(
+                auth->{
+                    auth.anyRequest().authenticated();
+                });
+
         http
                 .csrf()
                 .disable()
-                .cors().and()
+                .cors()
+                .and()
                 .authorizeHttpRequests()
                 .requestMatchers("/superadmin/**")
                 .hasRole("SUPER_ADMIN")
@@ -49,8 +55,6 @@ public class SecurityConfiguration {
                 .hasRole("FIELD_WORKER")
                 .requestMatchers("/login/**")
                 .permitAll()
-                .anyRequest()
-                .authenticated()
                 .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
