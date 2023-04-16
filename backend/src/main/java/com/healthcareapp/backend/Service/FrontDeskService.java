@@ -9,6 +9,7 @@ import com.healthcareapp.backend.Repository.FrontDeskRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import java.util.Objects;
 import java.util.Optional;
 
 @Component
@@ -56,7 +57,7 @@ public class FrontDeskService {
 
         updatedFrontDesk.get().setName(frontDesk.getName());
         updatedFrontDesk.get().setUsername(frontDesk.getUsername());
-        if(frontDesk.getPassword() != "")
+        if(!Objects.equals(frontDesk.getPassword(), ""))
             updatedFrontDesk.get().setPassword(passwordEncoder.encode(frontDesk.getPassword()));
 
         FrontDesk frontDesk1 = frontDeskRepository.save(updatedFrontDesk.get());
