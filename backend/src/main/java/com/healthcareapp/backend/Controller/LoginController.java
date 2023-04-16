@@ -31,7 +31,6 @@ public class LoginController {
 
     @PostMapping("/")
     public ResponseEntity<AuthenticationResponse> loginUser(@RequestBody Authorization request){
-        System.out.println(request.getRole());
         return ResponseEntity.ok(authenticationService.authenticate(request));
     }
 
