@@ -4,45 +4,56 @@ import com.healthcareapp.backend.Exception.ResourceNotFoundException;
 import com.healthcareapp.backend.Model.*;
 import com.healthcareapp.backend.Repository.HospitalRepository;
 import com.healthcareapp.backend.Repository.SupervisorRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Component
 public class SupervisorService {
-    SupervisorRepository supervisorRepository;
+    private SupervisorRepository supervisorRepository;
 
-    HospitalService hospitalService;
+    private HospitalService hospitalService;
 
-    AuthorizationService authorizationService;
+    private AuthorizationService authorizationService;
 
-    public SupervisorService(SupervisorRepository supervisorRepository, HospitalService hospitalService) {
+    private PasswordEncoder passwordEncoder;
+
+    public SupervisorService(SupervisorRepository supervisorRepository, HospitalService hospitalService, AuthorizationService authorizationService, PasswordEncoder passwordEncoder) {
         this.supervisorRepository = supervisorRepository;
         this.hospitalService = hospitalService;
+        this.authorizationService = authorizationService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public Supervisor addSupervisor(Supervisor supervisor) throws RuntimeException{
-        authorizationService.checkIfUserIdExists(supervisor.getUserId());
+        authorizationService.checkIfUserIdExists(supervisor.getUsername());
 
-        supervisor.setUserType("Supervisor");
-        supervisorRepository.save(supervisor);
+        supervisor.setRole(Role.ROLE_SUPERVISOR);
+        supervisor.setPassword(passwordEncoder.encode(supervisor.getPassword()));
+        Supervisor savedSupervisor = supervisorRepository.save(supervisor);
 
-        hospitalService.setSupervisorByPincode(supervisor);
+        hospitalService.setSupervisorByPincode(savedSupervisor);
 
-        return supervisor;
+        return savedSupervisor;
     }
 
     public Supervisor updateSupervisor(Supervisor supervisor) throws RuntimeException{
-        supervisorRepository.save(supervisor);
-        return supervisor;
+        Supervisor supervisorFromDb = supervisorRepository.findById(supervisor.getAuthId()).orElseThrow();
+        supervisorFromDb.setUsername(supervisor.getUsername());
+        supervisorFromDb.setName(supervisor.getName());
+        supervisorFromDb.setContact(supervisor.getContact());
+        if(!Objects.equals(supervisor.getPassword(), "")){
+            supervisorFromDb.setPassword(passwordEncoder.encode(supervisor.getPassword()));
+        }
+        Supervisor updatedSupervisor =supervisorRepository.save(supervisorFromDb);
+
+        return updatedSupervisor;
     }
 
 
     public List<Patient> unAssignedPatients(String userId){
-        Optional<Supervisor> supervisor = supervisorRepository.findByUserId(userId);
+        Optional<Supervisor> supervisor = supervisorRepository.findByUsername(userId);
 
         if(supervisor.isEmpty())
         {
@@ -71,7 +82,7 @@ public class SupervisorService {
     }
 
     public Supervisor getSupervisorByUserId(String userId){
-        Optional<Supervisor> supervisor= supervisorRepository.findByUserId(userId);
+        Optional<Supervisor> supervisor= supervisorRepository.findByUsername(userId);
 
         if(supervisor.isEmpty()){
             throw new ResourceNotFoundException("Supervisor with userId: "+ userId+ " not found");

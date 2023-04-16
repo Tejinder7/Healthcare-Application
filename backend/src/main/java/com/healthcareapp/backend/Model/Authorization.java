@@ -1,31 +1,46 @@
 package com.healthcareapp.backend.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.Collection;
+import java.util.List;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-public class Authorization {
+public class Authorization implements UserDetails {
     @Id
     @GeneratedValue
     @Column(unique = true)
     private int authId;
 
     @Column(unique = true)
-    private String userId;
+    private String username;
 
     private String password;
 
-    private String userType;
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
 
     public Authorization() {
     }
 
-    public Authorization(int authId, String userId, String password, String userType) {
+
+    public Authorization(int authId, String username, String password, Role role) {
         this.authId = authId;
-        this.userId = userId;
+        this.username = username;
         this.password = password;
-        this.userType = userType;
+        this.role = role;
+    }
+
+    @Override
+    @JsonIgnore
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority(role.name()));
     }
 
     public int getAuthId() {
@@ -36,21 +51,38 @@ public class Authorization {
         this.authId = authId;
     }
 
-    public String getUserId() {
-        return userId;
+    public String getUsername() {
+        return username;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    @Override
+    @JsonIgnore
+    public boolean isAccountNonExpired() {
+        return true;
     }
 
-    public String getUserType() {
-        return userType;
+    @Override
+    @JsonIgnore
+    public boolean isAccountNonLocked() {
+        return true;
     }
 
-    public void setUserType(String userType) {
-        this.userType = userType;
+    @Override
+    @JsonIgnore
+    public boolean isCredentialsNonExpired() {
+        return true;
     }
+
+    @Override
+    @JsonIgnore
+    public boolean isEnabled() {
+        return true;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
 
     public String getPassword() {
         return password;
@@ -60,13 +92,22 @@ public class Authorization {
         this.password = password;
     }
 
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
+
+
     @Override
     public String toString() {
         return "Authorization{" +
                 "authId=" + authId +
-                ", userId='" + userId + '\'' +
+                ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
-                ", userType='" + userType + '\'' +
+                ", role=" + role +
                 '}';
     }
 }

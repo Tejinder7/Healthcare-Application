@@ -43,7 +43,7 @@ public class DoctorController {
         return ResponseEntity.of(Optional.of(pendingQueueList));
     }
 
-    @PostMapping("addEncounter/{patientid}/{doctorUserId}")
+    @PostMapping("/addEncounter/{patientid}/{doctorUserId}")
     public ResponseEntity<Encounter> addEncounter(@PathVariable int patientid, @PathVariable String doctorUserId){
         Encounter savedEncounter;
 
@@ -75,7 +75,7 @@ public class DoctorController {
 
         return ResponseEntity.of(Optional.of(updatedEncounter));
     }
-    @GetMapping("getMedicalHistory/{patientId}")
+    @GetMapping("/getMedicalHistory/{patientId}")
     public ResponseEntity<List<Encounter>> getMedicalHistoryFromEncounters(@PathVariable int patientId){
         List<Encounter> encounterList;
 
