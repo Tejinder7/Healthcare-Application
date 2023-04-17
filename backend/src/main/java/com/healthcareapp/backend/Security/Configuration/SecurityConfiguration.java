@@ -30,11 +30,6 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
-        http.authorizeHttpRequests(
-                auth->{
-                    auth.anyRequest().authenticated();
-                });
-
         http
                 .csrf()
                 .disable()
@@ -42,19 +37,21 @@ public class SecurityConfiguration {
                 .and()
                 .authorizeHttpRequests()
                 .requestMatchers("/superadmin/**")
-                .hasRole("SUPER_ADMIN")
+                .hasAuthority("SCOPE_ROLE_SUPER_ADMIN")
                 .requestMatchers("/admin/**")
-                .hasRole("ADMIN")
+                .hasAuthority("SCOPE_ROLE_ADMIN")
                 .requestMatchers("/supervisor/**")
-                .hasRole("SUPERVISOR")
+                .hasAuthority("SCOPE_ROLE_SUPERVISOR")
                 .requestMatchers("/doctor/**")
-                .hasRole("DOCTOR")
+                .hasAuthority("SCOPE_ROLE_DOCTOR")
                 .requestMatchers("/frontdesk/**")
-                .hasRole("FRONT_DESK")
+                .hasAuthority("SCOPE_ROLE_FRONT_DESK")
                 .requestMatchers("/fieldworker/**")
-                .hasRole("FIELD_WORKER")
+                .hasAuthority("SCOPE_ROLE_FIELD_WORKER")
                 .requestMatchers("/login/**")
                 .permitAll()
+                .anyRequest()
+                .authenticated()
                 .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
