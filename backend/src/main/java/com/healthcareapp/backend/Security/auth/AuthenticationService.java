@@ -38,7 +38,7 @@ public class AuthenticationService {
 //        authenticationResponse.setUsername(user.getUsername());
 //        authenticationResponse.setToken(jwtToken);
 
-        return new JwtResponse(jwtToken);
+        return new JwtResponse(jwtToken, user.getUsername());
     }
 
 }
