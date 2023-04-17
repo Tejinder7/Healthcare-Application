@@ -49,7 +49,9 @@ public class AdminService {
 
     public Admin updateAdmin(Admin admin) throws RuntimeException{//TAKE NULL FROM PASSWORD IF NOT UPDATED
         Optional<Admin> adminFromDb = adminRepository.findById(admin.getAuthId());
-
+        if(!Objects.equals(adminFromDb.get().getUsername(), admin.getUsername())){
+            authorizationService.checkIfUserIdExists(admin.getUsername());
+        }
         adminFromDb.get().setUsername(admin.getUsername());
         adminFromDb.get().setName(admin.getName());
         if(!Objects.equals(admin.getPassword(), "")){

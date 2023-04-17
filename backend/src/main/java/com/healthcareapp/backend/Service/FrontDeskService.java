@@ -9,6 +9,7 @@ import com.healthcareapp.backend.Repository.FrontDeskRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import java.util.Objects;
 import java.util.Optional;
 
 @Component
@@ -49,6 +50,10 @@ public class FrontDeskService {
 
     public FrontDesk updateFrontDesk(FrontDesk frontDesk) throws RuntimeException{
         Optional<FrontDesk> updatedFrontDesk = frontDeskRepository.findById(frontDesk.getAuthId());
+
+        if(!Objects.equals(updatedFrontDesk.get().getUsername(), frontDesk.getUsername())){
+            authorizationService.checkIfUserIdExists(frontDesk.getUsername());
+        }
 
         if(updatedFrontDesk.isEmpty()){
             throw new ResourceNotFoundException("Front Desk with id: "+ frontDesk.getAuthId()+ " not found");

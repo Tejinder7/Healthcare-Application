@@ -9,6 +9,7 @@ import com.healthcareapp.backend.Security.Configuration.ApplicationConfig;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import java.util.Objects;
 import java.util.Optional;
 
 @Component
@@ -75,6 +76,10 @@ public class DoctorService {
 
     public Doctor updateDoctor(Doctor doctor) throws RuntimeException{
         Optional<Doctor> updatedDoctor = doctorRepository.findById(doctor.getAuthId());
+
+        if(!Objects.equals(updatedDoctor.get().getUsername(), doctor.getUsername())){
+            authorizationService.checkIfUserIdExists(doctor.getUsername());
+        }
 
         if(updatedDoctor.isEmpty()){
             throw new ResourceNotFoundException("No Doctor with id: "+ doctor.getAuthId()+ " found");
