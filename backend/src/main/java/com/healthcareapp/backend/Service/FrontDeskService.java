@@ -50,7 +50,7 @@ public class FrontDeskService {
 
     public FrontDesk updateFrontDesk(FrontDesk frontDesk) throws RuntimeException{
         Optional<FrontDesk> updatedFrontDesk = frontDeskRepository.findById(frontDesk.getAuthId());
-        if(updatedFrontDesk.get().getUsername() != frontDesk.getUsername()){
+        if(!Objects.equals(updatedFrontDesk.get().getUsername(), frontDesk.getUsername())){
             authorizationService.checkIfUserIdExists(frontDesk.getUsername());
         }
         if(updatedFrontDesk.isEmpty()){
