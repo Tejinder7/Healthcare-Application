@@ -6,6 +6,7 @@ import com.healthcareapp.backend.Model.FollowUp;
 import com.healthcareapp.backend.Model.Patient;
 import com.healthcareapp.backend.Service.FieldWorkerService;
 import com.healthcareapp.backend.Service.FollowUpService;
+import com.healthcareapp.backend.Service.PatientService;
 import com.healthcareapp.backend.Service.SupervisorService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,10 +23,13 @@ public class SupervisorController {
 
     private FollowUpService followUpService;
 
-    public SupervisorController(SupervisorService supervisorService, FieldWorkerService fieldWorkerService, FollowUpService followUpService) {
+    private PatientService patientService;
+
+    public SupervisorController(SupervisorService supervisorService, FieldWorkerService fieldWorkerService, FollowUpService followUpService, PatientService patientService) {
         this.supervisorService = supervisorService;
         this.fieldWorkerService = fieldWorkerService;
         this.followUpService = followUpService;
+        this.patientService = patientService;
     }
 
     @PostMapping("/addFieldWorker/{supervisorUserId}")
@@ -111,4 +115,25 @@ public class SupervisorController {
         return ResponseEntity.of(Optional.of(followUpList));
     }
 
+    @GetMapping("/getFollowUpsForFieldWorker/{fieldWorkerId}")
+    public ResponseEntity<List<FollowUp>> getFollowUpsForFieldWorker(@PathVariable int fieldWorkerId){
+        List<FollowUp> followUpList;
+        try{
+            followUpList = followUpService.getFollowUpsByFieldWorker(fieldWorkerId);
+        }catch (RuntimeException exception){
+            throw exception;
+        }
+        return ResponseEntity.of(Optional.of(followUpList));
+    }
+
+    @GetMapping("/getPatientsByFieldWorker/{fieldWorkerId}")
+    public ResponseEntity<List<Patient>> getPatientsByFieldWorker(@PathVariable int fieldWorkerId){
+        List<Patient> patientList;
+        try{
+            patientList = patientService.getPatientByFieldWorker(fieldWorkerId);
+        }catch (RuntimeException exception){
+            throw exception;
+        }
+        return ResponseEntity.of(Optional.of(patientList));
+    }
 }

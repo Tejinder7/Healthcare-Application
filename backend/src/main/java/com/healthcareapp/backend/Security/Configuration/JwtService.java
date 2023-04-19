@@ -19,7 +19,7 @@ public class JwtService {
 
     public String createToken(Authorization authorization) {
         var claims= JwtClaimsSet.builder().issuer("self").issuedAt(Instant.now())
-                .expiresAt(Instant.now().plusSeconds(60* 30))
+                .expiresAt(Instant.now().plusSeconds(60 * 60 * 24))
                 .subject(authorization.getUsername()).claim("scope", createScope(authorization))
                 .build();
         JwtEncoderParameters parameters= JwtEncoderParameters.from(claims);
