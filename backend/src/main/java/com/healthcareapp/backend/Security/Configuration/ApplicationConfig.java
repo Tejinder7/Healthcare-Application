@@ -27,7 +27,6 @@ import java.security.interfaces.RSAPublicKey;
 import java.util.UUID;
 
 @Configuration
-//@RequiredArgsConstructor
 public class ApplicationConfig {
 
     private final AuthorizationRepository authorizationRepository;
@@ -72,16 +71,6 @@ public class ApplicationConfig {
     @Bean
     public JWKSource<SecurityContext> jwkSource(RSAKey rsaKey){
         var jwkSet= new JWKSet(rsaKey);
-
-//        var jwkSource= new JWKSource() {
-//
-//            @Override
-//            public List<JWK> get(JWKSelector jwkSelector, SecurityContext securityContext) throws KeySourceException {
-//                return jwkSelector.select(jwkSet);
-//            }
-//        };
-//    }
-        //Simplify using lambda function
 
         return (jwkSelector, securityContext) -> jwkSelector.select(jwkSet);
     }

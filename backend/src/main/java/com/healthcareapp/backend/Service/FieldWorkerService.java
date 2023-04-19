@@ -15,16 +15,9 @@ import java.util.Optional;
 @Component
 public class FieldWorkerService {
     private FieldWorkerRepository fieldWorkerRepository;
-//    private SupervisorRepository supervisorRepository;
-
     private SupervisorService supervisorService;
-//    private FollowUpRepository followUpRepository;
-//    private PatientRepository patientRepository;
-
     private PatientService patientService;
-
     private AuthorizationService authorizationService;
-
     private PasswordEncoder passwordEncoder;
 
     public FieldWorkerService(FieldWorkerRepository fieldWorkerRepository, SupervisorService supervisorService, PatientService patientService, AuthorizationService authorizationService, PasswordEncoder passwordEncoder) {
@@ -84,19 +77,7 @@ public class FieldWorkerService {
 
         Patient patient = patientService.getPatientById(patientId);
 
-//        List<FollowUp> followUpList = followUpRepository.findByPatient(patient);
-
         FieldWorker fieldWorker = this.getFieldWorkerById(fieldWorkerAuthId);
-
-//        Patient patient = followUp.getPatient();
-
-//        List<Patient> list = fieldWorker.getPatientList();
-//
-//        list.add(patient);
-//
-//        fieldWorker.setPatientList(list);
-
-//        patient = patientRepository.findPatientByPatientId(patient.getPatientId());
 
         patient.setFieldWorker(fieldWorker);
 

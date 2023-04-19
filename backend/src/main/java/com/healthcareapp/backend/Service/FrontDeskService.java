@@ -16,9 +16,7 @@ import java.util.Optional;
 public class FrontDeskService {
     private FrontDeskRepository frontDeskRepository;
     private AuthorizationService authorizationService;
-//    private HospitalService hospitalService;
     private AdminService adminService;
-
     private PasswordEncoder passwordEncoder;
 
     public FrontDeskService(FrontDeskRepository frontDeskRepository, AuthorizationService authorizationService, AdminService adminService, PasswordEncoder passwordEncoder) {
@@ -42,11 +40,6 @@ public class FrontDeskService {
         frontDeskRepository.save(frontDesk);
         return frontDesk;
     }
-
-//    public List<FrontDesk> getAllFrontDeskByHospital(Hospital hospital){
-//        List<FrontDesk> frontDeskList= frontDeskRepository.findByHospital(hospital);
-//        return frontDeskList;
-//    }
 
     public FrontDesk updateFrontDesk(FrontDesk frontDesk) throws RuntimeException{
         Optional<FrontDesk> updatedFrontDesk = frontDeskRepository.findById(frontDesk.getAuthId());

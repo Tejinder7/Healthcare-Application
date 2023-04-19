@@ -4,18 +4,21 @@ import com.healthcareapp.backend.Exception.ResourceNotFoundException;
 import com.healthcareapp.backend.Model.Authorization;
 import com.healthcareapp.backend.Repository.AuthorizationRepository;
 import com.healthcareapp.backend.Security.Configuration.JwtService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
 
 @Service
-@RequiredArgsConstructor
 public class AuthenticationService {
     private final AuthorizationRepository authorizationRepository;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
 
+    public AuthenticationService(AuthorizationRepository authorizationRepository, JwtService jwtService, AuthenticationManager authenticationManager) {
+        this.authorizationRepository = authorizationRepository;
+        this.jwtService = jwtService;
+        this.authenticationManager = authenticationManager;
+    }
 
     public JwtResponse authenticate(Authorization request) {
         authenticationManager.authenticate(
@@ -32,11 +35,6 @@ public class AuthenticationService {
         }
 
         var jwtToken = jwtService.createToken(user);
-
-//        AuthenticationResponse authenticationResponse = new AuthenticationResponse();
-
-//        authenticationResponse.setUsername(user.getUsername());
-//        authenticationResponse.setToken(jwtToken);
 
         return new JwtResponse(jwtToken, user.getUsername());
     }

@@ -10,9 +10,6 @@ import java.util.Optional;
 public interface FrontDeskRepository extends JpaRepository<FrontDesk, Integer> {
 
     public List<FrontDesk> findByHospital(Hospital hospital);
-
-    public FrontDesk findFrontDeskByAuthId(int id);
-
     public Optional<FrontDesk> findByUsername(String userId);
 
 }

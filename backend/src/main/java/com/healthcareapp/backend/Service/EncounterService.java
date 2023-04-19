@@ -59,24 +59,6 @@ public class EncounterService {
 
         return updatedEncounter.get();
     }
-
-//    public Encounter getEncounterById(int encounterId){
-//        Optional<Encounter> encounter = encounterRepository.findById(encounterId);
-//
-//        if(encounter.isEmpty()){
-//            throw new ResourceNotFoundException("No encounter with id: "+ encounterId+ " found");
-//        }
-//
-//        return encounter.get();
-//    }
-
-    public List<Encounter> getEncountersByDoctor(Doctor doctor){
-        List<Encounter> encounterList;
-        encounterList= encounterRepository.findByDoctor(doctor);
-
-        return encounterList;
-    }
-
     public List<Encounter> getEncountersByPatientId(int patientId) throws RuntimeException{
         Patient patient= patientService.getPatientById(patientId);
 

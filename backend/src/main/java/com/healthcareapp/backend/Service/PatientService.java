@@ -26,14 +26,8 @@ public class PatientService {
 
     public Patient addPatient(Patient patient) throws RuntimeException{
         Patient savedPatient;
-//        String patientName = patient.getName().toLowerCase();
-//        patient.setName(patientName);
 
         if(patient.getDOB() != null) {
-//            SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
-//            Date date = formatter.parse(patient.getDOB());
-
-//            LocalDate birthDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 
             LocalDate birthDate = LocalDate.parse(patient.getDOB());
 
@@ -70,16 +64,6 @@ public class PatientService {
 
         return patientsWithGivenNameList;
     }
-
-//    public List<Patient> getPatientByFieldWorker(FieldWorker fieldWorker){
-//        List<Patient> patientList;
-//        patientList = patientRepository.findByFieldWorker(fieldWorker);
-//
-//        if(patientList.size() == 0)
-//            return new ArrayList<Patient>();
-//
-//        return patientList;
-//    }
 
     public Patient updatePatient(Patient patient){
         patientRepository.save(patient);

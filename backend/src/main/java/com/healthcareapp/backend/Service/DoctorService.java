@@ -5,7 +5,6 @@ import com.healthcareapp.backend.Model.Admin;
 import com.healthcareapp.backend.Model.Doctor;
 import com.healthcareapp.backend.Model.Role;
 import com.healthcareapp.backend.Repository.DoctorRepository;
-import com.healthcareapp.backend.Security.Configuration.ApplicationConfig;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -27,27 +26,6 @@ public class DoctorService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    //    public Doctor getDoctorByAuthId(int authId){
-//        Optional<Doctor> doctor = doctorRepository.findById(authId);
-//
-//        if(doctor.isEmpty()){
-//            throw new ResourceNotFoundException("No doctor with id: "+ authId+ " found");
-//        }
-//
-//        return doctor.get();
-//    }
-
-//    public Hospital getHospitalByDocId(int authId){
-//        Doctor doctor = getDoctorByAuthId(authId);
-//        Hospital hospital = doctor.getHospital();
-//
-//        if(hospital == null){
-//            throw new RuntimeException();
-//        }
-//        return hospital;
-//    }
-
-
     public Doctor addDoctor(Doctor doctor, String userId) throws RuntimeException{
         authorizationService.checkIfUserIdExists(doctor.getUsername());
 
@@ -66,13 +44,6 @@ public class DoctorService {
         Doctor savedDoctor= doctorRepository.save(doctor);
         return savedDoctor;
     }
-
-//    public List<Doctor> getAllDoctorsByHospital(Hospital hospital){
-//
-//        List<Doctor> doctorList= doctorRepository.findByHospital(hospital);
-//
-//        return doctorList;
-//    }
 
     public Doctor updateDoctor(Doctor doctor) throws RuntimeException{
         Optional<Doctor> updatedDoctor = doctorRepository.findById(doctor.getAuthId());

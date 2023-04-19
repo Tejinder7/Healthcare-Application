@@ -8,9 +8,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface DoctorRepository extends JpaRepository<Doctor, Integer> {
-
-    public Doctor findDoctorByAuthId(int authId);
-
     public List<Doctor> findByHospital(Hospital hospital);
 
     public Optional<Doctor> findByUsername(String userId);

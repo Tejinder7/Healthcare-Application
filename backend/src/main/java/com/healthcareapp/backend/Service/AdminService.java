@@ -5,7 +5,6 @@ import com.healthcareapp.backend.Model.*;
 import com.healthcareapp.backend.Repository.AdminRepository;
 import com.healthcareapp.backend.Repository.DoctorRepository;
 import com.healthcareapp.backend.Repository.FrontDeskRepository;
-import com.healthcareapp.backend.Security.Configuration.ApplicationConfig;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 

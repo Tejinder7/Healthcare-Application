@@ -17,9 +17,6 @@ public class HospitalService {
 
     private SupervisorRepository supervisorRepository;
 
-//    private AdminService adminService;
-
-
     public HospitalService(HospitalRepository hospitalRepository, SupervisorRepository supervisorRepository) {
         this.hospitalRepository = hospitalRepository;
         this.supervisorRepository = supervisorRepository;
