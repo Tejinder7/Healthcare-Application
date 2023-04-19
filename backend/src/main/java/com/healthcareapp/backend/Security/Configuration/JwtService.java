@@ -27,8 +27,6 @@ public class JwtService {
     }
 
     private String createScope(Authorization authorization) {
-//        return authentication.getAuthorities().stream()
-//                .map(a-> a.getAuthority()).collect(Collectors.joining(" "));
         return authorization.getAuthorities().stream().map(a-> a.getAuthority()).collect(Collectors.joining(" "));
     }
 }

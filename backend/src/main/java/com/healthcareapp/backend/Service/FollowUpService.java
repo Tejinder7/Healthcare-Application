@@ -49,8 +49,6 @@ public class FollowUpService {
 
     public FollowUp updateFollowUp(FollowUp followUp) throws RuntimeException{
 
-//        int followUpId = followUp.getFollowUpId();
-
         Optional<FollowUp> updatedFollowUp = followUpRepository.findById(followUp.getFollowUpId());
 
         if(updatedFollowUp.isEmpty())

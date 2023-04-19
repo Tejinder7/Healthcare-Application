@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-//@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequestMapping("/fieldworker")
 public class FieldWorkerController {
     private FieldWorkerService fieldWorkerService;

@@ -55,19 +55,6 @@ public class SupervisorController {
         }
         return ResponseEntity.ok(fieldWorkerList);
     }
-//    @GetMapping("/getAvailableFieldWorkers/{userId}")
-//    public ResponseEntity<List<FieldWorker>> getAvailableFieldWorkers(@PathVariable String userId){
-//        List<FieldWorker> fieldWorkerList;
-//
-//        try{
-//            fieldWorkerList = fieldWorkerService.getAvailableFieldWorkers(userId);
-//        }
-//        catch (Exception exception){
-//            throw new ResourceNotFoundException("No Field Workers under the SupervisorId: "+ userId);
-//        }
-//        return ResponseEntity.ok(fieldWorkerList);
-//    }
-
     @PutMapping ("/assignFollowUp/{fieldWorkerId}/{patientId}")
     public ResponseEntity<FieldWorker> assignFollowUp(@PathVariable int fieldWorkerId, @PathVariable int patientId){
         FieldWorker fieldWorker;

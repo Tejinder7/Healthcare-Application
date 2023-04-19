@@ -1,25 +1,19 @@
 package com.healthcareapp.backend.Controller;
 
-import com.healthcareapp.backend.Encryption.CryptoEncryption;
 import com.healthcareapp.backend.Model.Authorization;
-import com.healthcareapp.backend.Model.Role;
 import com.healthcareapp.backend.Model.SuperAdmin;
-import com.healthcareapp.backend.Security.auth.AuthenticationResponse;
 import com.healthcareapp.backend.Security.auth.AuthenticationService;
+import com.healthcareapp.backend.Security.auth.JwtResponse;
 import com.healthcareapp.backend.Service.AuthorizationService;
 import com.healthcareapp.backend.Service.SuperAdminService;
-import com.healthcareapp.backend.Service.SupervisorService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.parameters.P;
-import org.springframework.web.bind.annotation.*;
-import com.healthcareapp.backend.Security.auth.JwtResponse;
-
-import java.util.ArrayList;
-import java.util.List;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/login")
-//@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class LoginController {
     AuthorizationService authorizationService;
     AuthenticationService authenticationService;

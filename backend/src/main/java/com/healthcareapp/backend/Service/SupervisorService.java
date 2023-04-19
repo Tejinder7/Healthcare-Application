@@ -2,7 +2,6 @@ package com.healthcareapp.backend.Service;
 
 import com.healthcareapp.backend.Exception.ResourceNotFoundException;
 import com.healthcareapp.backend.Model.*;
-import com.healthcareapp.backend.Repository.HospitalRepository;
 import com.healthcareapp.backend.Repository.SupervisorRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -95,21 +94,5 @@ public class SupervisorService {
 
         return supervisor.get();
     }
-
-//    public Optional<Supervisor> getSupervisorByPincode(int pincode){
-//        Optional<Supervisor> supervisor = supervisorRepository.findByPincode(pincode);
-//
-////        if(supervisor.isEmpty()){
-////            throw new ResourceNotFoundException("No supervisor for the address: "+ pincode+ " found");
-////        }
-//
-//        return supervisor;
-//    }
-
-//    public List<Supervisor> getListOfSupervisors(){
-//        List<Supervisor> supervisorList= supervisorRepository.findAll();
-//
-//        return supervisorList;
-//    }
 }
 
