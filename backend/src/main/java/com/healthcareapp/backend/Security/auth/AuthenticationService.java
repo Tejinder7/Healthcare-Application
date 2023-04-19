@@ -17,7 +17,7 @@ public class AuthenticationService {
     private final AuthenticationManager authenticationManager;
 
 
-    public AuthenticationResponse authenticate(Authorization request) {
+    public JwtResponse authenticate(Authorization request) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         request.getUsername(),
@@ -31,14 +31,14 @@ public class AuthenticationService {
             throw new ResourceNotFoundException("Invalid Credentials. Please try again with valid credentials");
         }
 
-        var jwtToken = jwtService.generateToken(user);
+        var jwtToken = jwtService.createToken(user);
 
-        AuthenticationResponse authenticationResponse = new AuthenticationResponse();
+//        AuthenticationResponse authenticationResponse = new AuthenticationResponse();
 
-        authenticationResponse.setUsername(user.getUsername());
-        authenticationResponse.setToken(jwtToken);
+//        authenticationResponse.setUsername(user.getUsername());
+//        authenticationResponse.setToken(jwtToken);
 
-        return authenticationResponse;
+        return new JwtResponse(jwtToken, user.getUsername());
     }
 
 }

@@ -38,7 +38,7 @@ public class FieldWorkerService {
     public FieldWorker addFieldWorker(FieldWorker fieldWorker, String supervisorUserId) throws RuntimeException{
         authorizationService.checkIfUserIdExists(fieldWorker.getUsername());
 
-        FieldWorker savedFieldWorker;;
+        FieldWorker savedFieldWorker;
 
         Supervisor supervisor = supervisorService.getSupervisorByUserId(supervisorUserId);
 
@@ -113,4 +113,5 @@ public class FieldWorkerService {
 
         return fieldWorker.get();
     }
+
 }

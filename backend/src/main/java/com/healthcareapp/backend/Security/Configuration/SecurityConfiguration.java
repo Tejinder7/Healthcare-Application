@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.oauth2.server.resource.OAuth2ResourceServerConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -20,11 +21,11 @@ import java.util.Arrays;
 
 @Configuration
 @EnableWebSecurity
-@RequiredArgsConstructor //creates constructor of all final variables
 public class SecurityConfiguration {
 
-    private final JwtAuthenticationFilter jwtAuthFilter;
-    private final AuthenticationProvider authenticationProvider;
+//    private final JwtAuthenticationFilter jwtAuthFilter;
+//    private final AuthenticationProvider authenticationProvider;
+
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -32,30 +33,33 @@ public class SecurityConfiguration {
         http
                 .csrf()
                 .disable()
-                .cors().and()
+                .cors()
+                .and()
                 .authorizeHttpRequests()
                 .requestMatchers("/superadmin/**")
-                .hasRole("SUPER_ADMIN")
+                .hasAuthority("SCOPE_ROLE_SUPER_ADMIN")
                 .requestMatchers("/admin/**")
-                .hasRole("ADMIN")
+                .hasAuthority("SCOPE_ROLE_ADMIN")
                 .requestMatchers("/supervisor/**")
-                .hasRole("SUPERVISOR")
+                .hasAuthority("SCOPE_ROLE_SUPERVISOR")
                 .requestMatchers("/doctor/**")
-                .hasRole("DOCTOR")
+                .hasAuthority("SCOPE_ROLE_DOCTOR")
                 .requestMatchers("/frontdesk/**")
-                .hasRole("FRONT_DESK")
+                .hasAuthority("SCOPE_ROLE_FRONT_DESK")
                 .requestMatchers("/fieldworker/**")
-                .hasRole("FIELD_WORKER")
+                .hasAuthority("SCOPE_ROLE_FIELD_WORKER")
                 .requestMatchers("/login/**")
                 .permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()
                 .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
-                .authenticationProvider(authenticationProvider)
-                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+//                .and()
+//                .authenticationProvider(authenticationProvider)
+//                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+
+        http.oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt);
 
         return http.build();
     }
