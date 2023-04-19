@@ -7,10 +7,7 @@ import com.healthcareapp.backend.Repository.SupervisorRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Component
 public class SupervisorService {
@@ -42,17 +39,16 @@ public class SupervisorService {
     }
 
     public Supervisor updateSupervisor(Supervisor supervisor) throws RuntimeException{
-//        if(supervisor.getPassword() != null)
-//            supervisor.setPassword(passwordEncoder.encode(supervisor.getPassword()));
-//        supervisorRepository.save(supervisor);
-//        return supervisor;
-
         Supervisor supervisorFromDb = supervisorRepository.findById(supervisor.getAuthId()).orElseThrow();
+
+        if(!Objects.equals(supervisorFromDb.getUsername(), supervisor.getUsername())){
+            authorizationService.checkIfUserIdExists(supervisor.getUsername());
+        }
+
         supervisorFromDb.setUsername(supervisor.getUsername());
         supervisorFromDb.setName(supervisor.getName());
         supervisorFromDb.setContact(supervisor.getContact());
-        supervisorFromDb.setAddress(supervisor.getAddress());
-        if(supervisor.getPassword() != null){
+        if(!Objects.equals(supervisor.getPassword(), "")){
             supervisorFromDb.setPassword(passwordEncoder.encode(supervisor.getPassword()));
         }
         Supervisor updatedSupervisor =supervisorRepository.save(supervisorFromDb);

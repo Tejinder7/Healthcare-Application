@@ -9,5 +9,5 @@ import java.util.Optional;
 public interface AuthorizationRepository extends JpaRepository<Authorization, Integer> {
     public Optional<Authorization> findByUsernameAndPasswordAndRole(String userId, String password, Role role);
 
-    public Optional<Authorization> findByUsername(String userId);
+    public Optional<Authorization> findByUsername(String username);
 }

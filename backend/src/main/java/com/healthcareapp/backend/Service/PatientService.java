@@ -2,7 +2,9 @@ package com.healthcareapp.backend.Service;
 
 
 import com.healthcareapp.backend.Exception.ResourceNotFoundException;
+import com.healthcareapp.backend.Model.FieldWorker;
 import com.healthcareapp.backend.Model.Patient;
+import com.healthcareapp.backend.Repository.FieldWorkerRepository;
 import com.healthcareapp.backend.Repository.PatientRepository;
 import org.springframework.stereotype.Component;
 
@@ -15,9 +17,13 @@ import java.util.Optional;
 @Component
 public class PatientService {
     private PatientRepository patientRepository;
-    public PatientService(PatientRepository patientRepository) {
+    private FieldWorkerRepository fieldWorkerRepository;
+
+    public PatientService(PatientRepository patientRepository, FieldWorkerRepository fieldWorkerRepository) {
         this.patientRepository = patientRepository;
+        this.fieldWorkerRepository = fieldWorkerRepository;
     }
+
     public Patient addPatient(Patient patient) throws RuntimeException{
         Patient savedPatient;
 //        String patientName = patient.getName().toLowerCase();
@@ -78,5 +84,14 @@ public class PatientService {
     public Patient updatePatient(Patient patient){
         patientRepository.save(patient);
         return patient;
+    }
+
+    public List<Patient> getPatientByFieldWorker(int fieldWorkerId){
+        Optional<FieldWorker> fieldWorker = fieldWorkerRepository.findById(fieldWorkerId);
+        if(fieldWorker.isEmpty()){
+            throw new RuntimeException("Field Worker with id: "+ fieldWorkerId+ " not found");
+        }
+        List<Patient> patientList = patientRepository.findByFieldWorker(fieldWorker.get());
+        return patientList;
     }
 }
