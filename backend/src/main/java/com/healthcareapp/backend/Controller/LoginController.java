@@ -6,6 +6,7 @@ import com.healthcareapp.backend.Security.auth.AuthenticationService;
 import com.healthcareapp.backend.Security.auth.JwtResponse;
 import com.healthcareapp.backend.Service.AuthorizationService;
 import com.healthcareapp.backend.Service.SuperAdminService;
+import io.jsonwebtoken.Jwt;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -28,10 +29,16 @@ public class LoginController {
 
     @PostMapping("/")
     public ResponseEntity<JwtResponse> loginUser(@RequestBody Authorization request){
-        return ResponseEntity.ok(authenticationService.authenticate(request));
+        JwtResponse response;
+        try{
+            response= authenticationService.authenticate(request);
+        }catch(Exception exception){
+            throw exception;
+        }
+
+        return ResponseEntity.ok(response);
     }
 
-//    @CrossOrigin(origins = "localhost")
     @PostMapping("/addSuperAdmin")
     public SuperAdmin addSuperAdmin(@RequestBody SuperAdmin superAdmin){
         superAdminService.addSuperAdmin(superAdmin);

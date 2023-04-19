@@ -1,5 +1,6 @@
 package com.healthcareapp.backend.Security.auth;
 
+import com.healthcareapp.backend.Exception.ForbiddenException;
 import com.healthcareapp.backend.Exception.ResourceNotFoundException;
 import com.healthcareapp.backend.Model.Authorization;
 import com.healthcareapp.backend.Repository.AuthorizationRepository;
@@ -21,12 +22,17 @@ public class AuthenticationService {
     }
 
     public JwtResponse authenticate(Authorization request) {
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        request.getUsername(),
-                        request.getPassword()
-                )
-        );
+        try{
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            request.getUsername(),
+                            request.getPassword()
+                    )
+            );
+        } catch(Exception exception){
+            throw new ForbiddenException("Invalid Credentials. Please try again with valid credentials");
+        }
+
         Authorization user = authorizationRepository.findByUsername(request.getUsername())
                 .orElseThrow();
 
