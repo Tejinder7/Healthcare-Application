@@ -50,18 +50,18 @@ public class FrontDeskService {
 
     public FrontDesk updateFrontDesk(FrontDesk frontDesk) throws RuntimeException{
         Optional<FrontDesk> updatedFrontDesk = frontDeskRepository.findById(frontDesk.getAuthId());
-
+        
         if(!Objects.equals(updatedFrontDesk.get().getUsername(), frontDesk.getUsername())){
             authorizationService.checkIfUserIdExists(frontDesk.getUsername());
         }
-
+        
         if(updatedFrontDesk.isEmpty()){
             throw new ResourceNotFoundException("Front Desk with id: "+ frontDesk.getAuthId()+ " not found");
         }
 
         updatedFrontDesk.get().setName(frontDesk.getName());
         updatedFrontDesk.get().setUsername(frontDesk.getUsername());
-        if(frontDesk.getPassword() != "")
+        if(!Objects.equals(frontDesk.getPassword(), ""))
             updatedFrontDesk.get().setPassword(passwordEncoder.encode(frontDesk.getPassword()));
 
         FrontDesk frontDesk1 = frontDeskRepository.save(updatedFrontDesk.get());

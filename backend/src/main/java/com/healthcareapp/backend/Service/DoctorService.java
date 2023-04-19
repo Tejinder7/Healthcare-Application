@@ -90,7 +90,7 @@ public class DoctorService {
         updatedDoctor.get().setLicId(doctor.getLicId());
         updatedDoctor.get().setContact(doctor.getContact());
         updatedDoctor.get().setUsername(doctor.getUsername());
-        if(doctor.getPassword() != "")
+        if(!Objects.equals(doctor.getPassword(), ""))
             updatedDoctor.get().setPassword(passwordEncoder.encode(doctor.getPassword()));
 
         Doctor doctor1 = doctorRepository.save(updatedDoctor.get());
