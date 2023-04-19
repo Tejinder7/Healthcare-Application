@@ -37,10 +37,20 @@ public class FollowUp {
 //    @JsonBackReference("Patient-FollowUp")
     private Patient patient;
 
+    @Embedded
+    @AttributeOverrides(
+            {
+                    @AttributeOverride(name = "bloodPressure", column = @Column(name = "blood_pressure_reading")),
+                    @AttributeOverride(name = "temperature", column = @Column(name = "temperature_reading")),
+                    @AttributeOverride(name = "sugar", column = @Column(name = "sugar_reading"))
+            }
+    )
+    private Readings readings;
+
     public FollowUp() {
     }
 
-    public FollowUp(int followUpId, Encounter encounter, String date, String fieldWorkerRemarks, String doctorRemarks, boolean flag, String lastSyncDate, Hospital hospital, Patient patient) {
+    public FollowUp(int followUpId, Encounter encounter, String date, String fieldWorkerRemarks, String doctorRemarks, boolean flag, String lastSyncDate, Hospital hospital, Patient patient, Readings readings) {
         this.followUpId = followUpId;
         this.encounter = encounter;
         this.date = date;
@@ -50,6 +60,7 @@ public class FollowUp {
         this.lastSyncDate = lastSyncDate;
         this.hospital = hospital;
         this.patient = patient;
+        this.readings = readings;
     }
 
     public int getFollowUpId() {
@@ -124,6 +135,14 @@ public class FollowUp {
         this.doctorRemarks = doctorRemarks;
     }
 
+    public Readings getReadings() {
+        return readings;
+    }
+
+    public void setReadings(Readings readings) {
+        this.readings = readings;
+    }
+
     @Override
     public String toString() {
         return "FollowUp{" +
@@ -136,6 +155,7 @@ public class FollowUp {
                 ", lastSyncDate='" + lastSyncDate + '\'' +
                 ", hospital=" + hospital +
                 ", patient=" + patient +
+                ", readings=" + readings +
                 '}';
     }
 }
