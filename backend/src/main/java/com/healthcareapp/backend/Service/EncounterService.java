@@ -62,7 +62,8 @@ public class EncounterService {
     public List<Encounter> getEncountersByPatientId(int patientId) throws RuntimeException{
         Patient patient= patientService.getPatientById(patientId);
 
-        List<Encounter> encounterList= encounterRepository.findByPatient(patient);
+//        List<Encounter> encounterList= encounterRepository.findByPatient(patient);
+        List<Encounter> encounterList = encounterRepository.findByPatientAndPrescriptionIsNotNullAndSymptomsIsNotNull(patient);
 
         return encounterList;
     }

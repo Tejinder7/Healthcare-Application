@@ -13,4 +13,6 @@ public interface EncounterRepository extends JpaRepository<Encounter, Integer> {
     public List<Encounter> findByDoctor(Doctor doctor);
 
     public List<Encounter> findByPatient(Patient patient);
+
+    public List<Encounter> findByPatientAndPrescriptionIsNotNullAndSymptomsIsNotNull(Patient patient);
 }
