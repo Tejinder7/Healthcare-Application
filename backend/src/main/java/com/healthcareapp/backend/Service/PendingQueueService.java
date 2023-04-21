@@ -1,5 +1,6 @@
 package com.healthcareapp.backend.Service;
 
+import com.healthcareapp.backend.Exception.ForbiddenException;
 import com.healthcareapp.backend.Exception.ResourceNotFoundException;
 import com.healthcareapp.backend.Model.*;
 import com.healthcareapp.backend.Repository.PendingQueueRepository;
@@ -43,8 +44,11 @@ public class PendingQueueService {
         catch (DateTimeException exception){
             throw new RuntimeException(exception);
         }
-
-        pendingQueueRepository.save(pendingQueue);
+        try{
+            pendingQueueRepository.save(pendingQueue);
+        }catch(Exception exception){
+            throw new ForbiddenException("Appointment already exists for this patient");
+        }
         return pendingQueue;
     }
 

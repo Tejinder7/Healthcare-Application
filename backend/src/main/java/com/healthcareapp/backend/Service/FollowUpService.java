@@ -59,6 +59,7 @@ public class FollowUpService {
         updatedFollowUp.get().setFlag(followUp.isFlag());
         updatedFollowUp.get().setLastSyncDate(followUp.getLastSyncDate());
         updatedFollowUp.get().setFieldWorkerRemarks(followUp.getFieldWorkerRemarks());
+        updatedFollowUp.get().setReadings(followUp.getReadings());
 
         followUpRepository.save(updatedFollowUp.get());
         return updatedFollowUp.get();

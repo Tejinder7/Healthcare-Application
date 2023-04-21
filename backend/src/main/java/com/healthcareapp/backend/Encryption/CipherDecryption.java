@@ -5,7 +5,7 @@ import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import java.util.Base64;
 
-public class CryptoEncryption {
+public class CipherDecryption {
         public String encrypt(String str) {
             try {
                 String data = str;

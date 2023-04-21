@@ -3,6 +3,7 @@ package com.healthcareapp.backend.Controller;
 import com.healthcareapp.backend.Model.Encounter;
 import com.healthcareapp.backend.Model.FollowUp;
 import com.healthcareapp.backend.Model.PendingQueue;
+import com.healthcareapp.backend.Model.Readings;
 import com.healthcareapp.backend.Service.DoctorService;
 import com.healthcareapp.backend.Service.EncounterService;
 import com.healthcareapp.backend.Service.FollowUpService;
@@ -110,5 +111,14 @@ public class DoctorController {
             throw exception;
         }
         return ResponseEntity.of(Optional.of(followUpList));
+    }
+
+    @GetMapping("/getReadings")
+    public ResponseEntity<Readings> getReadings(){
+        Readings readings = new Readings();
+        readings.setBloodPressure("FALSE");
+        readings.setTemperature("FALSE");
+        readings.setSugar("FALSE");
+        return ResponseEntity.of(Optional.of(readings));
     }
 }
