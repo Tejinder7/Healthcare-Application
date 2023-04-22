@@ -1,6 +1,7 @@
 package com.healthcareapp.backend.Controller;
 
 
+import com.healthcareapp.backend.Model.Admin;
 import com.healthcareapp.backend.Model.FieldWorker;
 import com.healthcareapp.backend.Model.FollowUp;
 import com.healthcareapp.backend.Model.Patient;
@@ -122,5 +123,19 @@ public class SupervisorController {
             throw exception;
         }
         return ResponseEntity.of(Optional.of(patientList));
+    }
+
+    @PutMapping("/updateFieldWorker")
+    public ResponseEntity<FieldWorker> updateFieldWorker(@RequestBody FieldWorker fieldWorker){
+        FieldWorker updatedFieldWorker;
+
+        try{
+            updatedFieldWorker = fieldWorkerService.updateFieldWorker(fieldWorker);
+        }
+        catch (RuntimeException exception){
+            throw exception;
+        }
+
+        return ResponseEntity.of(Optional.of(updatedFieldWorker));
     }
 }

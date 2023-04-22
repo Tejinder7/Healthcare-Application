@@ -1,5 +1,6 @@
 package com.healthcareapp.backend.Service;
 
+import com.healthcareapp.backend.Exception.ForbiddenException;
 import com.healthcareapp.backend.Exception.ResourceNotFoundException;
 import com.healthcareapp.backend.Model.*;
 import com.healthcareapp.backend.Repository.SupervisorRepository;
@@ -27,6 +28,10 @@ public class SupervisorService {
 
     public Supervisor addSupervisor(Supervisor supervisor) throws RuntimeException{
         authorizationService.checkIfUserIdExists(supervisor.getUsername());
+
+        if(supervisorRepository.findByPincode(supervisor.getPincode()).isPresent()){
+            throw new ForbiddenException("Supervisor already exists with the given pincode. Please try again with a different pincode");
+        }
 
         supervisor.setRole(Role.ROLE_SUPERVISOR);
         supervisor.setPassword(passwordEncoder.encode(supervisor.getPassword()));

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Component
@@ -93,6 +94,24 @@ public class FieldWorkerService {
         }
 
         return fieldWorker.get();
+    }
+
+    public FieldWorker updateFieldWorker(FieldWorker fieldWorker) throws RuntimeException{
+        FieldWorker fieldWorkerFromdb = fieldWorkerRepository.findById(fieldWorker.getAuthId()).orElseThrow();
+
+        if(!Objects.equals(fieldWorkerFromdb.getUsername(), fieldWorker.getUsername())){
+            authorizationService.checkIfUserIdExists(fieldWorker.getUsername());
+        }
+
+        fieldWorkerFromdb.setUsername(fieldWorker.getUsername());
+        fieldWorkerFromdb.setName(fieldWorker.getName());
+        fieldWorkerFromdb.setContact(fieldWorker.getContact());
+        if(!Objects.equals(fieldWorker.getPassword(), "")){
+            fieldWorkerFromdb.setPassword(passwordEncoder.encode(fieldWorker.getPassword()));
+        }
+        FieldWorker updatedFieldWorker =fieldWorkerRepository.save(fieldWorkerFromdb);
+
+        return updatedFieldWorker;
     }
 
 }
