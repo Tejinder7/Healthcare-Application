@@ -27,6 +27,8 @@ public class FollowUp {
 
     private String lastSyncDate;
 
+    private int otp;
+
     @ManyToOne
     @JoinColumn(name= "hosp_id")
 //    @JsonBackReference(value="Hospital-FollowUp")
@@ -50,7 +52,7 @@ public class FollowUp {
     public FollowUp() {
     }
 
-    public FollowUp(int followUpId, Encounter encounter, String date, String fieldWorkerRemarks, String doctorRemarks, boolean flag, String lastSyncDate, Hospital hospital, Patient patient, Readings readings) {
+    public FollowUp(int followUpId, Encounter encounter, String date, String fieldWorkerRemarks, String doctorRemarks, boolean flag, String lastSyncDate, Hospital hospital, Patient patient, Readings readings, int otp) {
         this.followUpId = followUpId;
         this.encounter = encounter;
         this.date = date;
@@ -61,6 +63,7 @@ public class FollowUp {
         this.hospital = hospital;
         this.patient = patient;
         this.readings = readings;
+        this.otp = otp;
     }
 
     public int getFollowUpId() {
@@ -143,6 +146,15 @@ public class FollowUp {
         this.readings = readings;
     }
 
+
+    public int getOtp() {
+        return otp;
+    }
+
+    public void setOtp(int otp) {
+        this.otp = otp;
+    }
+
     @Override
     public String toString() {
         return "FollowUp{" +
@@ -153,6 +165,7 @@ public class FollowUp {
                 ", doctorRemarks='" + doctorRemarks + '\'' +
                 ", flag=" + flag +
                 ", lastSyncDate='" + lastSyncDate + '\'' +
+                ", otp=" + otp +
                 ", hospital=" + hospital +
                 ", patient=" + patient +
                 ", readings=" + readings +

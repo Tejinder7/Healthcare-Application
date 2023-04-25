@@ -4,6 +4,7 @@ import com.healthcareapp.backend.Exception.ForbiddenException;
 import com.healthcareapp.backend.Exception.ResourceNotFoundException;
 import com.healthcareapp.backend.Model.*;
 import com.healthcareapp.backend.Repository.PendingQueueRepository;
+import com.healthcareapp.backend.Validations.ValidationHelper;
 import org.springframework.stereotype.Component;
 
 import java.time.DateTimeException;
@@ -16,15 +17,19 @@ public class PendingQueueService {
     private PatientService patientService;
     private FrontDeskService frontDeskService;
     private DoctorService doctorService;
+    private ValidationHelper validationHelper;
 
-    public PendingQueueService(PendingQueueRepository pendingQueueRepository, PatientService patientService, FrontDeskService frontDeskService, DoctorService doctorService) {
+    public PendingQueueService(PendingQueueRepository pendingQueueRepository, PatientService patientService, FrontDeskService frontDeskService, DoctorService doctorService, ValidationHelper validationHelper) {
         this.pendingQueueRepository = pendingQueueRepository;
         this.patientService = patientService;
         this.frontDeskService = frontDeskService;
         this.doctorService = doctorService;
+        this.validationHelper = validationHelper;
     }
 
     public PendingQueue addPendingQueue(String userId, int pid) throws RuntimeException{
+
+        validationHelper.usernamePasswordValidation(userId);
 
         PendingQueue pendingQueue = new PendingQueue();
 
@@ -53,6 +58,8 @@ public class PendingQueueService {
     }
 
     public List<PendingQueue> getPendingQueueByDocId(String doctorUserId) throws RuntimeException{
+
+        validationHelper.usernamePasswordValidation(doctorUserId);
 
         Doctor doctor = doctorService.getDoctorByUserId(doctorUserId);
 

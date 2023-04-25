@@ -6,6 +6,7 @@ import com.healthcareapp.backend.Model.Hospital;
 import com.healthcareapp.backend.Model.Supervisor;
 import com.healthcareapp.backend.Repository.HospitalRepository;
 import com.healthcareapp.backend.Repository.SupervisorRepository;
+import com.healthcareapp.backend.Validations.ValidationHelper;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -17,9 +18,12 @@ public class HospitalService {
 
     private SupervisorRepository supervisorRepository;
 
-    public HospitalService(HospitalRepository hospitalRepository, SupervisorRepository supervisorRepository) {
+    private ValidationHelper validationHelper;
+
+    public HospitalService(HospitalRepository hospitalRepository, SupervisorRepository supervisorRepository, ValidationHelper validationHelper) {
         this.hospitalRepository = hospitalRepository;
         this.supervisorRepository = supervisorRepository;
+        this.validationHelper = validationHelper;
     }
 
     public Hospital getHospitalById(int id){
@@ -32,6 +36,11 @@ public class HospitalService {
     }
 
     public Hospital addHospital(Hospital hospital) throws RuntimeException{
+
+        validationHelper.nameValidation(hospital.getName());
+        validationHelper.strValidation(hospital.getAddress());
+        validationHelper.pincodeValidation(hospital.getPincode());
+
         Hospital savedHospital;
         Optional<Supervisor> supervisor = supervisorRepository.findByPincode(hospital.getPincode());
 

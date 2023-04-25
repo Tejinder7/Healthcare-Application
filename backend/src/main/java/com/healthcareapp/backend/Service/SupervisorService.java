@@ -4,6 +4,7 @@ import com.healthcareapp.backend.Exception.ForbiddenException;
 import com.healthcareapp.backend.Exception.ResourceNotFoundException;
 import com.healthcareapp.backend.Model.*;
 import com.healthcareapp.backend.Repository.SupervisorRepository;
+import com.healthcareapp.backend.Validations.ValidationHelper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -19,15 +20,25 @@ public class SupervisorService {
 
     private PasswordEncoder passwordEncoder;
 
-    public SupervisorService(SupervisorRepository supervisorRepository, HospitalService hospitalService, AuthorizationService authorizationService, PasswordEncoder passwordEncoder) {
+    private ValidationHelper validationHelper;
+
+    public SupervisorService(SupervisorRepository supervisorRepository, HospitalService hospitalService, AuthorizationService authorizationService, PasswordEncoder passwordEncoder, ValidationHelper validationHelper) {
         this.supervisorRepository = supervisorRepository;
         this.hospitalService = hospitalService;
         this.authorizationService = authorizationService;
         this.passwordEncoder = passwordEncoder;
+        this.validationHelper = validationHelper;
     }
 
     public Supervisor addSupervisor(Supervisor supervisor) throws RuntimeException{
         authorizationService.checkIfUserIdExists(supervisor.getUsername());
+
+        validationHelper.usernamePasswordValidation(supervisor.getUsername());
+        validationHelper.usernamePasswordValidation(supervisor.getPassword());
+        validationHelper.strValidation(supervisor.getAddress());
+        validationHelper.pincodeValidation(supervisor.getPincode());
+        validationHelper.nameValidation(supervisor.getName());
+        validationHelper.contactValidation(supervisor.getContact());
 
         if(supervisorRepository.findByPincode(supervisor.getPincode()).isPresent()){
             throw new ForbiddenException("Supervisor already exists with the given pincode. Please try again with a different pincode");
@@ -43,6 +54,12 @@ public class SupervisorService {
     }
 
     public Supervisor updateSupervisor(Supervisor supervisor) throws RuntimeException{
+
+        validationHelper.usernamePasswordValidation(supervisor.getUsername());
+        validationHelper.usernamePasswordValidation(supervisor.getPassword());
+        validationHelper.nameValidation(supervisor.getName());
+        validationHelper.contactValidation(supervisor.getContact());
+
         Supervisor supervisorFromDb = supervisorRepository.findById(supervisor.getAuthId()).orElseThrow();
 
         if(!Objects.equals(supervisorFromDb.getUsername(), supervisor.getUsername())){
@@ -62,6 +79,7 @@ public class SupervisorService {
 
 
     public List<Patient> unAssignedPatients(String userId){
+        validationHelper.usernamePasswordValidation(userId);
         Optional<Supervisor> supervisor = supervisorRepository.findByUsername(userId);
 
         if(supervisor.isEmpty())
@@ -91,6 +109,7 @@ public class SupervisorService {
     }
 
     public Supervisor getSupervisorByUserId(String userId){
+        validationHelper.usernamePasswordValidation(userId);
         Optional<Supervisor> supervisor= supervisorRepository.findByUsername(userId);
 
         if(supervisor.isEmpty()){

@@ -5,6 +5,7 @@ import com.healthcareapp.backend.Model.Patient;
 import com.healthcareapp.backend.Model.Role;
 import com.healthcareapp.backend.Model.Supervisor;
 import com.healthcareapp.backend.Repository.FieldWorkerRepository;
+import com.healthcareapp.backend.Validations.ValidationHelper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -20,17 +21,26 @@ public class FieldWorkerService {
     private PatientService patientService;
     private AuthorizationService authorizationService;
     private PasswordEncoder passwordEncoder;
+    private ValidationHelper validationHelper;
 
-    public FieldWorkerService(FieldWorkerRepository fieldWorkerRepository, SupervisorService supervisorService, PatientService patientService, AuthorizationService authorizationService, PasswordEncoder passwordEncoder) {
+    public FieldWorkerService(FieldWorkerRepository fieldWorkerRepository, SupervisorService supervisorService, PatientService patientService, AuthorizationService authorizationService, PasswordEncoder passwordEncoder, ValidationHelper validationHelper) {
         this.fieldWorkerRepository = fieldWorkerRepository;
         this.supervisorService = supervisorService;
         this.patientService = patientService;
         this.authorizationService = authorizationService;
         this.passwordEncoder = passwordEncoder;
+        this.validationHelper = validationHelper;
     }
 
     public FieldWorker addFieldWorker(FieldWorker fieldWorker, String supervisorUserId) throws RuntimeException{
         authorizationService.checkIfUserIdExists(fieldWorker.getUsername());
+
+        validationHelper.usernamePasswordValidation(fieldWorker.getUsername());
+        validationHelper.usernamePasswordValidation(fieldWorker.getPassword());
+        validationHelper.nameValidation(fieldWorker.getName());
+        validationHelper.strValidation(fieldWorker.getAddress());
+        validationHelper.pincodeValidation(fieldWorker.getPincode());
+        validationHelper.contactValidation(fieldWorker.getContact());
 
         FieldWorker savedFieldWorker;
 
@@ -49,6 +59,8 @@ public class FieldWorkerService {
 
 
     public List<FieldWorker> getFieldWorkers(String supervisorUserId){
+
+        validationHelper.usernamePasswordValidation(supervisorUserId);
         Supervisor supervisor = supervisorService.getSupervisorByUserId(supervisorUserId);
 
         List<FieldWorker> fieldWorkerList = fieldWorkerRepository.findBySupervisor(supervisor);
@@ -62,6 +74,7 @@ public class FieldWorkerService {
     }
 
     public List<FieldWorker> getAvailableFieldWorkers(String supervisorUserId){
+        validationHelper.usernamePasswordValidation(supervisorUserId);
         Supervisor supervisor = supervisorService.getSupervisorByUserId(supervisorUserId);
 
         List<FieldWorker> fieldWorkerList = fieldWorkerRepository.findBySupervisorAndAvailableStatusIsTrue(supervisor);
@@ -97,6 +110,12 @@ public class FieldWorkerService {
     }
 
     public FieldWorker updateFieldWorker(FieldWorker fieldWorker) throws RuntimeException{
+
+        validationHelper.usernamePasswordValidation(fieldWorker.getUsername());
+        validationHelper.usernamePasswordValidation(fieldWorker.getPassword());
+        validationHelper.nameValidation(fieldWorker.getName());
+        validationHelper.contactValidation(fieldWorker.getContact());
+
         FieldWorker fieldWorkerFromdb = fieldWorkerRepository.findById(fieldWorker.getAuthId()).orElseThrow();
 
         if(!Objects.equals(fieldWorkerFromdb.getUsername(), fieldWorker.getUsername())){
@@ -114,4 +133,13 @@ public class FieldWorkerService {
         return updatedFieldWorker;
     }
 
+    public FieldWorker getFieldWorkerByUsername(String username){
+        validationHelper.usernamePasswordValidation(username);
+        FieldWorker fieldWorker = fieldWorkerRepository.findByUsername(username);
+        if(fieldWorker == null){
+            throw new RuntimeException("Field Worker with id: "+ username+ " not found");
+        }
+
+        return fieldWorker;
+    }
 }

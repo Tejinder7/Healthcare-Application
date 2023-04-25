@@ -20,28 +20,28 @@ public class FieldWorkerController {
         this.followUpService = followUpService;
     }
 
-    @GetMapping("/getFollowUpsForFieldWorker/{fieldWorkerId}")
-    public ResponseEntity<List<FollowUp>> getFollowUpsForFieldWorker(@PathVariable int fieldWorkerId){
+    @GetMapping("/getFollowUpsForFieldWorkerMobile/{fieldWorkerUsername}/{followUpId}")
+    public ResponseEntity<List<FollowUp>> getFollowUpsForFieldWorker(@PathVariable String fieldWorkerUsername, @PathVariable int followUpId){
         List<FollowUp> followUpList;
         try{
-            followUpList = followUpService.getFollowUpsByFieldWorker(fieldWorkerId);
+            followUpList = followUpService.getFollowUpsByFieldWorkerMobile(fieldWorkerUsername, followUpId);
         }catch (RuntimeException exception){
             throw exception;
         }
         return ResponseEntity.of(Optional.of(followUpList));
     }
+
     @GetMapping("/getTodayFollowUps/{date}/{fieldWorkerId}")
     public ResponseEntity<List<FollowUp>> getTodayFollowUp(@PathVariable String date, @PathVariable int fieldWorkerId){
         List<FollowUp> followUpList;
-
         try {
             followUpList = followUpService.getCurrentDateFollowUps(date, fieldWorkerId);
         }catch (Exception exception){
             throw exception;
         }
-
         return ResponseEntity.ok(followUpList);
     }
+
     @PutMapping("/updateFollowUpByFieldWorker")
     public ResponseEntity<FollowUp> updateFollowUpByFieldWorker(@RequestBody FollowUp followUp){
         try{

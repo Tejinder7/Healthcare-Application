@@ -5,6 +5,7 @@ import com.healthcareapp.backend.Model.*;
 import com.healthcareapp.backend.Repository.EncounterRepository;
 import com.healthcareapp.backend.Repository.FollowUpRepository;
 import com.healthcareapp.backend.Repository.PatientRepository;
+import com.healthcareapp.backend.Validations.ValidationHelper;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -19,18 +20,22 @@ public class FollowUpService {
     private SupervisorService supervisorService;
     private FieldWorkerService fieldWorkerService;
     private DoctorService doctorService;
+    private ValidationHelper validationHelper;
 
-
-    public FollowUpService(FollowUpRepository followUpRepository, PatientRepository patientRepository, EncounterRepository encounterRepository, SupervisorService supervisorService, FieldWorkerService fieldWorkerService, DoctorService doctorService) {
+    public FollowUpService(FollowUpRepository followUpRepository, PatientRepository patientRepository, EncounterRepository encounterRepository, SupervisorService supervisorService, FieldWorkerService fieldWorkerService, DoctorService doctorService, ValidationHelper validationHelper) {
         this.followUpRepository = followUpRepository;
         this.patientRepository = patientRepository;
         this.encounterRepository = encounterRepository;
         this.supervisorService = supervisorService;
         this.fieldWorkerService = fieldWorkerService;
         this.doctorService = doctorService;
+        this.validationHelper = validationHelper;
     }
 
     public List<FollowUp> getCurrentDateFollowUps(String date, int fieldWorkerAuthId){
+
+        validationHelper.dateValidation(date);
+
         FieldWorker fieldWorker;
 
         fieldWorker = fieldWorkerService.getFieldWorkerById(fieldWorkerAuthId);
@@ -66,6 +71,9 @@ public class FollowUpService {
     }
 
     public List<FollowUp> getAllFollowUpsUnderSupervisor(String userId){
+
+        validationHelper.usernamePasswordValidation(userId);
+
         Supervisor supervisor = supervisorService.getSupervisorByUserId(userId);
 
         List<FollowUp> followUpList = new ArrayList<FollowUp>();
@@ -102,10 +110,33 @@ public class FollowUpService {
             List<FollowUp> followUpListForPatient = followUpRepository.findByPatient(patientList.get(i));
             followUpList.addAll(followUpListForPatient);
         }
+
         return followUpList;
     }
 
+    public List<FollowUp> getFollowUpsByFieldWorkerMobile(String fieldWorkerUsername, int followUpId){
+        validationHelper.usernamePasswordValidation(fieldWorkerUsername);
+        List<FollowUp> followUpList = new ArrayList<>();
+        FieldWorker fieldWorker = fieldWorkerService.getFieldWorkerByUsername(fieldWorkerUsername);
+        followUpList = getFollowUpsByFieldWorker(fieldWorker.getAuthId());
+
+        List<FollowUp> followUpListById = new ArrayList<>();
+
+        for(int i=0; i<followUpList.size(); i++){
+            if(followUpList.get(i).getFollowUpId() > followUpId){
+                followUpListById.add(followUpList.get(i));
+            }
+            if(followUpListById.size() == 5)
+                break;
+        }
+
+        return followUpListById;
+    }
+
     public List<FollowUp> getAllFollowUpsAssignedByDoctor(String doctorUserId) throws RuntimeException{
+
+        validationHelper.usernamePasswordValidation(doctorUserId);
+
         Doctor doctor= doctorService.getDoctorByUserId(doctorUserId);
 
         List<Encounter> encounterList= doctor.getEncounterList();

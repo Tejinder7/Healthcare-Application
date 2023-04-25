@@ -1,10 +1,12 @@
 package com.healthcareapp.backend.Service;
 
 import com.healthcareapp.backend.Exception.ResourceNotFoundException;
+import com.healthcareapp.backend.Exception.ValidationException;
 import com.healthcareapp.backend.Model.*;
 import com.healthcareapp.backend.Repository.AdminRepository;
 import com.healthcareapp.backend.Repository.DoctorRepository;
 import com.healthcareapp.backend.Repository.FrontDeskRepository;
+import com.healthcareapp.backend.Validations.ValidationHelper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -23,22 +25,30 @@ public class AdminService {
 
     PasswordEncoder passwordEncoder;
 
-    public AdminService(AdminRepository adminRepository, DoctorRepository doctorRepository, FrontDeskRepository frontDeskRepository, HospitalService hospitalService, AuthorizationService authorizationService, PasswordEncoder passwordEncoder) {
+    ValidationHelper validationHelper;
+
+    public AdminService(AdminRepository adminRepository, DoctorRepository doctorRepository, FrontDeskRepository frontDeskRepository, HospitalService hospitalService, AuthorizationService authorizationService, PasswordEncoder passwordEncoder, ValidationHelper validationHelper) {
         this.adminRepository = adminRepository;
         this.doctorRepository = doctorRepository;
         this.frontDeskRepository = frontDeskRepository;
         this.hospitalService = hospitalService;
         this.authorizationService = authorizationService;
         this.passwordEncoder = passwordEncoder;
+        this.validationHelper = validationHelper;
     }
 
     public Admin addAdmin(Admin admin, int hospId) throws RuntimeException{
         authorizationService.checkIfUserIdExists(admin.getUsername());
 
+        validationHelper.usernamePasswordValidation(admin.getUsername());
+        validationHelper.usernamePasswordValidation(admin.getPassword());
+        validationHelper.nameValidation(admin.getName());
+
         Hospital hospital= hospitalService.getHospitalById(hospId);
 
         admin.setHospital(hospital);
         admin.setRole(Role.ROLE_ADMIN);
+
         admin.setPassword(passwordEncoder.encode(admin.getPassword()));
 
         Admin savedAdmin= adminRepository.save(admin);
@@ -48,6 +58,11 @@ public class AdminService {
 
     public Admin updateAdmin(Admin admin) throws RuntimeException{//TAKE NULL FROM PASSWORD IF NOT UPDATED
         Optional<Admin> adminFromDb = adminRepository.findById(admin.getAuthId());
+
+        validationHelper.usernamePasswordValidation(admin.getUsername());
+        validationHelper.usernamePasswordValidation(admin.getPassword());
+        validationHelper.nameValidation(admin.getName());
+
         if(!Objects.equals(adminFromDb.get().getUsername(), admin.getUsername())){
             authorizationService.checkIfUserIdExists(admin.getUsername());
         }

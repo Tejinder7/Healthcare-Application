@@ -5,6 +5,7 @@ import com.healthcareapp.backend.Model.Admin;
 import com.healthcareapp.backend.Model.Doctor;
 import com.healthcareapp.backend.Model.Role;
 import com.healthcareapp.backend.Repository.DoctorRepository;
+import com.healthcareapp.backend.Validations.ValidationHelper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -16,18 +17,26 @@ public class DoctorService {
     private DoctorRepository doctorRepository;
     private AuthorizationService authorizationService;
     private AdminService adminService;
-
+    private ValidationHelper validationHelper;
     private PasswordEncoder passwordEncoder;
 
-    public DoctorService(DoctorRepository doctorRepository, AuthorizationService authorizationService, AdminService adminService, PasswordEncoder passwordEncoder) {
+    public DoctorService(DoctorRepository doctorRepository, AuthorizationService authorizationService, AdminService adminService, PasswordEncoder passwordEncoder, ValidationHelper validationHelper) {
         this.doctorRepository = doctorRepository;
         this.authorizationService = authorizationService;
         this.adminService = adminService;
         this.passwordEncoder = passwordEncoder;
+        this.validationHelper = validationHelper;
     }
 
     public Doctor addDoctor(Doctor doctor, String userId) throws RuntimeException{
         authorizationService.checkIfUserIdExists(doctor.getUsername());
+
+        validationHelper.usernamePasswordValidation(doctor.getUsername());
+        validationHelper.usernamePasswordValidation(doctor.getPassword());
+        validationHelper.nameValidation(doctor.getName());
+        validationHelper.contactValidation(doctor.getContact());
+        validationHelper.strValidation(doctor.getDocSpecialization());
+        validationHelper.usernamePasswordValidation(doctor.getLicId());
 
         Admin admin =  adminService.getAdminByUserId(userId);
 
@@ -46,6 +55,14 @@ public class DoctorService {
     }
 
     public Doctor updateDoctor(Doctor doctor) throws RuntimeException{
+
+        validationHelper.usernamePasswordValidation(doctor.getUsername());
+        validationHelper.usernamePasswordValidation(doctor.getPassword());
+        validationHelper.nameValidation(doctor.getName());
+        validationHelper.contactValidation(doctor.getContact());
+        validationHelper.strValidation(doctor.getDocSpecialization());
+        validationHelper.usernamePasswordValidation(doctor.getLicId());
+
         Optional<Doctor> updatedDoctor = doctorRepository.findById(doctor.getAuthId());
 
         if(!Objects.equals(updatedDoctor.get().getUsername(), doctor.getUsername())){

@@ -6,6 +6,7 @@ import com.healthcareapp.backend.Model.FrontDesk;
 import com.healthcareapp.backend.Model.Hospital;
 import com.healthcareapp.backend.Model.Role;
 import com.healthcareapp.backend.Repository.FrontDeskRepository;
+import com.healthcareapp.backend.Validations.ValidationHelper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -18,16 +19,23 @@ public class FrontDeskService {
     private AuthorizationService authorizationService;
     private AdminService adminService;
     private PasswordEncoder passwordEncoder;
+    private ValidationHelper validationHelper;
 
-    public FrontDeskService(FrontDeskRepository frontDeskRepository, AuthorizationService authorizationService, AdminService adminService, PasswordEncoder passwordEncoder) {
+    public FrontDeskService(FrontDeskRepository frontDeskRepository, AuthorizationService authorizationService, AdminService adminService, PasswordEncoder passwordEncoder, ValidationHelper validationHelper) {
         this.frontDeskRepository = frontDeskRepository;
         this.authorizationService = authorizationService;
         this.adminService = adminService;
         this.passwordEncoder = passwordEncoder;
+        this.validationHelper = validationHelper;
     }
 
     public FrontDesk addFrontDesk(FrontDesk frontDesk, String userId) throws RuntimeException{
         authorizationService.checkIfUserIdExists(frontDesk.getUsername());
+
+        validationHelper.usernamePasswordValidation(userId);
+        validationHelper.usernamePasswordValidation(frontDesk.getUsername());
+        validationHelper.usernamePasswordValidation(frontDesk.getPassword());
+        validationHelper.nameValidation(frontDesk.getName());
 
         Admin admin = adminService.getAdminByUserId(userId);
 
@@ -42,6 +50,11 @@ public class FrontDeskService {
     }
 
     public FrontDesk updateFrontDesk(FrontDesk frontDesk) throws RuntimeException{
+
+        validationHelper.usernamePasswordValidation(frontDesk.getUsername());
+        validationHelper.usernamePasswordValidation(frontDesk.getPassword());
+        validationHelper.nameValidation(frontDesk.getName());
+
         Optional<FrontDesk> updatedFrontDesk = frontDeskRepository.findById(frontDesk.getAuthId());
         
         if(!Objects.equals(updatedFrontDesk.get().getUsername(), frontDesk.getUsername())){
@@ -63,6 +76,7 @@ public class FrontDeskService {
     }
 
     public FrontDesk getFrontDeskByUserId(String userId){
+        validationHelper.usernamePasswordValidation(userId);
         Optional<FrontDesk> frontDesk = frontDeskRepository.findByUsername(userId);
         if(frontDesk.isEmpty()){
             throw new ResourceNotFoundException("Front Desk with userId: "+ userId+ " not found");

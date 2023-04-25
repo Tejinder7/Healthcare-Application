@@ -1,31 +1,35 @@
 package com.healthcareapp.backend.Service;
 
 import com.healthcareapp.backend.Exception.ResourceNotFoundException;
-import com.healthcareapp.backend.Model.Doctor;
-import com.healthcareapp.backend.Model.Encounter;
-import com.healthcareapp.backend.Model.Patient;
+import com.healthcareapp.backend.Model.*;
 import com.healthcareapp.backend.Repository.EncounterRepository;
+import com.healthcareapp.backend.Validations.ValidationHelper;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Consumer;
 
 @Component
 public class EncounterService {
     private EncounterRepository encounterRepository;
     private DoctorService doctorService;
     private PatientService patientService;
-
+    private ValidationHelper validationHelper;
     private PendingQueueService pendingQueueService;
 
-    public EncounterService(DoctorService doctorService, PatientService patientService, PendingQueueService pendingQueueService, EncounterRepository encounterRepository) {
+    public EncounterService(DoctorService doctorService, PatientService patientService, PendingQueueService pendingQueueService, EncounterRepository encounterRepository, ValidationHelper validationHelper) {
         this.doctorService = doctorService;
         this.patientService = patientService;
         this.pendingQueueService = pendingQueueService;
         this.encounterRepository = encounterRepository;
+        this.validationHelper = validationHelper;
     }
 
     public Encounter addEncounter(int patientId, String doctorUserId) throws RuntimeException{
+
+        validationHelper.usernamePasswordValidation(doctorUserId);
+
         Encounter encounter = new Encounter();
 
         Patient patient= patientService.getPatientById(patientId);
@@ -45,6 +49,17 @@ public class EncounterService {
     }
 
     public Encounter updateEncounter(Encounter encounter) throws RuntimeException{
+
+        validationHelper.strValidation(encounter.getPrescription());
+        validationHelper.strValidation(encounter.getSymptoms());
+
+        for(int i=0; i<encounter.getFollowUpList().size(); i++){
+            FollowUp followUp = encounter.getFollowUpList().get(i);
+            validationHelper.strValidation(followUp.getReadings().getBloodPressure());
+            validationHelper.strValidation(followUp.getReadings().getSugar());
+            validationHelper.strValidation(followUp.getReadings().getTemperature());
+        }
+
         Optional<Encounter> updatedEncounter= encounterRepository.findById(encounter.getEncounterId());
 
         if(updatedEncounter.isEmpty()){
