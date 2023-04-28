@@ -56,8 +56,6 @@ public class FieldWorkerService {
         return savedFieldWorker;
     }
 
-
-
     public List<FieldWorker> getFieldWorkers(String supervisorUserId){
 
         validationHelper.usernamePasswordValidation(supervisorUserId);
@@ -139,7 +137,7 @@ public class FieldWorkerService {
         if(fieldWorker == null){
             throw new RuntimeException("Field Worker with id: "+ username+ " not found");
         }
-
         return fieldWorker;
     }
+
 }

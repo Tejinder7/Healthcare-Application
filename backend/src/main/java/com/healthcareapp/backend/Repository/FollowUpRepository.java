@@ -17,4 +17,6 @@ public interface FollowUpRepository extends JpaRepository<FollowUp, Integer> {
     public List<FollowUp> findByHospitalAndFlagIsFalse(Hospital hospital);
 
     public List<FollowUp> findByPatient(Patient patient);
+
+    public List<FollowUp> findByDate(String date);
 }

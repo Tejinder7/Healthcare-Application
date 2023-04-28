@@ -1,5 +1,6 @@
 package com.healthcareapp.backend.Controller;
 
+import com.healthcareapp.backend.Model.FieldWorker;
 import com.healthcareapp.backend.Model.FollowUp;
 import com.healthcareapp.backend.Service.FieldWorkerService;
 import com.healthcareapp.backend.Service.FollowUpService;
@@ -31,25 +32,36 @@ public class FieldWorkerController {
         return ResponseEntity.of(Optional.of(followUpList));
     }
 
-    @GetMapping("/getTodayFollowUps/{date}/{fieldWorkerId}")
-    public ResponseEntity<List<FollowUp>> getTodayFollowUp(@PathVariable String date, @PathVariable int fieldWorkerId){
-        List<FollowUp> followUpList;
-        try {
-            followUpList = followUpService.getCurrentDateFollowUps(date, fieldWorkerId);
-        }catch (Exception exception){
-            throw exception;
-        }
-        return ResponseEntity.ok(followUpList);
-    }
+//    @GetMapping("/getTodayFollowUps/{date}/{fieldWorkerId}")
+//    public ResponseEntity<List<FollowUp>> getTodayFollowUp(@PathVariable String date, @PathVariable int fieldWorkerId){
+//        List<FollowUp> followUpList;
+//        try {
+//            followUpList = followUpService.getCurrentDateFollowUps(date, fieldWorkerId);
+//        }catch (Exception exception){
+//            throw exception;
+//        }
+//        return ResponseEntity.ok(followUpList);
+//    }
 
-    @PutMapping("/updateFollowUpByFieldWorker")
-    public ResponseEntity<FollowUp> updateFollowUpByFieldWorker(@RequestBody FollowUp followUp){
+    @PutMapping("/updateFollowUpsByFieldWorker")
+    public ResponseEntity<List<Integer>> updateFollowUpsByFieldWorker(@RequestBody List<FollowUp> followUpList){
         try{
-            followUpService.updateFollowUp(followUp);
+            List<Integer> followUpListUpdated = followUpService.updateFollowUp(followUpList);
+            return ResponseEntity.of(Optional.of(followUpListUpdated));
         }
         catch (Exception exception){
             throw exception;
         }
-        return ResponseEntity.of(Optional.of(followUp));
+    }
+
+    @GetMapping("/getFieldWorker/{fieldWorkerUsername}")
+    public ResponseEntity<FieldWorker> getFieldWorkerByUsername(@PathVariable String fieldWorkerUsername){
+        FieldWorker fieldworker = new FieldWorker();
+        try{
+            fieldworker = fieldWorkerService.getFieldWorkerByUsername(fieldWorkerUsername);
+            return ResponseEntity.of(Optional.of(fieldworker));
+        }catch (RuntimeException exception){
+            throw exception;
+        }
     }
 }

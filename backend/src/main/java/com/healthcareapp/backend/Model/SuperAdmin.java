@@ -17,6 +17,6 @@ public class SuperAdmin extends Authorization{
 
     @Override
     public String toString() {
-        return "SuperAdmin{}";
+        return "SuperAdmin{} " + super.toString();
     }
 }

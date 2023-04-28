@@ -8,6 +8,7 @@ import com.healthcareapp.backend.Repository.PatientRepository;
 import com.healthcareapp.backend.Validations.ValidationHelper;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -32,7 +33,9 @@ public class FollowUpService {
         this.validationHelper = validationHelper;
     }
 
-    public List<FollowUp> getCurrentDateFollowUps(String date, int fieldWorkerAuthId){
+    public List<FollowUp> getCurrentDateFollowUpsByFieldWorker(int fieldWorkerAuthId){
+
+        String date = LocalDate.now().toString();
 
         validationHelper.dateValidation(date);
 
@@ -51,23 +54,37 @@ public class FollowUpService {
         return followUpList;
     }
 
+    public List<FollowUp> getAllTodayFollowUps(){
+        String date = LocalDate.now().toString();
+        List<FollowUp> followUpList = followUpRepository.findByDate(date);
+        return followUpList;
+    }
 
-    public FollowUp updateFollowUp(FollowUp followUp) throws RuntimeException{
+    public List<Integer> updateFollowUp(List<FollowUp> followUpList) throws RuntimeException{
 
-        Optional<FollowUp> updatedFollowUp = followUpRepository.findById(followUp.getFollowUpId());
+        List<Integer> followUpListUpdatedId = new ArrayList<>();
 
-        if(updatedFollowUp.isEmpty())
-        {
-            throw new ResourceNotFoundException("Follow up with id: "+ followUp.getFollowUpId()+ " not found");
+        for(int i=0; i<followUpList.size(); i++) {
+            FollowUp incomingFollowUp = followUpList.get(i);
+            Optional<FollowUp> updatedFollowUp = followUpRepository.findById(incomingFollowUp.getFollowUpId());
+
+            if (updatedFollowUp.isEmpty()) {
+                throw new ResourceNotFoundException("Follow up with id: " + incomingFollowUp.getFollowUpId() + " not found");
+            }
+
+            updatedFollowUp.get().setFlag(true);
+            updatedFollowUp.get().setFieldWorkerRemarks(incomingFollowUp.getFieldWorkerRemarks());
+//            updatedFollowUp.get().setReadings(incomingFollowUp.getReadings());
+
+            updatedFollowUp.get().getReadings().setSugar(incomingFollowUp.getReadings().getSugar());
+            updatedFollowUp.get().getReadings().setTemperature(incomingFollowUp.getReadings().getTemperature());
+            updatedFollowUp.get().getReadings().setBloodPressure(incomingFollowUp.getReadings().getBloodPressure());
+
+            followUpListUpdatedId.add(updatedFollowUp.get().getFollowUpId());
+
+            followUpRepository.save(updatedFollowUp.get());
         }
-
-        updatedFollowUp.get().setFlag(followUp.isFlag());
-        updatedFollowUp.get().setLastSyncDate(followUp.getLastSyncDate());
-        updatedFollowUp.get().setFieldWorkerRemarks(followUp.getFieldWorkerRemarks());
-        updatedFollowUp.get().setReadings(followUp.getReadings());
-
-        followUpRepository.save(updatedFollowUp.get());
-        return updatedFollowUp.get();
+        return followUpListUpdatedId;
     }
 
     public List<FollowUp> getAllFollowUpsUnderSupervisor(String userId){
@@ -95,6 +112,7 @@ public class FollowUpService {
             followUp.setFlag(false);
             followUp.setPatient(encounter1.getPatient());
             followUp.setHospital(encounter1.getDoctor().getHospital());
+            followUp.setOtp((int)((Math.random() * (9999 - 1000)) + 1000));
             followUpRepository.save(followUp);
         }
     }

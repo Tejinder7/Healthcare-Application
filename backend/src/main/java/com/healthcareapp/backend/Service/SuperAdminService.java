@@ -43,11 +43,12 @@ public class SuperAdminService {
         return userList;
     }
 
-    public void addSuperAdmin(SuperAdmin superAdmin){
+    public SuperAdmin addSuperAdmin(SuperAdmin superAdmin){
         authorizationService.checkIfUserIdExists(superAdmin.getUsername());
         superAdmin.setPassword(passwordEncoder.encode(superAdmin.getPassword()));
         superAdmin.setRole(Role.ROLE_SUPER_ADMIN);
-        superAdminRepository.save(superAdmin);
+        SuperAdmin superAdmin1 = superAdminRepository.save(superAdmin);
+        return superAdmin1;
     }
 
 }

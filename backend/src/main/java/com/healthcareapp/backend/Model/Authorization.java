@@ -103,10 +103,9 @@ public class Authorization implements UserDetails {
 
     @Override
     public String toString() {
-        return "Authorization{" +
+        return "{" +
                 "authId=" + authId +
                 ", username='" + username + '\'' +
-                ", password='" + password + '\'' +
                 ", role=" + role +
                 '}';
     }
