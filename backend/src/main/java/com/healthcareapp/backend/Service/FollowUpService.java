@@ -6,6 +6,12 @@ import com.healthcareapp.backend.Repository.EncounterRepository;
 import com.healthcareapp.backend.Repository.FollowUpRepository;
 import com.healthcareapp.backend.Repository.PatientRepository;
 import com.healthcareapp.backend.Validations.ValidationHelper;
+import com.twilio.Twilio;
+import com.twilio.rest.api.v2010.account.Message;
+import com.twilio.type.PhoneNumber;
+import jakarta.annotation.PostConstruct;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
@@ -23,6 +29,15 @@ public class FollowUpService {
     private DoctorService doctorService;
     private ValidationHelper validationHelper;
 
+    @Value("${TWILIO_ACCOUNT_SID}")
+    String ACCOUNT_SID;
+
+    @Value("${TWILIO_AUTH_TOKEN}")
+    String AUTH_TOKEN;
+
+    @Value("${TWILIO_OUTGOING_SMS_NUMBER}")
+    String OUTGOING_SMS_NUMBER;
+
     public FollowUpService(FollowUpRepository followUpRepository, PatientRepository patientRepository, EncounterRepository encounterRepository, SupervisorService supervisorService, FieldWorkerService fieldWorkerService, DoctorService doctorService, ValidationHelper validationHelper) {
         this.followUpRepository = followUpRepository;
         this.patientRepository = patientRepository;
@@ -33,31 +48,9 @@ public class FollowUpService {
         this.validationHelper = validationHelper;
     }
 
-    public List<FollowUp> getCurrentDateFollowUpsByFieldWorker(int fieldWorkerAuthId){
-
-        String date = LocalDate.now().toString();
-
-        validationHelper.dateValidation(date);
-
-        FieldWorker fieldWorker;
-
-        fieldWorker = fieldWorkerService.getFieldWorkerById(fieldWorkerAuthId);
-
-        List<Patient> patientList = fieldWorker.getPatientList();
-
-        List<FollowUp> followUpList= new ArrayList<FollowUp>();
-
-//        patientList.forEach(patient -> followUpRepository.findByDateAndPatient(date, patient).forEach(followUp -> followUpList.add(followUp)));
-
-        patientList.forEach(patient -> {followUpList.addAll(followUpRepository.findByDateAndPatient(date, patient));});
-
-        return followUpList;
-    }
-
-    public List<FollowUp> getAllTodayFollowUps(){
-        String date = LocalDate.now().toString();
-        List<FollowUp> followUpList = followUpRepository.findByDate(date);
-        return followUpList;
+    @PostConstruct
+    public void setup(){
+        Twilio.init(ACCOUNT_SID, AUTH_TOKEN);
     }
 
     public List<Integer> updateFollowUp(List<FollowUp> followUpList) throws RuntimeException{
@@ -164,5 +157,19 @@ public class FollowUpService {
         encounterList.forEach(encounter -> followUpList.addAll(encounter.getFollowUpList()));
 
         return followUpList;
+    }
+
+    @Scheduled(cron = "0 25 0 * * ?")
+    public void sendOtpForTodaysFollowUps(){
+        String date = LocalDate.now().toString();
+        List<FollowUp> followUpList = followUpRepository.findByDate(date);
+
+        System.out.println("Sending message");
+        followUpList.forEach((followUp -> {
+            Message message= Message.creator(
+                    new PhoneNumber("+91"+ followUp.getPatient().getContact()),
+                    new PhoneNumber(OUTGOING_SMS_NUMBER),
+                    "Your OTP for today's follow up is "+ followUp.getOtp()).create();
+        }));
     }
 }

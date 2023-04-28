@@ -52,11 +52,6 @@ public class LoginController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/tp")
-    public List<FollowUp> tp(){
-        return followUpService.getAllTodayFollowUps();
-    }
-
     @PostMapping("/addSuperAdmin")
     public SuperAdmin addSuperAdmin(@RequestBody SuperAdmin superAdmin) throws Exception {
         SuperAdmin superAdmin1 = superAdminService.addSuperAdmin(superAdmin);
