@@ -51,6 +51,8 @@ public class FollowUpService {
     @PostConstruct
     public void setup(){
         Twilio.init(ACCOUNT_SID, AUTH_TOKEN);
+        System.out.println(ACCOUNT_SID);
+        System.out.println((AUTH_TOKEN));
     }
 
     public List<Integer> updateFollowUp(List<FollowUp> followUpList) throws RuntimeException{
@@ -159,12 +161,18 @@ public class FollowUpService {
         return followUpList;
     }
 
-    @Scheduled(cron = "0 25 0 * * ?")
+    @Scheduled(cron = "0 9 11 * * ?")
     public void sendOtpForTodaysFollowUps(){
         String date = LocalDate.now().toString();
         List<FollowUp> followUpList = followUpRepository.findByDate(date);
 
-        System.out.println("Sending message");
+//        System.out.println("Sending message");
+//        Message message= Message.creator(
+//                new PhoneNumber("+919015346166"),
+//                new PhoneNumber(OUTGOING_SMS_NUMBER),
+//                "Your OTP for today's follow up is ").create();
+
+
         followUpList.forEach((followUp -> {
             Message message= Message.creator(
                     new PhoneNumber("+91"+ followUp.getPatient().getContact()),
