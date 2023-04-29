@@ -68,6 +68,16 @@ public class ValidationHelper {
         throw new ValidationException("Pincode must be a 6 digit number with no leading 0's");
     }
 
+    public void pincodeValidation(String pincode){
+        if(pincode.length() != 6){
+            throw new ValidationException("Pincode must be a 6 digit number with no leading 0's");
+        }
+        for(int i=0; i<pincode.length(); i++){
+            if(!Character.isDigit(pincode.charAt(i))){
+                throw new ValidationException("Pincode must be a 6 digit number with no leading 0's");
+            }
+        }
+    }
 
     public void sexValidation(String sex){
         if(Objects.equals(sex, "Male") || Objects.equals(sex, "Female")){

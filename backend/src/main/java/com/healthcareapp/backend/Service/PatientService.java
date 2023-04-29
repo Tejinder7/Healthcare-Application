@@ -1,6 +1,7 @@
 package com.healthcareapp.backend.Service;
 
 
+import com.healthcareapp.backend.Encryption.AESUtil;
 import com.healthcareapp.backend.Exception.ResourceNotFoundException;
 import com.healthcareapp.backend.Model.FieldWorker;
 import com.healthcareapp.backend.Model.Patient;
@@ -21,26 +22,33 @@ public class PatientService {
     private FieldWorkerRepository fieldWorkerRepository;
     private ValidationHelper validationHelper;
 
-    public PatientService(PatientRepository patientRepository, FieldWorkerRepository fieldWorkerRepository, ValidationHelper validationHelper) {
+    private AESUtil aesUtil;
+
+    public PatientService(PatientRepository patientRepository, FieldWorkerRepository fieldWorkerRepository, ValidationHelper validationHelper, AESUtil aesUtil) {
         this.patientRepository = patientRepository;
         this.fieldWorkerRepository = fieldWorkerRepository;
         this.validationHelper = validationHelper;
+        this.aesUtil = aesUtil;
     }
 
     public Patient addPatient(Patient patient) throws RuntimeException{
 
-        validationHelper.nameValidation(patient.getName());
-        validationHelper.strValidation(patient.getAddress());
-        validationHelper.sexValidation(patient.getSex());
-        validationHelper.dateValidation(patient.getDOB());
-        validationHelper.pincodeValidation(patient.getPincode());
-        validationHelper.contactValidation(patient.getContact());
+        validationHelper.nameValidation(aesUtil.decrypt("password" , patient.getName()));
+        validationHelper.strValidation(aesUtil.decrypt("password" , patient.getAddress()));
+        validationHelper.sexValidation(aesUtil.decrypt("password" , patient.getSex()));
+        validationHelper.dateValidation(aesUtil.decrypt("password" , patient.getDOB()));
+        validationHelper.pincodeValidation(aesUtil.decrypt("password" , patient.getPincode()));
+        validationHelper.contactValidation(aesUtil.decrypt("password" , patient.getContact()));
 
-        Patient savedPatient;
+        Patient savedPatient = null;
 
-        if(patient.getDOB() != null) {
+        String dob = aesUtil.decrypt("password" , patient.getDOB());
+        patient.setName(aesUtil.decrypt("password" , patient.getName()));
+        patient.setSex(aesUtil.decrypt("password" , patient.getSex()));
 
-            LocalDate birthDate = LocalDate.parse(patient.getDOB());
+        if(dob != null) {
+
+            LocalDate birthDate = LocalDate.parse(dob);
 
             LocalDate currentDate = LocalDate.now();
 
@@ -54,6 +62,7 @@ public class PatientService {
 
         return savedPatient;
     }
+
     public Patient getPatientById(int Pid){
         Optional<Patient> patient = patientRepository.findById(Pid);
 

@@ -161,7 +161,7 @@ public class FollowUpService {
         return followUpList;
     }
 
-    @Scheduled(cron = "0 9 11 * * ?")
+    @Scheduled(cron = "0 46 11 * * ?")
     public void sendOtpForTodaysFollowUps(){
         String date = LocalDate.now().toString();
         List<FollowUp> followUpList = followUpRepository.findByDate(date);

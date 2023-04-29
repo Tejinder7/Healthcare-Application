@@ -1,9 +1,7 @@
 package com.healthcareapp.backend.Controller;
 
-import com.healthcareapp.backend.Encryption.ObjectEncryption;
-import com.healthcareapp.backend.Encryption.SealedObjectConversions;
+import com.healthcareapp.backend.Encryption.AESUtil;
 import com.healthcareapp.backend.Model.Authorization;
-import com.healthcareapp.backend.Model.FollowUp;
 import com.healthcareapp.backend.Model.SuperAdmin;
 import com.healthcareapp.backend.Security.auth.AuthenticationService;
 import com.healthcareapp.backend.Security.auth.JwtResponse;
@@ -13,10 +11,6 @@ import com.healthcareapp.backend.Service.SuperAdminService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.crypto.SealedObject;
-import java.time.LocalDate;
-import java.util.List;
-
 @RestController
 @RequestMapping("/login")
 public class LoginController {
@@ -25,18 +19,15 @@ public class LoginController {
 
     SuperAdminService superAdminService;
 
-    ObjectEncryption objectEncryption;
-
-    SealedObjectConversions sealedObjectConversions;
+    AESUtil aesUtil;
 
     FollowUpService followUpService;
 
-    public LoginController(AuthorizationService authorizationService, AuthenticationService authenticationService, SuperAdminService superAdminService, FollowUpService followUpService, ObjectEncryption objectEncryption, SealedObjectConversions sealedObjectConversions) {
+    public LoginController(AuthorizationService authorizationService, AuthenticationService authenticationService, SuperAdminService superAdminService, FollowUpService followUpService, AESUtil aesUtil) {
         this.authorizationService = authorizationService;
         this.authenticationService = authenticationService;
         this.superAdminService = superAdminService;
-        this.objectEncryption = objectEncryption;
-        this.sealedObjectConversions = sealedObjectConversions;
+        this.aesUtil = aesUtil;
         this.followUpService = followUpService;
     }
 
@@ -50,6 +41,13 @@ public class LoginController {
         }
 
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/test/{str}")
+    public String testing(@PathVariable String str) throws Exception {
+//        String en = aesUtil.encrypt("password", str);
+        String de = aesUtil.decrypt("password", str);
+        return de;
     }
 
     @PostMapping("/addSuperAdmin")
