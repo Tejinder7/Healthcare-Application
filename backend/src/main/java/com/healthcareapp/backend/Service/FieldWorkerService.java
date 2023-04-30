@@ -51,6 +51,9 @@ public class FieldWorkerService {
         fieldWorker.setRole(Role.ROLE_FIELD_WORKER);
         fieldWorker.setAvailableStatus(true);
 
+        String date = java.time.LocalDate.now().toString();
+        fieldWorker.setLastSyncDate(date);
+
         savedFieldWorker = fieldWorkerRepository.save(fieldWorker);
 
         return savedFieldWorker;
@@ -123,6 +126,7 @@ public class FieldWorkerService {
         fieldWorkerFromdb.setUsername(fieldWorker.getUsername());
         fieldWorkerFromdb.setName(fieldWorker.getName());
         fieldWorkerFromdb.setContact(fieldWorker.getContact());
+        fieldWorkerFromdb.setLastSyncDate(fieldWorker.getLastSyncDate());
         if(!Objects.equals(fieldWorker.getPassword(), "")){
             fieldWorkerFromdb.setPassword(passwordEncoder.encode(fieldWorker.getPassword()));
         }

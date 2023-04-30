@@ -21,6 +21,8 @@ public class FieldWorker extends Authorization{
     @Column(nullable = false)
     private String contact;
 
+    private String lastSyncDate;
+
     private boolean availableStatus;
 
     @ManyToOne
@@ -35,12 +37,12 @@ public class FieldWorker extends Authorization{
     public FieldWorker() {
     }
 
-
-    public FieldWorker(String name, String address, int pincode, String contact, boolean availableStatus, Supervisor supervisor, List<Patient> patientList) {
+    public FieldWorker(String name, String address, int pincode, String contact, String lastSyncDate, boolean availableStatus, Supervisor supervisor, List<Patient> patientList) {
         this.name = name;
         this.address = address;
         this.pincode = pincode;
         this.contact = contact;
+        this.lastSyncDate = lastSyncDate;
         this.availableStatus = availableStatus;
         this.supervisor = supervisor;
         this.patientList = patientList;
@@ -94,6 +96,14 @@ public class FieldWorker extends Authorization{
         this.availableStatus = availableStatus;
     }
 
+    public String getLastSyncDate() {
+        return lastSyncDate;
+    }
+
+    public void setLastSyncDate(String lastSyncDate) {
+        this.lastSyncDate = lastSyncDate;
+    }
+
     public int getPincode() {
         return pincode;
     }
@@ -109,9 +119,10 @@ public class FieldWorker extends Authorization{
                 ", address='" + address + '\'' +
                 ", pincode=" + pincode +
                 ", contact='" + contact + '\'' +
+                ", lastSyncDate='" + lastSyncDate + '\'' +
                 ", availableStatus=" + availableStatus +
                 ", supervisor=" + supervisor +
                 ", patientList=" + patientList +
-                '}';
+                "} " + super.toString();
     }
 }

@@ -25,8 +25,6 @@ public class FollowUp {
 
     private boolean flag;
 
-    private String lastSyncDate;
-
     private int otp;
 
     @ManyToOne
@@ -52,14 +50,13 @@ public class FollowUp {
     public FollowUp() {
     }
 
-    public FollowUp(int followUpId, Encounter encounter, String date, String fieldWorkerRemarks, String doctorRemarks, boolean flag, String lastSyncDate, Hospital hospital, Patient patient, Readings readings, int otp) {
+    public FollowUp(int followUpId, Encounter encounter, String date, String fieldWorkerRemarks, String doctorRemarks, boolean flag, Hospital hospital, Patient patient, Readings readings, int otp) {
         this.followUpId = followUpId;
         this.encounter = encounter;
         this.date = date;
         this.fieldWorkerRemarks = fieldWorkerRemarks;
         this.doctorRemarks = doctorRemarks;
         this.flag = flag;
-        this.lastSyncDate = lastSyncDate;
         this.hospital = hospital;
         this.patient = patient;
         this.readings = readings;
@@ -114,14 +111,6 @@ public class FollowUp {
         this.flag = flag;
     }
 
-    public String getLastSyncDate() {
-        return lastSyncDate;
-    }
-
-    public void setLastSyncDate(String lastSyncDate) {
-        this.lastSyncDate = lastSyncDate;
-    }
-
     public String getFieldWorkerRemarks() {
         return fieldWorkerRemarks;
     }
@@ -164,7 +153,6 @@ public class FollowUp {
                 ", fieldWorkerRemarks='" + fieldWorkerRemarks + '\'' +
                 ", doctorRemarks='" + doctorRemarks + '\'' +
                 ", flag=" + flag +
-                ", lastSyncDate='" + lastSyncDate + '\'' +
                 ", otp=" + otp +
                 ", hospital=" + hospital +
                 ", patient=" + patient +

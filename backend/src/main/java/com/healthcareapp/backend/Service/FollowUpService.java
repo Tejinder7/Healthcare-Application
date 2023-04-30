@@ -1,5 +1,6 @@
 package com.healthcareapp.backend.Service;
 
+import com.healthcareapp.backend.Encryption.AESUtil;
 import com.healthcareapp.backend.Exception.ResourceNotFoundException;
 import com.healthcareapp.backend.Model.*;
 import com.healthcareapp.backend.Repository.EncounterRepository;
@@ -29,6 +30,8 @@ public class FollowUpService {
     private DoctorService doctorService;
     private ValidationHelper validationHelper;
 
+    private AESUtil aesUtil;
+
     @Value("${TWILIO_ACCOUNT_SID}")
     String ACCOUNT_SID;
 
@@ -38,7 +41,7 @@ public class FollowUpService {
     @Value("${TWILIO_OUTGOING_SMS_NUMBER}")
     String OUTGOING_SMS_NUMBER;
 
-    public FollowUpService(FollowUpRepository followUpRepository, PatientRepository patientRepository, EncounterRepository encounterRepository, SupervisorService supervisorService, FieldWorkerService fieldWorkerService, DoctorService doctorService, ValidationHelper validationHelper) {
+    public FollowUpService(FollowUpRepository followUpRepository, PatientRepository patientRepository, EncounterRepository encounterRepository, SupervisorService supervisorService, FieldWorkerService fieldWorkerService, DoctorService doctorService, ValidationHelper validationHelper, AESUtil aesUtil) {
         this.followUpRepository = followUpRepository;
         this.patientRepository = patientRepository;
         this.encounterRepository = encounterRepository;
@@ -46,6 +49,7 @@ public class FollowUpService {
         this.fieldWorkerService = fieldWorkerService;
         this.doctorService = doctorService;
         this.validationHelper = validationHelper;
+        this.aesUtil = aesUtil;
     }
 
     @PostConstruct
@@ -58,6 +62,7 @@ public class FollowUpService {
     public List<Integer> updateFollowUp(List<FollowUp> followUpList) throws RuntimeException{
 
         List<Integer> followUpListUpdatedId = new ArrayList<>();
+
 
         for(int i=0; i<followUpList.size(); i++) {
             FollowUp incomingFollowUp = followUpList.get(i);
@@ -76,6 +81,15 @@ public class FollowUpService {
             updatedFollowUp.get().getReadings().setBloodPressure(incomingFollowUp.getReadings().getBloodPressure());
 
             followUpListUpdatedId.add(updatedFollowUp.get().getFollowUpId());
+
+            Patient patient = updatedFollowUp.get().getPatient();
+
+            FieldWorker fieldWorker = patient.getFieldWorker();
+
+            String date = java.time.LocalDate.now().toString();
+            fieldWorker.setLastSyncDate(date);
+
+            fieldWorkerService.updateFieldWorker(fieldWorker);
 
             followUpRepository.save(updatedFollowUp.get());
         }
@@ -161,7 +175,7 @@ public class FollowUpService {
         return followUpList;
     }
 
-    @Scheduled(cron = "0 46 11 * * ?")
+    @Scheduled(cron = "0 42 00 * * ?")
     public void sendOtpForTodaysFollowUps(){
         String date = LocalDate.now().toString();
         List<FollowUp> followUpList = followUpRepository.findByDate(date);
@@ -175,7 +189,7 @@ public class FollowUpService {
 
         followUpList.forEach((followUp -> {
             Message message= Message.creator(
-                    new PhoneNumber("+91"+ followUp.getPatient().getContact()),
+                    new PhoneNumber("+91"+ aesUtil.decrypt("password" , followUp.getPatient().getContact())),
                     new PhoneNumber(OUTGOING_SMS_NUMBER),
                     "Your OTP for today's follow up is "+ followUp.getOtp()).create();
         }));
