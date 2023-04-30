@@ -85,6 +85,7 @@ public class FollowUpService {
             Patient patient = updatedFollowUp.get().getPatient();
 
             FieldWorker fieldWorker = patient.getFieldWorker();
+            fieldWorker.setPassword("");
 
             String date = java.time.LocalDate.now().toString();
             fieldWorker.setLastSyncDate(date);
@@ -150,7 +151,7 @@ public class FollowUpService {
         List<FollowUp> followUpListById = new ArrayList<>();
 
         for(int i=0; i<followUpList.size(); i++){
-            if(followUpList.get(i).getFollowUpId() > followUpId){
+            if((followUpList.get(i).getFollowUpId() > followUpId) && !followUpList.get(i).isFlag()){
                 followUpListById.add(followUpList.get(i));
             }
             if(followUpListById.size() == 5)

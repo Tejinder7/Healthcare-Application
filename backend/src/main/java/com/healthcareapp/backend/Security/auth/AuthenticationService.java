@@ -37,7 +37,7 @@ public class AuthenticationService {
                 .orElseThrow();
 
         if(user.getRole() != request.getRole()){
-            throw new ResourceNotFoundException("Invalid Credentials. Please try again with valid credentials");
+            throw new ResourceNotFoundException("User Type is wrong. Please try again with valid user type");
         }
 
         var jwtToken = jwtService.createToken(user);
