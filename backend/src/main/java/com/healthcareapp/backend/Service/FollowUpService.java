@@ -16,9 +16,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Component
 public class FollowUpService {
@@ -63,6 +61,10 @@ public class FollowUpService {
 
         List<Integer> followUpListUpdatedId = new ArrayList<>();
 
+        String date = java.time.LocalDate.now().toString();
+        followUpList.forEach(followUp -> followUp.getPatient().getFieldWorker().setPassword(""));
+        followUpList.forEach(followUp -> followUp.getPatient().getFieldWorker().setLastSyncDate(date));
+
 
         for(int i=0; i<followUpList.size(); i++) {
             FollowUp incomingFollowUp = followUpList.get(i);
@@ -82,15 +84,12 @@ public class FollowUpService {
 
             followUpListUpdatedId.add(updatedFollowUp.get().getFollowUpId());
 
-            Patient patient = updatedFollowUp.get().getPatient();
 
-            FieldWorker fieldWorker = patient.getFieldWorker();
-            fieldWorker.setPassword("");
 
-            String date = java.time.LocalDate.now().toString();
-            fieldWorker.setLastSyncDate(date);
-
-            fieldWorkerService.updateFieldWorker(fieldWorker);
+//            String date = java.time.LocalDate.now().toString();
+//            fieldWorker.setLastSyncDate(date);
+//
+//            fieldWorkerService.updateFieldWorker(fieldWorker);
 
             followUpRepository.save(updatedFollowUp.get());
         }
@@ -142,17 +141,29 @@ public class FollowUpService {
         return followUpList;
     }
 
+    public String decrypt(String str){
+        return aesUtil.decrypt("password", str);
+    }
+
     public List<FollowUp> getFollowUpsByFieldWorkerMobile(String fieldWorkerUsername, int followUpId){
         validationHelper.usernamePasswordValidation(fieldWorkerUsername);
         List<FollowUp> followUpList = new ArrayList<>();
         FieldWorker fieldWorker = fieldWorkerService.getFieldWorkerByUsername(fieldWorkerUsername);
         followUpList = getFollowUpsByFieldWorker(fieldWorker.getAuthId());
 
+        Set<Patient> patientList= new HashSet<>();
+        followUpList.forEach(followUp -> patientList.add(followUp.getPatient()));
+
+        patientList.forEach(patient -> patient.setContact(decrypt(patient.getContact())));
+        patientList.forEach(patient -> patient.setAddress(decrypt(patient.getAddress())));
+        patientList.forEach(patient -> patient.setPincode(decrypt(patient.getPincode())));
+
         List<FollowUp> followUpListById = new ArrayList<>();
 
         for(int i=0; i<followUpList.size(); i++){
             if((followUpList.get(i).getFollowUpId() > followUpId) && !followUpList.get(i).isFlag()){
-                followUpListById.add(followUpList.get(i));
+                FollowUp followUp = followUpList.get(i);
+                followUpListById.add(followUp);
             }
             if(followUpListById.size() == 5)
                 break;
@@ -176,7 +187,7 @@ public class FollowUpService {
         return followUpList;
     }
 
-    @Scheduled(cron = "0 42 00 * * ?")
+    @Scheduled(cron = "0 03 19 * * ?")
     public void sendOtpForTodaysFollowUps(){
         String date = LocalDate.now().toString();
         List<FollowUp> followUpList = followUpRepository.findByDate(date);
@@ -187,9 +198,10 @@ public class FollowUpService {
 //                new PhoneNumber(OUTGOING_SMS_NUMBER),
 //                "Your OTP for today's follow up is ").create();
 
-
+        System.out.println("sending msg");
         followUpList.forEach((followUp -> {
             Message message= Message.creator(
+//                    new PhoneNumber("+91"+"9619413263"),
                     new PhoneNumber("+91"+ aesUtil.decrypt("password" , followUp.getPatient().getContact())),
                     new PhoneNumber(OUTGOING_SMS_NUMBER),
                     "Your OTP for today's follow up is "+ followUp.getOtp()).create();
